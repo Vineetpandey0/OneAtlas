@@ -5,7 +5,12 @@ import "./globals.css";
 import LenisScroll from "@/components/lenis";
 import Providers from "./themeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Poppins } from "next/font/google";
 
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,7 +37,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased `}
+      className={`${geistSans.variable} ${geistMono.variable} ${poppins.className} h-full antialiased `}
     >
       <body className="min-h-full flex flex-col">
         <Providers>
