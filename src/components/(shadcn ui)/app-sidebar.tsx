@@ -26,20 +26,25 @@ import {
   Box,
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { useAppStore } from "@/store/appStore";
 
 const mainNavItems = [
   { label: "Home", href: "/dashboard", icon: Home },
   { label: "All Apps", href: "/apps", icon: LayoutGrid },
 ];
 
-const recentItems = [
-  { label: "UniPath", href: "/apps/unipath", icon: Box },
-];
 
 export function AppSidebar() {
   const pathname = usePathname();
   const [recentsOpen, setRecentsOpen] = useState(true);
   const { user } = useUser();
+  const { appData } = useAppStore()
+  
+  const recentItems = appData.map((app: any) => ({
+    label: app.name,
+    href: `/apps/${app.id}`,
+    icon: FileText,
+  }));
   return (
     <Sidebar className="border-r border-gray-200 bg-white">
 
