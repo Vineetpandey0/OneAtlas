@@ -157,8 +157,7 @@ export default function ActionHeroSection() {
         </p>
 
         {/* Prompt Box */}
-        <form
-          onSubmit={() => { }}
+        <div
           className="w-full max-w-2xl bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden focus-within:ring-2 focus-within:ring-gray-300 transition-shadow"
         >
           <textarea
@@ -172,22 +171,7 @@ export default function ActionHeroSection() {
           />
 
           <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-gray-50/50">
-            <div className="flex items-center gap-2">
-              
-
-              {/* Settings */}
-              {/* <button
-                type="button"
-                className="p-1.5 rounded-md border border-gray-200 text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
-                title="Options"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <circle cx="8" cy="4" r="1" fill="currentColor" />
-                  <circle cx="8" cy="8" r="1" fill="currentColor" />
-                  <circle cx="8" cy="12" r="1" fill="currentColor" />
-                </svg>
-              </button> */}
-            </div>
+            
 
             <div className="flex items-center gap-2">
 
@@ -212,7 +196,7 @@ export default function ActionHeroSection() {
               </button>
             </div>
           </div>
-        </form>
+        </div>
 
         {/* Marquee of prompt suggestions */}
         <Marquee
