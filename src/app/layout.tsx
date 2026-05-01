@@ -33,19 +33,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
     <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${poppins.className} h-full antialiased `}
+    lang="en"
+    suppressHydrationWarning
+    className={`${geistSans.variable} ${geistMono.variable} ${poppins.className} h-full antialiased `}
     >
+      <ClerkProvider>
       <body className="min-h-full flex flex-col">
         <Providers>
           <LenisScroll />
             {children}
         </Providers>
       </body>
+      </ClerkProvider>
     </html>
-    </ClerkProvider>
   );
 }
