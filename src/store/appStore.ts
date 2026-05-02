@@ -13,11 +13,13 @@ import {create} from "zustand";
 // }
 
 interface AppStore {
-    appData: [];
-    setAppData: (app: []) => void;
+    appData: any[];
+    setAppData: (app: any[]) => void;
+    appendAppData: (app: any) => void;
 }
 
 export const useAppStore = create<AppStore>((set) => ({
     appData: [],
     setAppData: (app) => set({ appData: app }),
+    appendAppData: (app) => set((state) => ({ appData: [...state.appData, app] })),
 }))
