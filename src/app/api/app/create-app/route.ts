@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db/prisma";
+import { callGemini } from "@/lib/gemini";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -21,7 +22,18 @@ export async function POST(req: NextRequest) {
 
             },
         });
-        return NextResponse.json({ app, chat }, { status: 200 });
+
+        const aiResponse = await callGemini(config_json); //call Gemini with the config_json as the input, which will generate the initial response from the bot based on the system prompt and initial messages provided in the config_json
+        const botChat = await prisma.chats.create({
+            data: {
+                appId: app.id,
+                userId: userId,
+                role: "assistant",
+                messages: aiResponse,
+            },
+        });
+        const chatHistory = {chat, botChat}
+        return NextResponse.json({ app, chat: chatHistory }, { status: 200 });
     }
     catch (err) {
         console.log(err);
