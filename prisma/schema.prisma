@@ -20,7 +20,7 @@ model User {
   createdAt DateTime @default(now())
 
   apps      App[]
-  records   Record[]
+  chats     Chats[]
 }
 
 model App {
@@ -32,18 +32,19 @@ model App {
   userId String
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  records Record[]
+  chats     Chats[]
+
 }
 
-model Record {
+model Chats {
   id          String   @id @default(uuid())
-  entity_name String
-  data        Json
+  messages    String
+  role        String
   createdAt   DateTime @default(now())
 
   appId String
   app   App @relation(fields: [appId], references: [id], onDelete: Cascade)
 
   userId String?
-  user   User? @relation(fields: [userId], references: [id])
+  user   User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
