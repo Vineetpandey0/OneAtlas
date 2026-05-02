@@ -1,8 +1,8 @@
 'use client'
 import axios from 'axios'
 import { usePathname } from 'next/navigation'
-import React, { useState, useRef, useEffect, KeyboardEvent } from 'react'
-
+import { useState, useRef, useEffect, KeyboardEvent } from 'react'
+import { ArrowUp, Send, Sparkles, User } from 'lucide-react'
 
 interface Message {
   id: string
@@ -15,6 +15,31 @@ function getTime() {
   return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }
 
+function parseReply(raw: string): string {
+  if (!raw) return 'Sorry, no response.'
+  const trimmed = raw.trim()
+
+  // Strip markdown code fences  ```json … ```  or  ``` … ```
+  const fenceMatch = trimmed.match(/^```(?:json)?\s*([\s\S]*?)```$/i)
+  const inner = fenceMatch ? fenceMatch[1].trim() : trimmed
+
+  // Try JSON and extract common reply fields
+  try {
+    const parsed = JSON.parse(inner)
+    if (typeof parsed === 'string') return parsed
+    return (
+      parsed.message ??
+      parsed.reply ??
+      parsed.content ??
+      parsed.text ??
+      parsed.answer ??
+      JSON.stringify(parsed, null, 2)
+    )
+  } catch {
+    return inner
+  }
+}
+
 export default function Page() {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState('')
@@ -24,21 +49,23 @@ export default function Page() {
   const APP_ID = usePathname().split('/').pop()
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const timer = setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    }, 60)
+    return () => clearTimeout(timer)
   }, [messages, isLoading])
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(`/api/app/${APP_ID}/chat`)
-        setMessages(res.data.chats)
-        console.log(res.data.chats);
+        setMessages(res.data.chats ?? [])
       } catch (err) {
         console.log(err)
       }
     }
     fetchMessages()
-  }, [])
+  }, [APP_ID])
 
   function autoResize() {
     const el = textareaRef.current
@@ -47,13 +74,13 @@ export default function Page() {
     el.style.height = Math.min(el.scrollHeight, 120) + 'px'
   }
 
-  async function sendMessage(messages: string) {
-    if (!messages.trim() || isLoading) return
+  async function sendMessage(text: string) {
+    if (!text.trim() || isLoading) return
 
     const userMsg: Message = {
       id: crypto.randomUUID(),
       role: 'user',
-      messages,
+      messages: text,
       time: getTime(),
     }
     setMessages((prev) => [...prev, userMsg])
@@ -62,14 +89,14 @@ export default function Page() {
     if (textareaRef.current) textareaRef.current.style.height = 'auto'
 
     try {
-      const res = await axios.post(`/api/apps/${APP_ID}/chat`, {
-        message: messages
-      }, {
-        headers: { 'Content-Type': 'application/json' }
-      })
-      const data = await res.data
-      const reply: string =
-        data.message ?? data.reply ?? data.content ?? 'Sorry, no response.'
+      const res = await axios.post(
+        `/api/apps/${APP_ID}/chat`,
+        { message: text },
+        { headers: { 'Content-Type': 'application/json' } }
+      )
+      const data = res.data
+      const rawReply: string = data.message ?? data.reply ?? data.content ?? data.text ?? ''
+      const reply = parseReply(rawReply || JSON.stringify(data))
 
       setMessages((prev) => [
         ...prev,
@@ -99,80 +126,76 @@ export default function Page() {
     }
   }
 
-
   return (
-    <div className="flex flex-col h-screen bg-stone-50">
+    /*
+     * The TopNav is `fixed` with h-14 (56px).
+     * The sidebar layout likely adds a left offset, but vertical space must be
+     * manually reserved with pt-14 on the outer wrapper.
+     *
+     * Structure:
+     *   [fixed navbar — 56px]
+     *   [this div — fills remaining viewport height below navbar]
+     *     [scrollable messages — grows and scrolls]
+     *     [input bar — always pinned at the bottom, never scrolls away]
+     */
+    <div
+      className="flex flex-col bg-zinc-50 h-[calc(100vh-3.5rem)] overflow-hidden no-scrollbar"
+    >
+      {/* ── Scrollable message list ── */}
+      <div className="flex-1 min-h-0 overflow-y-auto" data-lenis-prevent>
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-4">
 
-      {/* ── Messages ── */}
-      <main className="flex-1 overflow-y-auto py-7 pb-36 pt-14 scroll-smooth">
-        <div className="max-w-2xl mx-auto px-6 flex flex-col gap-5">
-            <>
-              {messages.map((msg) => (
+          {/* Messages */}
+          {messages.map((msg) => (
+            <div
+              key={msg.id}
+              className={`flex gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+              style={{ animation: 'fadeUp 0.2s ease forwards', opacity: 0 }}
+            >
+              
+
+              {/* Bubble + timestamp */}
+              <div className={`flex flex-col gap-1 max-w-[75%] ${msg.role === 'user' ? 'items-end' : 'items-start'}`}>
                 <div
-                  key={msg.id}
-                  className={`flex gap-2.5 animate-[fadeUp_0.25s_ease_forwards] opacity-0 ${
-                    msg.role === 'user' ? 'flex-row-reverse' : ''
+                  className={`px-4 py-2.5 text-sm leading-relaxed tracking-tight break-words whitespace-pre-wrap ${
+                    msg.role === 'user'
+                      ? 'bg-violet-500 text-white rounded-2xl rounded-br-[4px]'
+                      : 'bg-white text-zinc-800 border border-zinc-200 rounded-2xl rounded-tl-[4px] shadow-sm'
                   }`}
                 >
-                  {/* Avatar */}
-                  <div
-                    className={`w-[30px] h-[30px] rounded-[9px] shrink-0 flex items-center justify-center text-[13px] font-semibold mt-0.5 ${
-                      msg.role === 'user'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-stone-900 text-white'
-                    }`}
-                  >
-                    {msg.role === 'user' ? 'U' : '✦'}
-                  </div>
-
-                  {/* Bubble + time */}
-                  <div
-                    className={`flex flex-col gap-1 max-w-[75%] ${
-                      msg.role === 'user' ? 'items-end' : ''
-                    }`}
-                  >
-                    <div
-                      className={`px-4 py-2.5 text-sm leading-relaxed tracking-[-0.005em] break-words ${
-                        msg.role === 'user'
-                          ? 'bg-stone-900 text-white rounded-2xl rounded-br-[4px]'
-                          : 'bg-white text-stone-800 border border-stone-200 rounded-2xl rounded-tl-[4px] shadow-sm'
-                      }`}
-                    >
-                      {msg.messages?.split('\n').map((line, i, arr) => (
-                        <React.Fragment key={i}>
-                          {line}
-                          {i < arr.length - 1 && <br />}
-                        </React.Fragment>
-                      ))}
-                    </div>
-                    <p className="text-[11px] text-stone-400 font-mono px-0.5">{msg.time}</p>
-                  </div>
+                  {msg.messages}
                 </div>
-              ))}
+                <p className="text-[10.5px] text-zinc-400 font-mono px-0.5">{msg.time}</p>
+              </div>
+            </div>
+          ))}
 
-              {/* Typing indicator */}
-              {isLoading && (
-                <div className="flex gap-2.5 animate-[fadeUp_0.25s_ease_forwards] opacity-0">
-                  <div className="w-[30px] h-[30px] rounded-[9px] shrink-0 flex items-center justify-center text-[13px] font-semibold mt-0.5 bg-stone-900 text-white">
-                    ✦
-                  </div>
-                  <div className="bg-white border border-stone-200 rounded-2xl rounded-tl-[4px] shadow-sm px-4 py-3.5 flex gap-1.5 items-center">
-                    <span className="w-1.5 h-1.5 rounded-full bg-stone-300 animate-bounce [animation-delay:0ms]" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-stone-300 animate-bounce [animation-delay:150ms]" />
-                    <span className="w-1.5 h-1.5 rounded-full bg-stone-300 animate-bounce [animation-delay:300ms]" />
-                  </div>
-                </div>
-              )}
-            </>
+          {/* Typing indicator */}
+          {isLoading && (
+            <div
+              className="flex gap-2.5"
+              style={{ animation: 'fadeUp 0.2s ease forwards', opacity: 0 }}
+            >
+              <div className="w-7 h-7 rounded-lg shrink-0 flex items-center justify-center mt-0.5 bg-violet-600 text-white">
+                <Sparkles className="w-3.5 h-3.5" />
+              </div>
+              <div className="bg-white border border-zinc-200 rounded-2xl rounded-tl-[4px] shadow-sm px-4 py-3.5 flex gap-1.5 items-center">
+                <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 animate-bounce [animation-delay:0ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 animate-bounce [animation-delay:150ms]" />
+                <span className="w-1.5 h-1.5 rounded-full bg-zinc-300 animate-bounce [animation-delay:300ms]" />
+              </div>
+            </div>
+          )}
 
-          <div ref={messagesEndRef} />
+          {/* Scroll anchor */}
+          <div ref={messagesEndRef} className="h-px" />
         </div>
-      </main>
+      </div>
 
-      {/* ── Input area ── */}
-      <div className="bg-white border-t border-stone-200 px-6 pt-4 pb-5 shrink-0 fixed bottom-0 w-full">
+      {/* ── Input bar — always visible at the bottom ── */}
+      <div className="flex-shrink-0 bg-white border-t border-zinc-200 px-4 sm:px-6 py-3">
         <div className="max-w-2xl mx-auto">
-          <div className="flex items-end gap-2.5 bg-stone-50 border border-stone-200 rounded-2xl px-4 py-2.5 focus-within:border-blue-500 focus-within:ring-[3px] focus-within:ring-blue-500/10 transition-all">
+          <div className="flex items-center gap-2.5 bg-zinc-50 border border-zinc-200 rounded-2xl px-4 py-2.5 focus-within:border-blue-500 focus-within:ring-[3px] focus-within:ring-blue-500/10 transition-all duration-150">
             <textarea
               ref={textareaRef}
               value={input}
@@ -183,20 +206,17 @@ export default function Page() {
               onKeyDown={handleKeyDown}
               placeholder="Type a message…"
               rows={1}
-              className="flex-1 bg-transparent border-none outline-none resize-none text-sm text-stone-800 placeholder:text-stone-400 leading-relaxed max-h-[120px] py-0.5"
+              className="flex-1 bg-transparent border-none outline-none resize-none text-sm text-zinc-800 placeholder:text-zinc-400 leading-relaxed max-h-[120px] py-0.5 font-sans"
             />
             <button
               onClick={() => sendMessage(input)}
               disabled={!input.trim() || isLoading}
-              className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all bg-blue-600 text-white hover:bg-blue-700 active:scale-95 disabled:bg-stone-200 disabled:text-stone-400 disabled:cursor-not-allowed"
+              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all duration-150 bg-gray-600 text-white hover:bg-gray-900 cursor-pointer active:scale-95 disabled:bg-zinc-200 disabled:text-zinc-400 disabled:cursor-not-allowed"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                <line x1={22} y1={2} x2={11} y2={13} />
-                <polygon points="22 2 15 22 11 13 2 9 22 2" />
-              </svg>
+              <ArrowUp className="" />
             </button>
           </div>
-          <p className="text-center text-[11px] text-stone-400 font-mono mt-2 tracking-wide">
+          <p className="text-center text-[10.5px] text-zinc-400 font-mono mt-2 tracking-wide">
             Enter to send · Shift+Enter for new line
           </p>
         </div>
@@ -204,7 +224,7 @@ export default function Page() {
 
       <style>{`
         @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(8px); }
+          from { opacity: 0; transform: translateY(6px); }
           to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
