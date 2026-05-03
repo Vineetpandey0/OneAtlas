@@ -41,10 +41,10 @@ export default function RootLayout({
     <html
     lang="en"
     suppressHydrationWarning
-    className={`${geistSans.variable} ${geistMono.variable} ${grotesk.variable} ${poppins.className} h-full antialiased `}
+    className={`${geistSans.variable} ${geistMono.variable} ${grotesk.variable} ${poppins.className} antialiased`}
     >
       <ClerkProvider>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-screen flex flex-col">
         <Providers>
           <LenisScroll />
             {children}
