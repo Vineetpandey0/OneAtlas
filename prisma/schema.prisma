@@ -33,6 +33,7 @@ model App {
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   chats     Chats[]
+  deployedUrl String?
 
 }
 
