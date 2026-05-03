@@ -14,9 +14,8 @@ The JSON object must have this exact structure:
   ]
 }
 
-CRITICAL RULES FOR "type":
+CRITICAL RULES FOR "type": Look for maximum similarity percentage
 You must choose the "type" for each page from the following supported templates:
-- "landing" (if no other pages match)
 - "college_discovery" (University/college search)
 - "real_estate" (Property listings or any other related)
 - "ecommerce" (Online store with products)
@@ -29,6 +28,7 @@ You must choose the "type" for each page from the following supported templates:
 - "event_ticketing" (Concerts, shows, ticketing)
 - "form" (Generic data entry form)
 
+try to fit pages in one of these components.
 Always include 3 to 5 pages. For example, a main page (like /home), a dashboard/feed, and a settings/profile page.
 Choose the templates that best fit the user's prompt. If no specific template perfectly fits, use the closest one or fallback to "landing" or "saas_dashboard".
 Output raw JSON ONLY. Do not use \`\`\`json blocks.

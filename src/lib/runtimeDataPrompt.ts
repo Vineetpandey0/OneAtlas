@@ -94,6 +94,14 @@ Generate a SINGLE JSON object that:
 * admin panel
 * real product
 
+8. VISUAL ASSETS (NEW)
+   Whenever a field requires an image, photo, or avatar:
+   use this https://source.unsplash.com/featured/?{$}{encodeURIComponent(query)
+   ✔ Use high-quality image URLs
+   ✔ Ensure the image content matches the context (e.g., a "coffee" product should have a coffee photo)
+   ✔ Do NOT use placeholders or generic URLs like "example.com/image.jpg"
+   ✔ For ecommerce, images are MANDATORY for every product.
+   ✔ Dont use dead links, verify links before using, must be public links
 ---
 
 ## ENHANCED SCHEMA LOGIC
@@ -229,7 +237,8 @@ IF PAGE TYPE = "ecommerce":
 "stock": number,
 "category": "string",
 "description": "rich product description",
-"brand": "string"
+"brand": "string",
+"image": "string (high-quality Unsplash URL, e.g. https://images.unsplash.com/photo-...) "
 }
 ]
 }
