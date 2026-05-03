@@ -2,11 +2,18 @@ import { GoogleGenAI } from "@google/genai";
 import { SYSTEM_PROMPT } from "./prompt";
 import { DATA_GENERATION_SYSTEM_PROMPT } from "./runtimeDataPrompt";
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GOOGLE_API_KEY!,
-});
+import { cookies } from "next/headers";
+
+function getGeminiClient() {
+  const cookieStore = cookies();
+  const userKey = cookieStore.get("gemini_api_key")?.value;
+  const apiKey = userKey || process.env.GOOGLE_API_KEY!;
+  
+  return new GoogleGenAI({ apiKey });
+}
 
 export async function callGemini(input: string): Promise<string> {
+  const ai = getGeminiClient();
   const res = await ai.models.generateContent({
     model: "gemini-2.5-flash", 
     contents: [
@@ -26,6 +33,7 @@ export async function callGemini(input: string): Promise<string> {
 }
 
 export async function callGeminiForData(config: any, page: any): Promise<any> {
+  const ai = getGeminiClient();
   const inputPayload = JSON.stringify({ appConfig: config, page: page }, null, 2);
   
   const res = await ai.models.generateContent({

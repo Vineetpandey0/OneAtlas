@@ -19,6 +19,19 @@ export default function TopNav() {
 
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [geminiKey, setGeminiKey] = useState("");
+
+  useEffect(() => {
+    // Read from cookie on mount
+    const match = document.cookie.match(/(^| )gemini_api_key=([^;]+)/);
+    if (match) setGeminiKey(match[2]);
+  }, []);
+
+  const handleKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setGeminiKey(val);
+    document.cookie = `gemini_api_key=${val}; path=/; max-age=31536000`;
+  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -88,25 +101,44 @@ export default function TopNav() {
 
         {/* Dropdown */}
         {openMenu && (
-          <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-sm z-50">
+          <div className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-sm z-50 overflow-hidden">
             
             {/* User info */}
-            <div className="px-3 py-2 border-b border-gray-100">
-              <p className="text-sm font-medium">
+            <div className="px-3 py-2.5 border-b border-gray-100 bg-gray-50/50">
+              <p className="text-sm font-medium text-gray-900">
                 {user?.fullName || "User"}
               </p>
-              <p className="text-xs text-gray-500 truncate">
+              <p className="text-xs text-gray-500 truncate mt-0.5">
                 {user?.primaryEmailAddress?.emailAddress}
               </p>
             </div>
 
+            {/* API Key Input */}
+            <div className="px-3 py-3 border-b border-gray-100">
+              <label className="block text-xs font-medium text-gray-700 mb-1.5">
+                Gemini API Key
+              </label>
+              <input 
+                type="password" 
+                placeholder="Enter your API key..."
+                value={geminiKey}
+                onChange={handleKeyChange}
+                className="w-full text-sm px-2.5 py-1.5 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-colors"
+              />
+              <p className="text-[10px] text-gray-400 mt-1.5 leading-tight">
+                Keys are stored locally in your browser to power AI generations.
+              </p>
+            </div>
+
             {/* Logout */}
-            <SignOutButton>
-              <button className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-500 hover:bg-gray-100 transition">
-                <LogOut className="w-4 h-4" />
-                Sign out
-              </button>
-            </SignOutButton>
+            <div className="p-1">
+              <SignOutButton>
+                <button className="w-full flex items-center gap-2 px-2.5 py-2 text-sm text-red-600 font-medium rounded-md hover:bg-red-50 transition">
+                  <LogOut className="w-4 h-4" />
+                  Sign out
+                </button>
+              </SignOutButton>
+            </div>
 
           </div>
         )}
