@@ -38,28 +38,35 @@ export async function callGeminiForData(promptContext: string, config: any, page
   const ai = await getGeminiClient();
   const inputPayload = JSON.stringify({ appIdeaOrPrompt: promptContext, appConfig: config, page: page }, null, 2);
   
-  const res = await ai.models.generateContent({
-    model: "gemini-2.5-flash", 
-    contents: [
-      {
-        role: "user",
-        parts: [{ text: inputPayload }],
-      },
-    ],
-    config: {
-        systemInstruction: DATA_GENERATION_SYSTEM_PROMPT,
-        temperature: 0.7, 
-        responseMimeType: "application/json",
-    }
-  });
-  console.log(res.text);
-
   try {
+    const res = await ai.models.generateContent({
+      model: "gemini-2.5-flash", 
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: inputPayload }],
+        },
+      ],
+      config: {
+          systemInstruction: DATA_GENERATION_SYSTEM_PROMPT,
+          temperature: 0.7, 
+          responseMimeType: "application/json",
+      }
+    });
+    console.log(res.text);
+
     const rawText = res.text || "{}";
     const parsed = JSON.parse(rawText);
     return parsed;
-  } catch (err) {
-    console.error("Failed to parse Gemini data output:", err);
+  } catch (err: any) {
+    console.error("Gemini Data Error:", err);
+    
+    // Check for rate limit / quota errors
+    const errorMsg = err.message?.toLowerCase() || "";
+    if (errorMsg.includes("429") || errorMsg.includes("quota") || errorMsg.includes("limit")) {
+      return { _error: "rate_limit" };
+    }
+    
     return page.type === 'table' ? [] : {};
   }
 }
