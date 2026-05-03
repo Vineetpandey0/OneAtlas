@@ -17,11 +17,15 @@ Your job is to generate COMPLETE, PRODUCTION-QUALITY JSON data for a dynamic app
 
 You will receive:
 
-1. "appConfig"
+1. "appIdeaOrPrompt"
+   → the original user prompt or core app concept
+   → use this to determine the exact niche, tone, and specific data points (e.g. "luxury real estate in Miami" or "AI saas for lawyers")
+
+2. "appConfig"
    → full application configuration
    → includes entities, fields, pages, navigation
 
-2. "page"
+3. "page"
    → current page being rendered
 
 ---
