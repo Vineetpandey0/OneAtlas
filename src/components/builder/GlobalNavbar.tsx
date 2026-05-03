@@ -27,7 +27,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         scrolled
           ? "bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-100"
           : "bg-transparent"
@@ -87,7 +87,7 @@ export default function Navbar() {
           mobileOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-          <div className="flex flex-col gap-2 pt-2">
+          <div className="flex flex-col gap-3 pt-4 px-5 pb-6">
             <Link
               href="/sign-in"
               className="text-center text-sm font-medium text-gray-700 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
