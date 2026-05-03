@@ -53,7 +53,7 @@ export default function TopNav() {
       </div>
 
       {/* Workspace */}
-      <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition max-w-[180px]">
+      <button className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg hover:bg-gray-100 transition ">
         <span className="text-sm font-medium text-gray-800 ">
           {user?.firstName + " 's Workspace"}
         </span>

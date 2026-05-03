@@ -54,7 +54,7 @@ export default function SaaSDashboard({ data }: { data: any }) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 h-screen overflow-y-auto">
+      <main className="flex-1 flex flex-col min-w-0 min-h-screen">
         {/* Top Header */}
         <header className="h-16 border-b border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between px-4 sm:px-8 sticky top-0 z-30 shrink-0">
           <h1 className="text-xl font-semibold lg:hidden">NexusSaaS</h1>
