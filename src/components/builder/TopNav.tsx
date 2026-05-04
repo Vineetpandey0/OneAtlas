@@ -14,11 +14,11 @@ import {
 } from "lucide-react";
 
 import { useSidebar } from "@/components/ui/sidebar";
-import { useUser, SignOutButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { useState, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Logo from "../logo";
-import { toast } from "sonner";
+import { useAppActions } from "@/hooks/useAppActions";
 
 export default function TopNav() {
   const { toggleSidebar, open } = useSidebar();
@@ -26,136 +26,20 @@ export default function TopNav() {
   const params = useParams();
   const appId = params?.appId as string;
 
+  const {
+    isDownloading,
+    isDeploying,
+    isDeleting,
+    deployedUrl,
+    showLoadingUrl,
+    handleDeploy,
+    handleDeleteDeployment,
+    handleDownload,
+  } = useAppActions(appId);
+
   const [openMenu, setOpenMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [geminiKey, setGeminiKey] = useState("");
-  const [isDownloading, setIsDownloading] = useState(false);
-  const [isDeploying, setIsDeploying] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [deployedUrl, setDeployedUrl] = useState<string | null>(null);
-  const [showLoadingUrl, setShowLoadingUrl] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState<null | 'deploy' | 'delete'>(null);
-
-  const fetchAppData = async () => {
-    if (!appId) {
-      setDeployedUrl(null);
-      return;
-    }
-    
-    // Reset state for the new app
-    setDeployedUrl(null);
-    setIsDeploying(false);
-    setIsDownloading(false);
-    setShowLoadingUrl(false);
-
-    try {
-      const res = await fetch(`/api/apps/${appId}`);
-      if (!res.ok) throw new Error();
-      const data = await res.json();
-      setDeployedUrl(data.deployedUrl || null);
-    } catch (e) {
-      setDeployedUrl(null);
-    }
-  };
-
-  useEffect(() => {
-    fetchAppData();
-  }, [appId]);
-
-  const handleDeploy = async () => {
-    if (!appId) return;
-    
-    setShowConfirmModal(null);
-    setIsDeploying(true);
-    setShowLoadingUrl(true);
-    const tId = toast.loading("Uploading files to Vercel...");
-    
-    try {
-      const res = await fetch(`/api/apps/${appId}/deploy`, { method: "POST" });
-      const data = await res.json();
-      
-      if (!res.ok) throw new Error(data.error || "Deployment failed");
-      
-      toast.loading("Files uploaded! Waiting for Vercel to build your app (40s)...", { id: tId });
-      
-      // Wait for 40 seconds to allow Vercel build to finish
-      await new Promise(resolve => setTimeout(resolve, 40000));
-      
-      setDeployedUrl(data.url);
-      setShowLoadingUrl(false);
-      toast.success("Successfully deployed to Vercel!", { id: tId });
-    } catch (err: any) {
-      console.error(err);
-      setShowLoadingUrl(false);
-      toast.error(err.message || "Failed to deploy. Please check your Vercel Token.", { id: tId });
-    } finally {
-      setIsDeploying(false);
-    }
-  };
-
-  const handleDeleteDeployment = async () => {
-    if (!appId) return;
-
-    setShowConfirmModal(null);
-    setIsDeleting(true);
-    const tId = toast.loading("Removing deployment from Vercel...");
-
-    try {
-      const res = await fetch(`/api/apps/${appId}/deploy`, { method: "DELETE" });
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.error || "Deletion failed");
-
-      setDeployedUrl(null);
-      toast.success("Deployment successfully removed.", { id: tId });
-    } catch (err: any) {
-      console.error(err);
-      toast.error(err.message || "Failed to remove deployment.", { id: tId });
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
-  const handleDownload = async () => {
-    if (!appId) return;
-    
-    setIsDownloading(true);
-    const tId = toast.loading("Preparing your project ZIP...");
-    
-    try {
-      const res = await fetch(`/api/apps/${appId}/export`);
-      if (!res.ok) throw new Error("Failed to export project");
-      
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `app-project-${appId}.zip`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      
-      toast.success("Project downloaded successfully!", { id: tId });
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to download project. Please try again.", { id: tId });
-    } finally {
-      setIsDownloading(false);
-    }
-  };
-
-  useEffect(() => {
-    // Read from cookie on mount
-    const match = document.cookie.match(/(^| )gemini_api_key=([^;]+)/);
-    if (match) setGeminiKey(match[2]);
-  }, []);
-
-  const handleKeyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setGeminiKey(val);
-    document.cookie = `gemini_api_key=${val}; path=/; max-age=31536000`;
-  };
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -275,67 +159,30 @@ export default function TopNav() {
         </button>
 
         {/* Dropdown */}
-        {openMenu && (
-          <div className="absolute right-0 mt-2 w-72 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in slide-in-from-top-2 duration-200">
+        {openMenu && appId && (
+          <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden animate-in slide-in-from-top-2 duration-200">
             
-            {/* User info */}
-            <div className="px-4 py-3 border-b border-gray-100 bg-gray-50/50">
-              <p className="text-sm font-semibold text-gray-900">
-                {user?.fullName || "User"}
-              </p>
-              <p className="text-[11px] text-gray-500 truncate mt-0.5">
-                {user?.primaryEmailAddress?.emailAddress}
-              </p>
-            </div>
-
-            {/* Mobile Actions (Visible only on small screens) */}
-            <div className="sm:hidden px-2 py-2 border-b border-gray-100">
+            <div className="p-1.5 space-y-1">
               <button 
-                onClick={handleDownload}
+                onClick={() => { handleDownload(); setOpenMenu(false); }}
                 disabled={isDownloading}
-                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition"
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
               >
                 {isDownloading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                 Download Project
               </button>
               
-              <div className="flex items-center justify-between px-3 py-2 mt-1">
-                <div className="flex items-center gap-2">
-                  <CloudUpload className="w-4 h-4 text-violet-600" />
-                  <span className="text-sm text-gray-700 font-medium">Deploy</span>
+              <button
+                onClick={() => { setShowConfirmModal(deployedUrl ? 'delete' : 'deploy'); setOpenMenu(false); }}
+                disabled={isDeploying || isDeleting}
+                className="w-full flex items-center justify-between gap-3 px-3 py-2 text-sm text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition disabled:opacity-50"
+              >
+                <div className="flex items-center gap-3">
+                  <CloudUpload className={`w-4 h-4 ${deployedUrl ? 'text-emerald-500' : 'text-violet-600'}`} />
+                  <span>{deployedUrl ? 'Manage Deploy' : 'Deploy App'}</span>
                 </div>
-                <button
-                  onClick={() => setShowConfirmModal(deployedUrl ? 'delete' : 'deploy')}
-                  disabled={isDeploying || isDeleting}
-                  className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors ${deployedUrl ? 'bg-emerald-500' : 'bg-gray-200'}`}
-                >
-                  <span className={`pointer-events-none block h-4 w-4 rounded-full bg-white shadow-lg transition-transform ${deployedUrl ? 'translate-x-4' : 'translate-x-0.5'}`} />
-                </button>
-              </div>
-            </div>
-
-            {/* API Key Input */}
-            <div className="px-4 py-4 border-b border-gray-100">
-              <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">
-                Gemini API Key
-              </label>
-              <input 
-                type="password" 
-                placeholder="Enter your API key..."
-                value={geminiKey}
-                onChange={handleKeyChange}
-                className="w-full text-sm px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-violet-500/20 focus:border-violet-500 transition-colors"
-              />
-            </div>
-
-            {/* Logout */}
-            <div className="p-1.5">
-              <SignOutButton>
-                <button className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-red-600 font-semibold rounded-lg hover:bg-red-50 transition">
-                  <LogOut className="w-4 h-4" />
-                  Sign out
-                </button>
-              </SignOutButton>
+                {deployedUrl && <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />}
+              </button>
             </div>
 
           </div>
