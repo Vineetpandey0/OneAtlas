@@ -1,173 +1,614 @@
-# Spawn.dev - AI Application Builder
+<div align="center">
 
+# ⚡ SpawnApps.dev — AI Application Builder
 
+**Generate. Preview. Deploy. In seconds.**
 
-**Spawn.dev** is a powerful, AI-orchestrated runtime engine that generates fully functional, professionally designed web applications dynamically. Using natural language prompts, the platform leverages the Google Gemini API to structure data and instantly deploy specialized, interactive app templates ranging from SaaS Dashboards and E-commerce Stores to Social Feeds and Job Boards.
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38bdf8?style=flat-square&logo=tailwindcss)](https://tailwindcss.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
+[![Clerk](https://img.shields.io/badge/Auth-Clerk-6C47FF?style=flat-square&logo=clerk)](https://clerk.com/)
+[![Gemini](https://img.shields.io/badge/AI-Gemini%202.5-4285F4?style=flat-square&logo=google)](https://ai.google.dev/)
 
-No coding required. Just prompt, preview, and deploy.
+<br/>
+
+**SpawnApps.dev** is a powerful, AI-orchestrated runtime engine that generates fully functional, professionally designed web applications from a single natural language prompt. Describe your idea, and the engine instantly scaffolds a live, navigable application — no code required.
+
+Live: https://spawnapps.dev
+
+<br/>
+
+[**🚀 Deploy to Vercel**](#-deploy-to-vercel-one-click) · [**📦 Download as Next.js ZIP**](#-download-as-nextjs-project) · [**🛠 Run Locally**](#-getting-started-local-development) · [**📖 Architecture**](#-architecture-overview)
+
+</div>
 
 ---
 
-## Table of Contents
+## 📋 Table of Contents
 
-1. [Features](#features)
-2. [How It Works](#how-it-works)
-3. [Supported App Templates](#supported-app-templates)
-4. [Getting Started (Local Development)](#getting-started-local-development)
-5. [Using the App](#using-the-app)
+1. [Overview](#-overview)
+2. [Features](#-features)
+3. [Supported App Templates](#-supported-app-templates)
+4. [How It Works](#-how-it-works)
+5. [Deploy to Vercel (One-Click)](#-deploy-to-vercel-one-click)
+6. [Download as Next.js Project](#-download-as-nextjs-project)
+7. [Getting Started (Local Development)](#-getting-started-local-development)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#1-clone--install)
+   - [Environment Variables](#2-environment-variables)
+   - [Database Migration](#3-database-migration)
+   - [Run Dev Server](#4-run-development-server)
+8. [Using the App](#-using-the-app)
    - [Providing Your Gemini API Key](#providing-your-gemini-api-key)
    - [Generating an App](#generating-an-app)
-6. [Configuration Examples](#configuration-examples)
-7. [Upcoming Features](#upcoming-features)
-8. [Architecture Overview](#architecture-overview)
+9. [Configuration Schema Reference](#-configuration-schema-reference)
+10. [Prompt Engineering Guide](#-prompt-engineering-guide)
+11. [Architecture Overview](#-architecture-overview)
+12. [Project Structure](#-project-structure)
+13. [Upcoming Features](#-upcoming-features)
+14. [Contributing](#-contributing)
+15. [License](#-license)
 
 ---
 
-## Features
+## 🌐 Overview
 
-- ✨ **Natural Language to App:** Describe your idea in plain English and watch it generate in seconds.
-- 🎨 **10+ Premium Templates:** Dynamically renders professional, highly aesthetic layouts tailored to your domain.
-- 🔑 **Bring Your Own Key (BYOK):** Seamlessly input your personal Gemini API key directly from the UI to bypass platform rate limits.
-- 💾 **Intelligent Caching:** Generated layouts and data are cached in a local database, saving tokens on subsequent visits.
-- 📱 **Fully Responsive:** All generated applications are optimized for desktop, tablet, and mobile browsers.
-- 🔐 **Authentication Ready:** Integrated securely with Clerk for robust user management.
+Spawn.dev bridges the gap between idea and working software. Under the hood, a multi-step AI pipeline interprets your natural language description, structures it into a typed JSON configuration, and hands that config off to a **dynamic runtime renderer** that hydrates one of 10+ premium Next.js templates with AI-generated mock data — all in a matter of seconds.
+
+The result is a fully navigable, multi-page web application with real UI components, realistic data, and professional design — instantly available in your browser, ready to deploy or export.
 
 ---
 
-## How It Works
+## ✨ Features
 
-1. **Prompt Engineering:** The user enters a natural language prompt describing their desired app (e.g., *"Create a real estate discovery platform for luxury homes in Miami"*).
-2. **AI Orchestration:** The backend queries Google Gemini (using the user's provided API key or a fallback key) to output a strictly typed JSON configuration map.
-3. **Dynamic Registry:** The JSON schema determines the required pages (e.g., `/home`, `/listings`, `/dashboard`) and assigns them a UI `type` based on the intent.
-4. **Runtime Rendering:** The `AppRenderer` intercepts the route, matches the `type` against the internal Component Registry, and renders the specific Next.js template pre-populated with AI-generated mock data.
-
----
-
-## Supported App Templates
-
-Our runtime engine dynamically injects one of the following premium components depending on the user's intent:
-
-- `SaaSDashboard`: B2B metrics, charts, and data tables.
-- `EcommerceStore`: Product grids, shopping carts, and checkout flows.
-- `SocialFeed`: Infinite scrolling timelines and post interactions.
-- `JobBoard`: Job listings, filtering, and application modals.
-- `CollegeDiscovery`: Educational institution directories and ranking grids.
-- `RealEstateExplorer`: Property maps, image galleries, and pricing details.
-- `BookingSystem`: Service reservations, calendars, and availability slots.
-- `EventTicketing`: Neon-themed concert/event timelines and ticket purchases.
-- `BlogPlatform`: Clean typography, rich-text reader views, and author bios.
-- `PortfolioGallery`: Minimalist masonry grids for photographers and designers.
+| Feature | Description |
+|---|---|
+| 🧠 **Natural Language to App** | Describe your idea in plain English. The AI figures out the rest. |
+| 🎨 **10+ Premium Templates** | Hand-crafted, domain-specific layouts from SaaS dashboards to real estate explorers. |
+| 🚀 **One-Click Vercel Deploy** | Push your generated app directly to production on Vercel without leaving the browser. |
+| 📦 **Next.js ZIP Export** | Download the full, runnable Next.js project as a ZIP archive for local editing or custom hosting. |
+| 🔑 **Bring Your Own Key (BYOK)** | Paste your personal Gemini API key in the UI to bypass platform rate limits. |
+| 💾 **Intelligent Caching** | Generated configs are cached in a local database — revisiting an app never costs extra tokens. |
+| 📱 **Fully Responsive** | Every template is optimized for desktop, tablet, and mobile out of the box. |
+| 🔐 **Authentication Ready** | Full user management via Clerk — login, sessions, and per-user API key storage included. |
+| 🗺️ **Multi-Page Navigation** | Generated apps are multi-route applications with a functional top navigation bar. |
+| ⚡ **Streaming Generation** | Watch your app materialize in real time as the AI streams its configuration. |
 
 ---
 
-## Getting Started (Local Development)
+## 🧩 Supported App Templates
+
+The runtime engine selects and populates one of the following premium templates based on your prompt's detected intent:
+
+| Template Key | App Type | Features |
+|---|---|---|
+| `SaaSDashboard` | B2B / Analytics | KPI metrics, charts, activity tables, sidebar nav |
+| `EcommerceStore` | Online Retail | Product grids, filters, cart, checkout flow |
+| `SocialFeed` | Social Platform | Infinite scroll timeline, likes, comments, stories |
+| `JobBoard` | Recruitment | Job listing cards, role filters, application modal |
+| `CollegeDiscovery` | EdTech | Institution cards, ranking tables, program details |
+| `RealEstateExplorer` | Property | Map view, image galleries, pricing, agent contact |
+| `BookingSystem` | Services / Travel | Calendar picker, availability slots, booking confirmation |
+| `EventTicketing` | Events / Entertainment | Neon-themed event timeline, ticket tiers, purchase flow |
+| `BlogPlatform` | Publishing / Content | Rich-text reader, author bio, tag filtering, related posts |
+| `PortfolioGallery` | Creative / Agency | Masonry grid, project detail modal, contact form |
+
+> **Adding custom templates:** Drop a new component in `src/lib/runtime/componentRegistry.ts` and it becomes available to the AI immediately.
+
+---
+
+## 🔄 How It Works
+
+```
+User Prompt
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│         Prompt Engineering Layer        │
+│   Formats user input into a structured  │
+│   system prompt for the AI model        │
+└──────────────────┬──────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────┐
+│        Google Gemini 2.5 Flash          │
+│   Outputs a strictly typed JSON config  │
+│   (pages array, types, entities, meta)  │
+└──────────────────┬──────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────┐
+│         Config Validation & Cache       │
+│  Validates schema, stores in Postgres   │
+│  via Prisma. Cache hit → skip AI call   │
+└──────────────────┬──────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────┐
+│            AppRenderer                  │
+│  Intercepts /apps/[appId] routes,       │
+│  resolves page `type` → Component via   │
+│  the Component Registry                 │
+└──────────────────┬──────────────────────┘
+                   │
+                   ▼
+┌─────────────────────────────────────────┐
+│      Dynamic Template + Mock Data       │
+│  Component rendered with AI-generated   │
+│  content, live navigation, responsive   │
+│  layout, and real UI interactions       │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## 🚀 Deploy to Vercel (One-Click)
+
+Spawn.dev features **direct Vercel deployment** — push your generated app to production without leaving the browser.
+
+### How to Deploy
+
+1. **Generate your app** from the dashboard (see [Generating an App](#generating-an-app)).
+2. In the app preview, click the **"Deploy to Vercel"** button in the top action bar.
+3. You will be prompted to **authorize Spawn.dev** to connect to your Vercel account (one-time OAuth flow).
+4. Choose your preferred **Vercel team/scope** and **project name**.
+5. Click **Confirm Deploy**. The engine:
+   - Compiles the generated configuration and template code into a deployable Next.js project.
+   - Creates a new Vercel project via the Vercel API.
+   - Initiates a deployment. A live URL (e.g., `your-app.vercel.app`) is returned within ~60 seconds.
+6. Your live URL is saved to the app detail page for future reference.
+
+### Requirements for Vercel Deployment
+- A free or paid [Vercel account](https://vercel.com/signup).
+- Vercel OAuth authorization (prompted on first deploy).
+- No additional configuration is needed — environment variables and build settings are injected automatically.
+
+> **Note:** Deployed apps use AI-generated mock data by default. To connect a live database, see the [Upcoming Features](#-upcoming-features) section on Persistent State Management.
+
+---
+
+## 📦 Download as Next.js Project
+
+Not deploying to Vercel? You can **export your generated app as a fully runnable Next.js ZIP archive** and host it anywhere.
+
+### How to Download
+
+1. **Generate your app** from the dashboard.
+2. In the app preview, click the **"Download Project"** button in the top action bar.
+3. A `.zip` file will download containing a complete Next.js project, pre-configured with:
+   - Your AI-generated page configuration baked in as static data.
+   - All referenced template components from the Spawn.dev component library.
+   - `package.json`, `tailwind.config.js`, `next.config.js`, and TypeScript config.
+   - A `.env.example` file listing any variables you may need to configure.
+4. Unzip, run `npm install && npm run dev`, and your app is running locally in seconds.
+
+### What's Included in the ZIP
+
+```
+your-app-name/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx           # Root layout
+│   │   ├── page.tsx             # Entry redirect
+│   │   └── [generated pages]/  # One folder per page in your config
+│   ├── components/
+│   │   └── templates/           # The specific template(s) used by your app
+│   └── lib/
+│       └── appConfig.ts         # Your generated JSON config, baked in as a constant
+├── public/
+├── .env.example
+├── next.config.js
+├── package.json
+├── tailwind.config.js
+└── tsconfig.json
+```
+
+> **Tip:** The downloaded project has zero dependency on Spawn.dev's backend. It is a fully self-contained Next.js application you own completely.
+
+---
+
+## 🛠 Getting Started (Local Development)
 
 ### Prerequisites
-- Node.js (v18.x or later)
-- PostgreSQL Database
-- Clerk API Keys
-- Google Gemini API Key
+
+Make sure you have the following installed and available:
+
+- **Node.js** v18.x or later — [Download](https://nodejs.org/)
+- **PostgreSQL** (v14+) — [Download](https://www.postgresql.org/download/) or use a hosted service like [Supabase](https://supabase.com/) or [Neon](https://neon.tech/)
+- **Clerk Account** — [Sign up free](https://clerk.com/) (for authentication)
+- **Google Gemini API Key** — [Get one free](https://aistudio.google.com/app/apikey) (for AI generation)
+
+---
 
 ### 1. Clone & Install
+
 ```bash
+# Clone the repository
 git clone https://github.com/Vineetpandey0/App-Builder.git
+
+# Navigate into the project directory
 cd App-Builder
+
+# Install all dependencies
 npm install
 ```
 
+---
+
 ### 2. Environment Variables
-Create a `.env` file in the root directory and populate it with your credentials:
+
+Create a `.env` file in the root of the project by copying the example:
+
+```bash
+cp .env.example .env
+```
+
+Then open `.env` and fill in your credentials:
+
 ```env
-# Database
+# ─────────────────────────────────────────
+# DATABASE
+# ─────────────────────────────────────────
+# Your PostgreSQL connection string.
+# Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE_NAME
 DATABASE_URL="postgresql://user:password@localhost:5432/spawn_dev"
 
-# Authentication (Clerk)
+# ─────────────────────────────────────────
+# AUTHENTICATION (Clerk)
+# ─────────────────────────────────────────
+# Found in your Clerk dashboard → API Keys
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
 CLERK_SECRET_KEY=sk_test_...
 
-# AI Configuration (Fallback)
+# Optional: Customize Clerk redirect paths
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/dashboard
+NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/dashboard
+
+# ─────────────────────────────────────────
+# AI CONFIGURATION
+# ─────────────────────────────────────────
+# Fallback Gemini API key used when a user hasn't provided their own.
+# Get one free at: https://aistudio.google.com/app/apikey
 GOOGLE_API_KEY="AIzaSy..."
+
+# ─────────────────────────────────────────
+# DEPLOYMENT (Optional — for Vercel Deploy feature)
+# ─────────────────────────────────────────
+# Your Vercel API token for one-click deployment.
+# Create one at: https://vercel.com/account/tokens
+VERCEL_API_TOKEN=""
+
+# ─────────────────────────────────────────
+# APP URL (Required for production)
+# ─────────────────────────────────────────
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
+
+> **Security Note:** Never commit your `.env` file to version control. It is already listed in `.gitignore`.
+
+---
 
 ### 3. Database Migration
-Initialize the Prisma schema:
+
+Initialize the database schema using Prisma:
+
 ```bash
+# Push the Prisma schema to your database (creates all tables)
 npx prisma db push
+
+# Optional: Open Prisma Studio to inspect your database visually
+npx prisma studio
 ```
 
+If you make changes to `prisma/schema.prisma` in the future, run `npx prisma db push` again to sync.
+
+---
+
 ### 4. Run Development Server
+
 ```bash
 npm run dev
 ```
-Visit `http://localhost:3000` to access the builder platform.
+
+Open [http://localhost:3000](http://localhost:3000) in your browser to access the Spawn.dev builder.
+
+Other useful commands:
+
+```bash
+npm run build       # Production build
+npm run start       # Start production server
+npm run lint        # Run ESLint
+npm run type-check  # Run TypeScript type checking
+```
 
 ---
 
-## Using the App
+## 🎮 Using the App
 
 ### Providing Your Gemini API Key
-To ensure fast generations and avoid platform rate limits, users can provide their own Gemini API key:
-1. Log in to the application.
-2. Click on your **User Avatar** in the top right corner of the Top Navigation Bar.
-3. In the dropdown, paste your API key into the **Gemini API Key** input field.
-4. The key is automatically saved securely to your browser cookies and will be used for all future AI generations.
 
-### Generating an App
-1. Navigate to the **New App** dashboard.
-2. Type your application concept into the main prompt box.
-3. Click generate. The engine will communicate with Gemini, structure your database, and redirect you to the live preview window (`/apps/[appId]`).
-4. Navigate through the generated pages using the top bar of your newly spawned app!
+Spawn.dev supports **Bring Your Own Key (BYOK)** to avoid platform rate limits and ensure fast, unthrottled generations.
+
+1. Log in to the application.
+2. Click your **User Avatar** in the top-right corner of the navigation bar.
+3. In the dropdown menu, locate the **Gemini API Key** input field.
+4. Paste your key (format: `AIzaSy...`).
+5. The key is automatically and securely saved to your **browser cookies** and will be used for all subsequent AI requests.
+
+> **Privacy:** Your API key is stored client-side in cookies and is sent directly to the Gemini API. It is never stored on Spawn.dev's servers.
 
 ---
 
-## Configuration Examples
+### Generating an App
 
-Behind the scenes, `spawn.dev` uses a strictly defined JSON structure to orchestrate routing. If you wish to build an app manually via API or database injection, follow this structure:
+1. After signing in, navigate to the **Dashboard** and click **"New App"**.
+2. Enter a natural language description of your application concept in the prompt box.
+
+   **Examples of strong prompts:**
+   - `"A SaaS analytics platform for tracking e-commerce conversion funnels"`
+   - `"A luxury vacation rental marketplace for mountain cabins in Colorado"`
+   - `"A job board for remote-first engineering roles at tech startups"`
+   - `"A portfolio site for an architectural photography studio in Tokyo"`
+   - `"A booking platform for yoga and meditation classes in London"`
+
+3. Click **"Generate"**. The engine will:
+   - Send your prompt to Gemini for structured configuration generation.
+   - Validate and store the configuration in the database.
+   - Redirect you to the **live preview** at `/apps/[appId]`.
+
+4. Use the **top navigation bar** of your generated app to explore all generated pages.
+5. From the preview, use the action bar to:
+   - **Deploy to Vercel** — go live instantly.
+   - **Download ZIP** — export as a self-contained Next.js project.
+   - **Regenerate** — re-run the AI with the same prompt for a different result.
+
+---
+
+## 📐 Configuration Schema Reference
+
+Behind the scenes, the AI generates a strictly typed JSON configuration object. You can also craft this manually for API or database injection.
+
+### Full Schema
 
 ```json
 {
   "name": "Luxury Miami Real Estate",
+  "description": "A high-end property discovery platform for luxury homes.",
+  "theme": "light",
   "pages": [
     {
       "path": "/home",
+      "label": "Home",
       "type": "landing",
       "entity": "website"
     },
     {
       "path": "/properties",
+      "label": "Properties",
       "type": "real_estate",
       "entity": "listings"
     },
     {
       "path": "/admin",
+      "label": "Admin",
       "type": "saas_dashboard",
       "entity": "user"
     }
   ]
 }
 ```
-*Note: The `type` property must exactly match a key inside `src/lib/runtime/componentRegistry.ts`.*
+
+### Field Reference
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `name` | `string` | ✅ | Display name of the generated application |
+| `description` | `string` | ❌ | Short summary of the app's purpose |
+| `theme` | `"light" \| "dark"` | ❌ | UI color scheme (defaults to `"light"`) |
+| `pages` | `Page[]` | ✅ | Array of page definitions (minimum 1) |
+| `pages[].path` | `string` | ✅ | URL path, must start with `/` |
+| `pages[].label` | `string` | ✅ | Navigation label shown in the app's top bar |
+| `pages[].type` | `TemplateKey` | ✅ | Must exactly match a key in `componentRegistry.ts` |
+| `pages[].entity` | `string` | ✅ | Domain entity the page represents (e.g., `"listings"`, `"user"`) |
+
+### Valid `type` Values
+
+```
+landing · saas_dashboard · ecommerce · social_feed · job_board
+college_discovery · real_estate · booking · event_ticketing
+blog_platform · portfolio_gallery
+```
+
+> **Important:** The `type` value must exactly match a registered key in `src/lib/runtime/componentRegistry.ts`. Unrecognized types will cause a fallback render.
 
 ---
 
-## Upcoming Features
+## 💡 Prompt Engineering Guide
 
-We are constantly evolving the `spawn.dev` engine. Our upcoming roadmap includes:
+To get the best results from Spawn.dev's AI engine, follow these guidelines when crafting your prompt:
 
-- 🚀 **Autonomous Deployment:** One-click seamless deployment of your generated apps directly to Vercel or Netlify via API integration.
-- 📦 **GitHub Repository Export:** Export your generated JSON, dynamic templates, and Next.js boilerplate directly to a new GitHub repository on your account.
-- 🧩 **Custom Component Injection:** Upload your own React components to the engine registry to create bespoke template sets.
-- 🔄 **Persistent State Management:** Moving beyond static mock data by hooking generated apps up to live PostgreSQL instances automatically.
-- 🎨 **Theme Customization:** Exposing color palettes, fonts, and border radii settings to the user via an intuitive design side-panel.
+### ✅ Effective Prompts
+
+| Strategy | Example |
+|---|---|
+| **Be specific about the domain** | "A job board for remote DevOps engineers" (not just "a job board") |
+| **Include the target audience** | "A booking platform for personal trainers serving busy professionals" |
+| **Mention geography when relevant** | "A real estate explorer for luxury condos in Dubai" |
+| **Reference a visual style** | "A dark-themed SaaS dashboard for a cybersecurity startup" |
+| **Name the core entities** | "A marketplace for vintage camera equipment with listings, sellers, and auctions" |
+
+### ❌ Prompts to Avoid
+
+- Too vague: `"Make me an app"` → Use a domain-specific description
+- Too technical: `"Build a CRUD app with REST endpoints"` → Describe the *product*, not the implementation
+- Contradictory: `"A social media platform but also an e-commerce store"` → Pick a primary domain
+
+### 🔁 Iterating
+
+If a generation doesn't match your vision:
+- Click **Regenerate** to re-run the AI with the same prompt.
+- Refine your prompt with more detail and generate again.
+- Different runs of the same prompt will produce varied configurations due to AI temperature.
 
 ---
 
-## Architecture Overview
+## 🏗 Architecture Overview
 
-- **Frontend:** Next.js 14 App Router, React, Tailwind CSS, Shadcn UI
-- **Backend:** Next.js Route Handlers, Server Components
-- **AI Integration:** `@google/genai` (Gemini 2.5 Flash)
-- **Database:** PostgreSQL accessed via Prisma ORM
-- **Authentication:** Clerk
+Spawn.dev is a full-stack Next.js 14 application using the App Router. Here is a breakdown of each layer:
 
-Built with ❤️ by the spawn.dev team.
+### Technology Stack
+
+| Layer | Technology | Purpose |
+|---|---|---|
+| **Frontend** | Next.js 14 (App Router) | File-based routing, React Server Components, streaming |
+| **UI Library** | Tailwind CSS + Shadcn UI | Utility-first styling and accessible component primitives |
+| **AI Integration** | `@google/genai` (Gemini 2.5 Flash) | Structured JSON configuration generation from natural language |
+| **Database** | PostgreSQL + Prisma ORM | App config persistence, caching, user data |
+| **Authentication** | Clerk | User accounts, sessions, OAuth, BYOK key storage |
+| **Deployment** | Vercel (target) | Edge-optimized serverless Next.js hosting |
+
+### Request Flow
+
+```
+Browser
+  │
+  ▼
+Next.js App Router
+  ├─ /dashboard          → App creation UI
+  ├─ /api/generate       → POST: AI generation route handler
+  │     ├─ Reads user's Gemini key from cookies (or fallback env key)
+  │     ├─ Sends structured prompt to Gemini 2.5 Flash
+  │     ├─ Validates returned JSON config
+  │     └─ Persists to PostgreSQL via Prisma
+  │
+  └─ /apps/[appId]/[...path]  → AppRenderer (Server Component)
+        ├─ Fetches config from DB by appId
+        ├─ Matches current path → page config
+        ├─ Resolves page `type` → Component from Registry
+        └─ Renders component with AI-generated props
+```
+
+### Component Registry Pattern
+
+```typescript
+// src/lib/runtime/componentRegistry.ts
+import { SaaSDashboard } from "@/components/templates/SaaSDashboard";
+import { RealEstateExplorer } from "@/components/templates/RealEstateExplorer";
+// ...
+
+export const componentRegistry: Record<string, React.ComponentType<any>> = {
+  saas_dashboard: SaaSDashboard,
+  real_estate: RealEstateExplorer,
+  // Add new templates here — they become available to the AI immediately
+};
+```
+
+---
+
+## 📁 Project Structure
+
+```
+App-Builder/
+├── prisma/
+│   └── schema.prisma              # Database schema (App, Page, User models)
+│
+├── src/
+│   ├── app/
+│   │   ├── (auth)/                # Clerk sign-in / sign-up pages
+│   │   ├── api/
+│   │   │   ├── generate/          # POST /api/generate — AI generation handler
+│   │   │   ├── deploy/            # POST /api/deploy — Vercel deployment handler
+│   │   │   └── export/            # GET /api/export/[appId] — ZIP export handler
+│   │   ├── apps/
+│   │   │   └── [appId]/
+│   │   │       └── [...path]/     # Dynamic AppRenderer — catches all app routes
+│   │   ├── dashboard/             # Main user dashboard (app list + creation)
+│   │   └── layout.tsx             # Root layout with ClerkProvider
+│   │
+│   ├── components/
+│   │   ├── templates/             # 10+ premium app templates
+│   │   │   ├── SaaSDashboard.tsx
+│   │   │   ├── EcommerceStore.tsx
+│   │   │   ├── RealEstateExplorer.tsx
+│   │   │   └── ...
+│   │   └── ui/                    # Shadcn UI primitives + custom shared components
+│   │
+│   └── lib/
+│       ├── runtime/
+│       │   └── componentRegistry.ts   # Maps type keys → React components
+│       ├── ai/
+│       │   └── generateConfig.ts      # Gemini API call + prompt templates
+│       ├── db/
+│       │   └── prisma.ts              # Prisma client singleton
+│       └── utils.ts                   # Shared utility functions
+│
+├── .env.example
+├── next.config.js
+├── tailwind.config.js
+├── tsconfig.json
+└── package.json
+```
+
+---
+
+## 🔮 Upcoming Features
+
+We're actively building the next generation of Spawn.dev. Here's what's on the roadmap:
+
+| Feature | Status | Description |
+|---|---|---|
+| 🚀 **Autonomous Vercel Deploy** | ✅ **Shipped** | One-click deployment to Vercel from the preview window |
+| 📦 **Next.js ZIP Export** | ✅ **Shipped** | Download your generated app as a self-contained Next.js project |
+| 🐙 **GitHub Repository Export** | 🔨 In Progress | Push generated code directly to a new GitHub repo on your account |
+| 🧩 **Custom Component Injection** | 📅 Planned | Upload your own React components to the engine registry |
+| 🔄 **Persistent State Management** | 📅 Planned | Connect generated apps to live PostgreSQL instances for real data |
+| 🎨 **Theme Customization Panel** | 📅 Planned | Side panel for adjusting color palettes, fonts, and border radii |
+| 🌐 **Custom Domain Binding** | 📅 Planned | Attach a custom domain to deployed apps via Vercel API |
+| 🤝 **Team Collaboration** | 📅 Planned | Share apps with team members, leave comments, manage permissions |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Here's how to get started:
+
+1. **Fork** the repository and create your feature branch:
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+2. Make your changes, following the existing code style (ESLint + Prettier are configured).
+3. If adding a new template, register it in `src/lib/runtime/componentRegistry.ts`.
+4. Run `npm run lint` and `npm run type-check` to verify no errors.
+5. **Open a Pull Request** with a clear description of what you've added or changed.
+
+### Adding a New Template
+
+```bash
+# 1. Create your component
+touch src/components/templates/MyNewTemplate.tsx
+
+# 2. Register it in the component registry
+# src/lib/runtime/componentRegistry.ts
+#   my_new_type: MyNewTemplate,
+
+# 3. That's it — the AI can now select your template!
+```
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**. See the [LICENSE](./LICENSE) file for full details.
+
+---
+
+<div align="center">
+
+Built with ❤️ by the **spawn.dev** team.
+
+[⭐ Star on GitHub](https://github.com/Vineetpandey0/App-Builder) · [🐛 Report a Bug](https://github.com/Vineetpandey0/App-Builder/issues) · [💡 Request a Feature](https://github.com/Vineetpandey0/App-Builder/issues)
+
+</div>
