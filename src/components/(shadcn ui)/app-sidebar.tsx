@@ -20,12 +20,16 @@ import {
   FileText,
   ChevronDown,
   SquarePen,
-  Star,
+  Settings,
+  LogOut,
+  User as UserIcon,
 } from "lucide-react";
-import { useUser } from "@clerk/nextjs";
+import { useUser, SignOutButton } from "@clerk/nextjs";
 import { useAppStore } from "@/store/appStore";
 
 import Logo from "../logo";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import SettingsDialog from "../builder/SettingsDialog";
 
 const mainNavItems = [
   { label: "New App", href: "/dashboard", icon: SquarePen },
@@ -36,6 +40,7 @@ const mainNavItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const [recentsOpen, setRecentsOpen] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const { user } = useUser();
   const { appData } = useAppStore();
   const { setOpenMobile, isMobile } = useSidebar();
@@ -141,25 +146,52 @@ export function AppSidebar() {
 
       </SidebarContent>
 
-      <SidebarFooter className="p-3 border-t border-gray-100 overflow-hidden mr-2">
-        <div className="flex items-center gap-2">
-          <img
-            src={user?.imageUrl}
-            className="w-8 h-8 rounded-full"
-            alt="avatar"
-          />
+      <SidebarFooter className="p-3 border-t border-gray-100 overflow-visible">
+        <Popover>
+          <PopoverTrigger asChild>
+            <button className="flex items-center gap-3 w-full p-2 rounded-xl hover:bg-gray-100 transition-all group">
+              <div className="relative">
+                <img
+                  src={user?.imageUrl}
+                  className="w-9 h-9 rounded-full border border-gray-200 group-hover:border-violet-200 transition-colors"
+                  alt="avatar"
+                />
+                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
+              </div>
+              <div className="flex flex-col text-left flex-1 min-w-0">
+                <span className="text-sm font-bold text-gray-900 truncate">
+                  {user?.fullName || "User"}
+                </span>
+                <span className="text-[11px] text-gray-500 truncate">
+                  {user?.emailAddresses[0].emailAddress}
+                </span>
+              </div>
+              <ChevronDown className="w-4 h-4 text-gray-400 group-hover:text-gray-600 transition-colors" />
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-64 p-1.5 bg-white rounded-xl shadow-2xl border border-gray-200 mb-2 ml-4 animate-in slide-in-from-bottom-2 duration-200">
+            <div className="space-y-1">
+              <button 
+                onClick={() => setSettingsOpen(true)}
+                className="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition"
+              >
+                <Settings className="w-4 h-4 text-gray-400" />
+                Settings
+              </button>
+              
+              <div className="h-px bg-gray-100 my-1" />
 
-          
-          <div className="flex flex-col text-sm">
-            <span className="font-medium">
-              {user?.fullName || "User"}
-            </span>
-            <span className="text-gray-500 text-xs">
-              {user?.emailAddresses[0].emailAddress}
-            </span>
-          </div>
-          
-        </div>
+              <SignOutButton>
+                <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 font-semibold rounded-lg hover:bg-red-50 transition">
+                  <LogOut className="w-4 h-4" />
+                  Sign out
+                </button>
+              </SignOutButton>
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
       </SidebarFooter>
     </Sidebar>
   );
