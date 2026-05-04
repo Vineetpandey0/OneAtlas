@@ -227,16 +227,7 @@ function PromptBox() {
         />
 
         {/* Bottom bar */}
-        <div className="flex items-center justify-between px-3.5 pb-3.5 pt-2.5 border-t border-gray-100">
-          <label
-            htmlFor="hero-file"
-            className="flex items-center gap-1.5 text-[11px] text-gray-400 border border-gray-200 rounded-lg px-2.5 py-1.5 cursor-pointer
-              hover:bg-indigo-50 hover:text-indigo-500 hover:border-indigo-200 transition-all duration-200 tracking-wide"
-          >
-            <input type="file" id="hero-file" className="hidden" />
-            <UploadCloudIcon size={13} />
-            <span>Attach</span>
-          </label>
+        <div className="flex items-center justify-end px-3.5 pb-3.5 pt-2.5 border-t border-gray-100">
 
           <button
             type="submit"
