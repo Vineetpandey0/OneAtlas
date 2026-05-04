@@ -73,7 +73,7 @@ export default function EventTicketing({ data }: { data?: EventData }) {
           padding: 0 48px; height: 72px;
           display: flex; align-items: center; justify-content: space-between;
           border-bottom: 1px solid rgba(255,255,255,0.06);
-          position: sticky; top: 0; z-index: 50;
+          position: sticky; top: 0;
           background: rgba(8,8,16,0.9); backdrop-filter: blur(12px);
         }
         .et-logo { display: flex; align-items: center; gap: 10px; }
