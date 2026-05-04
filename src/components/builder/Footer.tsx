@@ -104,7 +104,7 @@ export default function Footer() {
             <input
               type="email"
               placeholder="you@example.com"
-              className="flex-1 sm:w-56 text-[13px] sm:text-sm px-3 sm:px-4 py-2 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 outline-none focus:border-indigo-400 transition"
+              className="flex-1 sm:w-56 w-34 text-[13px] sm:text-sm px-3 sm:px-4 py-2 rounded-lg bg-white/10 border border-white/10 text-white placeholder:text-gray-500 outline-none focus:border-indigo-400 transition"
             />
             <button className="px-3 sm:px-4 py-2 text-[13px] sm:text-sm font-medium rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition flex-shrink-0">
               Subscribe
