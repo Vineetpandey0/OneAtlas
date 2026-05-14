@@ -53,16 +53,6 @@ export default function HomePage() {
           {/* 4. AI Models Marquee */}
           <ModelsMarquee />
         </div>
-        
-        <div className="bg-[#F6F9FC]">
-          {/* 9. Atlas For Roles */}
-          <AtlasForRoles />
-        </div>
-
-        <div className="bg-[#F6F9FC]">
-          {/* 5. Why OneAtlas Comparison */}
-          <ComparisonSection />
-        </div>
 
         <div className="bg-white">
           {/* 6. Templates */}
@@ -73,6 +63,17 @@ export default function HomePage() {
           {/* 7. Pricing */}
           <PricingSection />
         </div>
+
+        <div className="bg-[#F6F9FC]">
+          {/* 9. Atlas For Roles */}
+          <AtlasForRoles />
+        </div>
+
+        <div className="bg-[#F6F9FC]">
+          {/* 5. Why OneAtlas Comparison */}
+          <ComparisonSection />
+        </div>
+
 
 
         <div className="bg-white">
