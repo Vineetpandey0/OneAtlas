@@ -83,11 +83,6 @@ export default function HomePage() {
           <PricingSection />
         </div>
 
-        <div className="bg-white">
-          {/* 8. Testimonials */}
-          <TestimonialsSection />
-        </div>
-
         <div className="bg-[#F6F9FC]">
           {/* 9. Atlas For Roles */}
           <AtlasForRoles />

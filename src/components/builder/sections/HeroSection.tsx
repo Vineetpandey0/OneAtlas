@@ -1,6 +1,6 @@
 "use client";
 
-import { SparklesIcon } from "lucide-react";
+import { ArrowBigRight, SparklesIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 /* ─── Design tokens ─── */
@@ -137,7 +137,7 @@ function PromptBox() {
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.opacity = "0.88"; (e.currentTarget as HTMLElement).style.transform = "scale(1.02)"; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.opacity = "1"; (e.currentTarget as HTMLElement).style.transform = "scale(1)"; }}
           >
-            <SparklesIcon size={14} /> Generate App
+            Generate App <ArrowBigRight size={14} /> 
           </button>
         </div>
       </form>
