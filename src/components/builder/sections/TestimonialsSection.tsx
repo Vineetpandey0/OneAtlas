@@ -135,7 +135,7 @@ export default function TestimonialsSection() {
   const header = useScrollReveal();
 
   return (
-    <section id="testimonials" style={{ background: "#fff", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
+    <section id="testimonials" style={{ background: "transparent", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 2rem" }}>
 
         {/* Header */}

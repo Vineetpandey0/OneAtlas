@@ -172,7 +172,7 @@ function CardStudent() {
 
 export default function AtlasForRoles() {
   return (
-    <section id="for-roles" style={{ background: "#FAFAFA", padding: "8rem 0" }}>
+    <section id="for-roles" style={{ background: "transparent", padding: "8rem 0" }}>
       <style>{`
         .bento-grid {
           display: grid;
@@ -193,12 +193,12 @@ export default function AtlasForRoles() {
           cursor: default;
         }
         .bento-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 24px 48px -12px rgba(10,37,64,0.08);
+          transform: translateY(-12px);
+          box-shadow: 0 32px 64px -12px rgba(10,37,64,0.12);
           border-color: #cbd5e1;
         }
         .bento-card:hover .bento-visual {
-          transform: scale(1.02);
+          transform: scale(1.08);
         }
         .bento-card-top {
           padding: 2rem;

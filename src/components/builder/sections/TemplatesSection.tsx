@@ -112,7 +112,7 @@ export default function TemplatesSection() {
   const filtered = active === "All" ? TEMPLATES : TEMPLATES.filter(t => t.category === active);
 
   return (
-    <section id="templates" style={{ background: "#fff", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
+    <section id="templates" style={{ background: "transparent", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 2rem" }}>
 
         {/* Header */}

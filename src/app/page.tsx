@@ -24,39 +24,65 @@ export default function HomePage() {
   }, [user])
 
   return (
-    <div className="bg-white">
-      {/* 1. Mega Menu Navbar */}
-      <GlobalNavbar />
+    <div className="relative bg-white selection:bg-indigo-100 selection:text-indigo-900">
+      {/* Dynamic Background Glows */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        <div 
+          className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full opacity-[0.03] blur-[120px] animate-pulse"
+          style={{ background: "#635BFF" }}
+        />
+        <div 
+          className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full opacity-[0.02] blur-[120px]"
+          style={{ background: "#635BFF" }}
+        />
+      </div>
 
-      {/* 2. Hero Section */}
-      <HeroSection />
+      <div className="relative z-10">
+        {/* 1. Mega Menu Navbar */}
+        <GlobalNavbar />
 
-      {/* 3. How OneAtlas Works */}
-      <BuildProcess />
+        {/* 2. Hero Section */}
+        <HeroSection />
 
-      {/* 4. AI Models Marquee */}
-      <ModelsMarquee />
+        <div className="bg-[#F6F9FC]">
+          {/* 3. How OneAtlas Works */}
+          <BuildProcess />
+        </div>
 
-      {/* 5. Why OneAtlas Comparison */}
-      <ComparisonSection />
+        <div className="bg-white">
+          {/* 4. AI Models Marquee */}
+          <ModelsMarquee />
+        </div>
+        
+        <div className="bg-[#F6F9FC]">
+          {/* 9. Atlas For Roles */}
+          <AtlasForRoles />
+        </div>
 
-      {/* 6. Templates */}
-      <TemplatesSection />
+        <div className="bg-[#F6F9FC]">
+          {/* 5. Why OneAtlas Comparison */}
+          <ComparisonSection />
+        </div>
 
-      {/* 7. Pricing */}
-      <PricingSection />
+        <div className="bg-white">
+          {/* 6. Templates */}
+          <TemplatesSection />
+        </div>
 
-      {/* 8. Testimonials */}
-      <TestimonialsSection />
+        <div className="bg-[#F6F9FC]">
+          {/* 7. Pricing */}
+          <PricingSection />
+        </div>
 
-      {/* 9. Atlas For Roles */}
-      <AtlasForRoles />
 
-      {/* 11. FAQ */}
-      <FAQSection />
+        <div className="bg-white">
+          {/* 11. FAQ */}
+          <FAQSection />
+        </div>
 
-      {/* Footer */}
-      <Footer />
+        {/* Footer */}
+        <Footer />
+      </div>
     </div>
   )
 }

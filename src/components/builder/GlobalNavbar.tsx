@@ -135,6 +135,7 @@ export default function GlobalNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const handler = () => { if (window.innerWidth >= 768) setMobileOpen(false); };
     window.addEventListener("resize", handler);
     return () => window.removeEventListener("resize", handler);

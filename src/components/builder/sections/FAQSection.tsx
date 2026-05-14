@@ -127,7 +127,7 @@ export default function FAQSection() {
   let qIndex = 0;
 
   return (
-    <section id="faq" style={{ background: "#F6F9FC", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
+    <section id="faq" style={{ background: "transparent", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
       <div style={{ maxWidth: 860, margin: "0 auto", padding: "0 2rem" }}>
 
         {/* Header */}

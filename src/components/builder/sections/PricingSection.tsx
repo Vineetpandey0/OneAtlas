@@ -75,7 +75,7 @@ export default function PricingSection() {
   const header = useScrollReveal();
 
   return (
-    <section id="pricing" style={{ background: "#F6F9FC", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
+    <section id="pricing" style={{ background: "transparent", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
       <style>{`
         .price-card { transition: box-shadow 0.25s ease, transform 0.25s ease; }
         .price-card:hover { box-shadow: 0 12px 40px rgba(10,37,64,0.1) !important; transform: translateY(-3px); }

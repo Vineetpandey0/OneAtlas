@@ -18,6 +18,7 @@ export default function ComparisonSection() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
+    if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

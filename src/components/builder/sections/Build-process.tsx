@@ -31,7 +31,7 @@ const STEPS = [
 
 export default function BuildProcess() {
   return (
-    <section className="py-16 md:py-32 px-8 font-sans">
+    <section className="py-16 md:py-32 px-8 font-sans bg-transparent">
       <div className="max-w-[1100px] mx-auto">
 
         {/* Section Heading */}

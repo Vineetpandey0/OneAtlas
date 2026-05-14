@@ -17,7 +17,7 @@ import {
   TII,
 } from "@lobehub/icons";
 
-/* ─── Model definitions ───────────────────────────────────────────────────── */
+/* ─── Models ─────────────────────────────────────────────────────────────── */
 const MODELS = [
   {
     name: "GPT-4o",
@@ -105,7 +105,7 @@ const MODELS = [
   },
 ];
 
-/* ─── Logo renderer ───────────────────────────────────────────────────────── */
+/* ─── Logo ──────────────────────────────────────────────────────────────── */
 function ModelLogo({
   model,
   size = 18,
@@ -135,7 +135,7 @@ function ModelLogo({
   );
 }
 
-/* ─── Minimal vertical logo + label ───────────────────────────────────────── */
+/* ─── Pill ───────────────────────────────────────────────────────────────── */
 function ModelPill({ model }: { model: (typeof MODELS)[0] }) {
   const [hovered, setHovered] = useState(false);
 
@@ -148,56 +148,62 @@ function ModelPill({ model }: { model: (typeof MODELS)[0] }) {
         display: "inline-flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 9,
-        width: 90,
-        cursor: "default",
+        gap: 12,
+        padding: "0 10px",
         textAlign: "center",
-        padding: "4px 0",
+        transition: "opacity 0.2s",
+        opacity: hovered ? 1 : 0.85,
       }}
     >
       <span
         style={{
-          width: 56,
-          height: 56,
-          borderRadius: 16,
+          width: 76,
+          height: 76,
+          borderRadius: "50%",
           background: model.bg,
-          border: `1.5px solid ${hovered ? model.border : "transparent"}`,
+          border: `1.5px solid ${
+            hovered ? model.border : "transparent"
+          }`,
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          flexShrink: 0,
           overflow: "hidden",
-          transition:
-            "transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease",
-          transform: hovered ? "translateY(-4px) scale(1.06)" : "translateY(0) scale(1)",
-          boxShadow: hovered ? `0 8px 20px ${model.border}88` : "none",
+          transition: "all 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
+          transform: hovered
+            ? "translateY(-6px) scale(1.1)"
+            : "translateY(0) scale(1)",
+          boxShadow: hovered
+            ? `0 12px 24px ${model.border}66`
+            : "0 2px 8px rgba(0,0,0,0.02)",
         }}
       >
-        <ModelLogo model={model} size={30} />
+        <ModelLogo model={model} size={40} />
       </span>
 
       <div>
         <p
           style={{
             margin: 0,
-            fontSize: 11.5,
+            fontSize: 12.5,
             fontWeight: 700,
             color: "#0A2540",
             lineHeight: 1.3,
-            letterSpacing: "-0.01em",
             whiteSpace: "nowrap",
           }}
         >
           {model.name}
         </p>
+
         <p
           style={{
-            margin: "1px 0 0",
+            margin: "2px 0 0",
             fontSize: 10,
-            color: "#97A3B4",
+            color: "#697386",
             lineHeight: 1.2,
-            fontWeight: 500,
+            fontWeight: 600,
+            letterSpacing: "0.02em",
             whiteSpace: "nowrap",
+            textTransform: "uppercase",
           }}
         >
           {model.company}
@@ -207,25 +213,38 @@ function ModelPill({ model }: { model: (typeof MODELS)[0] }) {
   );
 }
 
-/* ─── Curved marquee row ──────────────────────────────────────────────────── */
-function MarqueeRow({ reversed = false }: { reversed?: boolean }) {
-  const [t, setT] = useState(0);
+/* ─── Linear marquee ────────────────────────────────────────────────────── */
+function MarqueeRow() {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const positionRef = useRef(0);
+
   const [hovered, setHovered] = useState(false);
 
-  const items = MODELS;
+  const items = [...MODELS, ...MODELS, ...MODELS];
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+    const track = trackRef.current;
+
+    if (!track) return;
+
     let raf = 0;
-    let last = performance.now();
 
-    const speed = reversed ? -0.00022 : 0.00022;
+    const speed = 0.8;
 
-    const animate = (time: number) => {
-      const delta = time - last;
-      last = time;
-
+    const animate = () => {
       if (!hovered) {
-        setT((prev) => prev + delta * speed);
+        positionRef.current += speed;
+
+        const trackWidth = track.scrollWidth;
+        const oneThird = trackWidth / 3;
+
+        if (positionRef.current >= oneThird) {
+          positionRef.current = 0;
+        }
+
+        track.style.transform = `translateX(-${positionRef.current}px)`;
       }
 
       raf = requestAnimationFrame(animate);
@@ -234,107 +253,92 @@ function MarqueeRow({ reversed = false }: { reversed?: boolean }) {
     raf = requestAnimationFrame(animate);
 
     return () => cancelAnimationFrame(raf);
-  }, [hovered, reversed]);
+  }, [hovered]);
 
   return (
     <div
       style={{
         overflow: "hidden",
-        position: "relative",
         width: "100%",
-        height: 260,
+        position: "relative",
+        WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+        maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {items.map((m, i) => {
-        // moving parameter
-        const p = (t + i / items.length) % 1;
-
-        // horizontal traversal
-        const x = p * window.innerWidth * 1.3 - 180;
-
-        // normalize for parabola
-        const nx = (p - 0.5) * 2;
-
-        // actual parabola
-        const y = 140 + (nx * nx) * 120;
-
-        // perspective scaling
-        const scale = 1.12 - Math.abs(nx) * 0.28;
-
-        // tangent-based rotation
-        const rotate = nx * 12;
-
-        // depth opacity
-        const opacity = 1 - Math.abs(nx) * 0.55;
-
-        return (
-          <div
-            key={`${m.name}-${i}`}
-            style={{
-              position: "absolute",
-              left: 0,
-              top: 0,
-              transform: `
-                translate3d(${x}px, ${y}px, 0)
-                scale(${scale})
-                rotate(${rotate}deg)
-              `,
-              opacity,
-              willChange: "transform",
-            }}
-          >
-            <ModelPill model={m} />
-          </div>
-        );
-      })}
+      <div
+        ref={trackRef}
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 40,
+          width: "max-content",
+          willChange: "transform",
+          padding: "24px 0",
+        }}
+      >
+        {items.map((model, i) => (
+          <ModelPill
+            key={`${model.name}-${i}`}
+            model={model}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
-/* ─── Section ────────────────────────────────────────────────────────────── */
+/* ─── Section ───────────────────────────────────────────────────────────── */
 export default function ModelsMarquee() {
   const [visible, setVisible] = useState(false);
+
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") return;
     const el = ref.current;
+
     if (!el) return;
 
-    const obs = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
           setVisible(true);
-          obs.disconnect();
+          observer.disconnect();
         }
       },
       { threshold: 0.1 }
     );
 
-    obs.observe(el);
-    return () => obs.disconnect();
+    observer.observe(el);
+
+    return () => observer.disconnect();
   }, []);
 
   return (
     <section
       style={{
-        borderTop: "1px solid #E4E7EB",
-        borderBottom: "1px solid #E4E7EB",
+        borderTop: "none",
+        borderBottom: "none",
         overflow: "hidden",
-        padding: "5rem 0",
+        padding: "6rem 0",
       }}
     >
+      {/* Header */}
       <div
         ref={ref}
         style={{
           maxWidth: 1200,
           margin: "0 auto",
-          padding: "0 2rem 3rem",
+          padding: "0 2rem 1rem",
           textAlign: "center",
           opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(28px)",
-          transition: "opacity 0.7s ease, transform 0.7s ease",
+          transform: visible
+            ? "translateY(0)"
+            : "translateY(28px)",
+          transition:
+            "opacity 0.7s ease, transform 0.7s ease",
         }}
       >
         <p
@@ -348,6 +352,7 @@ export default function ModelsMarquee() {
         >
           — Powered by every frontier model
         </p>
+
         <h2
           style={{
             fontWeight: 800,
@@ -360,6 +365,7 @@ export default function ModelsMarquee() {
         >
           Build with all the latest AI models
         </h2>
+
         <p
           style={{
             color: "#425466",
@@ -368,10 +374,12 @@ export default function ModelsMarquee() {
             lineHeight: 1.75,
           }}
         >
-          OneAtlas connects to every top model so you always use the best one for the job.
+          OneAtlas connects to every top model so you
+          always use the best one for the job.
         </p>
       </div>
 
+      {/* Scroll */}
       <div style={{ position: "relative" }}>
         {(["left", "right"] as const).map((side) => (
           <div
@@ -391,9 +399,7 @@ export default function ModelsMarquee() {
           />
         ))}
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <MarqueeRow />
-        </div>
+        <MarqueeRow />
       </div>
     </section>
   );

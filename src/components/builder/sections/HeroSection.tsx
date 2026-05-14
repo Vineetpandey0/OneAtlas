@@ -208,7 +208,7 @@ export default function HeroSection() {
       <section id="home" style={{
         position: "relative", display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center", overflow: "hidden",
-        background: "#fff",
+        background: "transparent",
         paddingTop: "clamp(6rem,11vw,9rem)",
         paddingBottom: "clamp(3rem,6vw,6rem)",
         paddingLeft: "1.25rem", paddingRight: "1.25rem",
@@ -221,9 +221,9 @@ export default function HeroSection() {
           {/* Top glow */}
           <div style={{
             position: "absolute", top: "-10%", left: "50%", transform: "translateX(-50%)",
-            width: "min(900px,130vw)", height: 520,
-            background: "radial-gradient(ellipse at 50% 0%, #DBEAFE 0%, transparent 70%)",
-            opacity: 0.7,
+            width: "min(1100px,140vw)", height: 600,
+            background: "radial-gradient(ellipse at 50% 0%, #E0E7FF 0%, transparent 80%)",
+            opacity: 0.5,
           }} />
           {/* Orbs */}
           <div style={{ position: "absolute", width: 320, height: 320, top: "8%", left: "4%", borderRadius: "50%", background: "radial-gradient(circle, #C7D2FE66 0%, transparent 70%)", animation: "float 9s ease-in-out infinite" }} className="hidden sm:block" />
