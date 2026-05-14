@@ -233,17 +233,6 @@ export default function HeroSection() {
         {/* Content */}
         <div style={{ position: "relative", zIndex: 10, display: "flex", flexDirection: "column", alignItems: "center", width: "100%", maxWidth: 800, gap: 0 }}>
 
-          {/* Badge */}
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "#F0EFFF", border: "1px solid #C7D2FE",
-            borderRadius: 100, padding: "5px 14px 5px 8px", marginBottom: "1.75rem",
-            opacity: 0, animation: "fadeUp 0.6s cubic-bezier(.22,1,.36,1) 0.1s forwards",
-          }}>
-            <span style={{ background: C.primary, color: "#fff", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", padding: "3px 8px", borderRadius: 100, textTransform: "uppercase" }}>New</span>
-            <span style={{ fontSize: 13, color: C.primary, fontWeight: 500 }}>Multi-agent generation is here →</span>
-          </div>
-
           {/* Headline */}
           <h1 style={{ textAlign: "center", fontWeight: 900, fontSize: "clamp(2.8rem,8vw,5.5rem)", letterSpacing: "-0.04em", lineHeight: 1.06, color: C.navy, margin: "0 0 1.25rem", maxWidth: 820 }}>
             <span style={{ display: "block" }}>

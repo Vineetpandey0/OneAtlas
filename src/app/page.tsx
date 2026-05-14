@@ -3,7 +3,6 @@
 import GlobalNavbar from '@/components/builder/GlobalNavbar'
 import HeroSection from '@/components/builder/sections/HeroSection'
 import ModelsMarquee from '@/components/builder/sections/ModelsMarquee'
-import Features from '@/components/builder/sections/features'
 import BuildProcess from '@/components/builder/sections/Build-process'
 import TemplatesSection from '@/components/builder/sections/TemplatesSection'
 import PricingSection from '@/components/builder/sections/PricingSection'
@@ -37,9 +36,6 @@ export default function HomePage() {
 
       {/* 4. AI Models Marquee */}
       <ModelsMarquee />
-
-      {/* 5. Features */}
-      <Features />
 
       {/* 6. Templates */}
       <TemplatesSection />

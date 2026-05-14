@@ -1,548 +1,394 @@
 "use client";
+import { useEffect, useRef, useState } from "react";
+import { Sparkles, Globe2, LayoutTemplate, Code2, Users, Zap, Check, Rocket } from "lucide-react";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import {
-  Zap, Code2, Layers, Sparkles,
-  Globe2, ShieldCheck, Palette, Database, Gauge, GitBranch,
-} from "lucide-react";
+const P = "#635BFF", N = "#0A2540", M = "#425466";
 
-/* ─── Scroll reveal hook ─── */
-function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+/* ─── Shared card shell ─── */
+function Shell({ children, className }: { children: React.ReactNode; className?: string }) {
+  const [h, setH] = useState(false);
+  return (
+    <div
+      className={className}
+      onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)}
+      style={{
+        borderRadius: 16, padding: 1, position: "relative",
+        background: h
+          ? "linear-gradient(to bottom, #C7D2FE, rgba(199,210,254,0.3))"
+          : "linear-gradient(to bottom, #E4E7EB, rgba(228,231,235,0.2))",
+        boxShadow: h ? "0 8px 32px rgba(99,91,255,0.08)" : "none",
+        transition: "all .2s ease",
+      }}
+    >
+      <div style={{
+        borderRadius: 15, background: "#fff", width: "100%", height: "100%",
+        overflow: "hidden", position: "relative", display: "flex",
+        flexDirection: "column", padding: "1.5rem",
+      }}>
+        <div style={{ position: "relative", zIndex: 20 }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Title({ icon: I, label }: { icon: any; label: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 7, position: "relative", zIndex: 10 }}>
+      <I size={15} color={N} strokeWidth={1.8} />
+      <span style={{ fontSize: 13.5, fontWeight: 600, color: N }}>{label}</span>
+    </div>
+  );
+}
+
+function Desc({ children }: { children: React.ReactNode }) {
+  return <p style={{ fontSize: 13, color: M, lineHeight: 1.65, margin: "6px 0 0", position: "relative", zIndex: 10 }}>{children}</p>;
+}
+
+/* ─── Visual 1: Typing prompt (large card) ─── */
+const PROMPTS = ["Build a SaaS analytics dashboard", "Create an e-commerce store with Stripe", "Generate a portfolio with dark mode"];
+function PromptVisual() {
+  const [pi, setPi] = useState(0); const [ci, setCi] = useState(0); const [del, setDel] = useState(false);
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
-      { threshold: 0.12 }
-    );
-    obs.observe(el);
+    const word = PROMPTS[pi];
+    if (!del && ci === word.length) { const t = setTimeout(() => setDel(true), 1800); return () => clearTimeout(t); }
+    if (del && ci === 0) { setDel(false); setPi(p => (p + 1) % PROMPTS.length); return; }
+    const t = setTimeout(() => setCi(c => c + (del ? -1 : 1)), del ? 22 : 45);
+    return () => clearTimeout(t);
+  }, [ci, del, pi]);
+
+  return (
+    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#F6F9FC", borderTop: "1px solid rgba(10,37,64,.06)", padding: "1rem" }}>
+      <div style={{ background: "#fff", border: `1.5px solid rgba(99,91,255,.3)`, borderRadius: 10, padding: "8px 12px", fontSize: 12.5, color: N, fontFamily: "monospace", boxShadow: "0 0 0 3px rgba(99,91,255,.07)", display: "flex", alignItems: "center", minHeight: 38 }}>
+        {PROMPTS[pi].slice(0, ci)}<span style={{ display: "inline-block", width: 2, height: 14, background: P, marginLeft: 1, animation: "blink 1s infinite" }} />
+      </div>
+      <div style={{ display: "flex", gap: 5, marginTop: 8, flexWrap: "wrap" }}>
+        {["TypeScript", "Next.js", "Prisma", "Tailwind", "Auth"].map(t => (
+          <span key={t} style={{ fontSize: 10, fontWeight: 700, background: "#EEEFFD", color: P, borderRadius: 100, padding: "3px 9px", border: "1px solid rgba(99,91,255,.15)" }}>{t}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Visual 2: Models vertical marquee ─── */
+const MODS = [
+  { n: "GPT-4o", src: "https://cdn.simpleicons.org/openai/000000" },
+  { n: "Claude", src: "https://cdn.simpleicons.org/anthropic/D4714F" },
+  { n: "Gemini", src: "https://cdn.simpleicons.org/google/4285F4" },
+  { n: "Llama",  src: "https://cdn.simpleicons.org/meta/0082FB" },
+  { n: "Grok",   src: "https://cdn.simpleicons.org/x/000000" },
+  { n: "Perplexity", src: "https://cdn.simpleicons.org/perplexity/20B8CD" },
+  { n: "Phi-4",  src: "https://cdn.simpleicons.org/microsoft/737373" },
+  { n: "Command", src: "https://cdn.simpleicons.org/cohere/39594D" },
+];
+function ModelRow({ m }: { m: typeof MODS[0] }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 7, background: "#F6F9FC", border: "1px solid rgba(10,37,64,.07)", borderRadius: 8, padding: "5px 10px", flexShrink: 0 }}>
+      <img src={m.src} width={13} height={13} alt={m.n} style={{ objectFit: "contain" }} />
+      <span style={{ fontSize: 11, fontWeight: 600, color: N, whiteSpace: "nowrap" }}>{m.n}</span>
+    </div>
+  );
+}
+function ModelsVisual() {
+  const all = [...MODS, ...MODS];
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", display: "flex", gap: 6, padding: "0.75rem" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 5, animation: "slideUp 9s linear infinite" }}>
+        {all.map((m, i) => <ModelRow key={i} m={m} />)}
+      </div>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 5, animation: "slideDown 11s linear infinite" }}>
+        {[...all].reverse().map((m, i) => <ModelRow key={i} m={m} />)}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Visual 3: Deploy terminal ─── */
+const DEPLOY_STEPS = [
+  { t: "$ atlas deploy", c: N },
+  { t: "▲  Connecting to Vercel...", c: "#697386" },
+  { t: "⚙  Building project...", c: "#697386" },
+  { t: "✓  Build complete", c: "#10B981" },
+  { t: "→  https://myapp.vercel.app", c: P },
+];
+function DeployVisual() {
+  const [step, setStep] = useState(0);
+  useEffect(() => {
+    if (step >= DEPLOY_STEPS.length) { const t = setTimeout(() => setStep(0), 2000); return () => clearTimeout(t); }
+    const t = setTimeout(() => setStep(s => s + 1), step === 0 ? 500 : 750);
+    return () => clearTimeout(t);
+  }, [step]);
+  return (
+    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "#0A2540", borderRadius: "0 0 14px 14px", padding: "0.9rem 1rem", fontFamily: "monospace", display: "flex", flexDirection: "column", gap: 4, minHeight: 130 }}>
+      {DEPLOY_STEPS.slice(0, step).map((s, i) => (
+        <div key={i} style={{ fontSize: 11.5, color: s.c, animation: "fadeIn .3s ease" }}>{s.t}</div>
+      ))}
+      {step > 0 && step < DEPLOY_STEPS.length && <span style={{ display: "inline-block", width: 6, height: 12, background: "#fff", borderRadius: 1, animation: "blink .8s infinite" }} />}
+    </div>
+  );
+}
+
+/* ─── Visual 4: Templates scrolling chips ─── */
+const TMPL = [
+  { n: "SaaS Landing", c: P }, { n: "E-commerce", c: "#0EA5E9" }, { n: "Dashboard", c: "#10B981" },
+  { n: "Portfolio", c: "#F59E0B" }, { n: "Blog", c: "#EC4899" }, { n: "Booking App", c: "#14B8A6" },
+  { n: "Admin Panel", c: "#8B5CF6" }, { n: "Landing Page", c: "#F97316" },
+];
+function TChip({ t }: { t: typeof TMPL[0] }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 6, background: "#fff", border: "1px solid rgba(10,37,64,.07)", borderRadius: 8, padding: "5px 10px", flexShrink: 0, boxShadow: "0 1px 3px rgba(10,37,64,.04)" }}>
+      <div style={{ width: 7, height: 7, borderRadius: "50%", background: t.c, flexShrink: 0 }} />
+      <span style={{ fontSize: 11, fontWeight: 600, color: N, whiteSpace: "nowrap" }}>{t.n}</span>
+    </div>
+  );
+}
+function TemplatesVisual() {
+  const all = [...TMPL, ...TMPL];
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", display: "flex", flexDirection: "column", gap: 6, padding: "0.75rem 0" }}>
+      {[
+        { anim: "slideLeft 12s linear infinite", items: all },
+        { anim: "slideRight 14s linear infinite", items: [...all].reverse() },
+        { anim: "slideLeft 10s linear infinite", items: all },
+      ].map(({ anim, items }, ri) => (
+        <div key={ri} style={{ display: "flex", gap: 6, animation: anim, width: "max-content" }}>
+          {items.map((t, i) => <TChip key={i} t={t} />)}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ─── Visual 5: Cursor tracking ─── */
+function CursorIcon({ stroke = "rgba(10,37,64,.35)", fill = "#fff", glow = false }) {
+  return (
+    <svg width="20" height="26" viewBox="0 0 30 38" fill="none">
+      <path d="M3.58 1.7C2.58.87 1.06 1.58 1.06 2.89V35.63c0 1.47 1.87 2.11 2.77.94l8.76-11.47c.1-.14.26-.21.43-.21h14.31c1.45 0 2.1-1.81.99-2.73L3.58 1.7Z"
+        fill={fill} stroke={stroke} strokeWidth="1.8" strokeLinejoin="round"
+        style={glow ? { filter: `drop-shadow(0 0 5px ${stroke}88)` } : {}} />
+    </svg>
+  );
+}
+function CursorVisual({ wrapRef }: { wrapRef: React.RefObject<HTMLDivElement | null> }) {
+  const [pos, setPos] = useState({ x: 55, y: 55 }); const [on, setOn] = useState(false);
+  useEffect(() => {
+    const el = wrapRef.current; if (!el) return;
+    const mv = (e: MouseEvent) => { const r = el.getBoundingClientRect(); setPos({ x: e.clientX - r.left, y: e.clientY - r.top }); setOn(true); };
+    const out = () => setOn(false);
+    el.addEventListener("mousemove", mv); el.addEventListener("mouseleave", out);
+    return () => { el.removeEventListener("mousemove", mv); el.removeEventListener("mouseleave", out); };
+  }, [wrapRef]);
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+      <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(#E4E7EB 1px,transparent 1px)", backgroundSize: "20px 20px", opacity: .55 }} />
+      <div style={{ position: "absolute", top: "55%", left: "22%", transform: "translate(-50%,-50%)" }}>
+        <CursorIcon />
+        <div style={{ position: "absolute", left: "100%", top: -18, background: "#fff", border: "1px solid #E4E7EB", borderRadius: 100, padding: "2px 8px", display: "flex", gap: 3, alignItems: "center", boxShadow: "0 2px 6px rgba(10,37,64,.08)" }}>
+          {[0,1,2].map(i => <span key={i} style={{ width: 4, height: 4, borderRadius: "50%", background: "#C0C8D4", animation: `pulse .6s ${i*.2}s cubic-bezier(.4,0,.6,1) infinite` }} />)}
+        </div>
+      </div>
+      <div style={{ position: "absolute", top: "72%", left: "62%", transform: "translate(-50%,-50%) scale(.75)" }}>
+        <CursorIcon stroke="rgba(10,37,64,.2)" />
+      </div>
+      <div style={{ position: "absolute", top: 0, left: 0, transform: `translate(${pos.x - 10}px,${pos.y - 13}px)`, opacity: on ? 1 : 0, transition: "transform .08s ease-out,opacity .2s", pointerEvents: "none" }}>
+        <CursorIcon stroke={P} fill="rgba(99,91,255,.08)" glow />
+        <div style={{ position: "absolute", left: "100%", top: -18, background: P, color: "#fff", borderRadius: 100, padding: "2px 8px", fontSize: 10, fontWeight: 700, boxShadow: "0 2px 8px rgba(99,91,255,.35)", whiteSpace: "nowrap" }}>You</div>
+      </div>
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,#fff 0%,transparent 35%,transparent 65%,#fff 100%)", pointerEvents: "none" }} />
+    </div>
+  );
+}
+
+/* ─── Visual 6: Code export scrolling ─── */
+const CODE = [
+  ["0", "export default function Dashboard() {", P],
+  ["1", "  const [data] = useAtlasData()", N],
+  ["1", "  const user = useUser()", N],
+  ["0", "", ""],
+  ["1", "  return (", N],
+  ["2", "    <Layout sidebar={<Nav />}>", "#10B981"],
+  ["3", "      <Analytics data={data} />", "#0EA5E9"],
+  ["3", "      <DataTable rows={data.rows} />", "#0EA5E9"],
+  ["2", "    </Layout>", "#10B981"],
+  ["1", "  )", N],
+  ["0", "}", P],
+  ["0", "", ""],
+  ["0", "// ✓ Generated by OneAtlas", "#B0BAC8"],
+];
+function CodeVisual() {
+  const all = [...CODE, ...CODE];
+  return (
+    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "75%", overflow: "hidden" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 2, animation: "slideUp 12s linear infinite", padding: "0 1rem 1rem", fontFamily: "monospace", fontSize: 11 }}>
+        {all.map(([, txt, clr], i) => (
+          <div key={i} style={{ color: clr as string, whiteSpace: "pre", lineHeight: 1.7, opacity: clr ? 1 : 0 }}>{txt}</div>
+        ))}
+      </div>
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,#fff 0%,transparent 30%,transparent 80%,#fff 100%)", pointerEvents: "none" }} />
+    </div>
+  );
+}
+
+/* ─── Visual 7: Team avatars ─── */
+const TEAM = [
+  { i: "VP", c: P }, { i: "SK", c: "#0EA5E9" }, { i: "MR", c: "#10B981" },
+  { i: "LM", c: "#EC4899" }, { i: "TB", c: "#F59E0B" },
+];
+function TeamVisual() {
+  const [typing, setTyping] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setTyping(Math.floor(Math.random() * TEAM.length)), 1800);
+    return () => clearInterval(t);
+  }, []);
+  return (
+    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1rem", display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+      <div style={{ display: "flex", gap: 6 }}>
+        {TEAM.map((m, i) => (
+          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
+            <div style={{
+              width: 36, height: 36, borderRadius: "50%", background: m.c, color: "#fff",
+              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700,
+              boxShadow: i === typing ? `0 0 0 3px ${m.c}44` : "none",
+              transition: "box-shadow .3s",
+            }}>{m.i}</div>
+            {i === typing && (
+              <div style={{ background: "#fff", border: "1px solid #E4E7EB", borderRadius: 100, padding: "2px 6px", display: "flex", gap: 2, boxShadow: "0 2px 6px rgba(10,37,64,.08)" }}>
+                {[0,1,2].map(j => <span key={j} style={{ width: 3, height: 3, borderRadius: "50%", background: m.c, animation: `pulse .6s ${j*.2}s infinite` }} />)}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      <div style={{ background: "#F6F9FC", border: "1px solid rgba(10,37,64,.07)", borderRadius: 10, padding: "8px 12px", fontSize: 11.5, color: M, width: "100%", textAlign: "left" }}>
+        <span style={{ color: TEAM[typing].c, fontWeight: 700 }}>{TEAM[typing].i}</span> is editing <span style={{ color: N, fontWeight: 600 }}>Dashboard.tsx</span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Main Section ─── */
+export default function FeaturesSection() {
+  const card5Ref = useRef<HTMLDivElement>(null);
+  const [secVis, setSecVis] = useState(false);
+  const secRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setSecVis(true); obs.disconnect(); } }, { threshold: .08 });
+    if (secRef.current) obs.observe(secRef.current);
     return () => obs.disconnect();
   }, []);
-  return { ref, visible };
-}
-
-/* ─── Tilt on mouse move ─── */
-function useTilt() {
-  const ref = useRef<HTMLDivElement>(null);
-  const onMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const el = ref.current;
-    if (!el) return;
-    const { left, top, width, height } = el.getBoundingClientRect();
-    const x = (e.clientX - left) / width - 0.5;
-    const y = (e.clientY - top) / height - 0.5;
-    el.style.transform = `perspective(900px) rotateY(${x * 10}deg) rotateX(${-y * 8}deg) scale(1.02)`;
-  }, []);
-  const onLeave = useCallback(() => {
-    if (ref.current) ref.current.style.transform = "";
-  }, []);
-  return { ref, onMove, onLeave };
-}
-
-/* ─────────────────────────────────────
-   DATA
-───────────────────────────────────── */
-const PRIMARY = [
-  {
-    icon: Zap,
-    label: "01",
-    title: "Instant Generation",
-    sub: "From thought to production in seconds",
-    body: "Describe your idea in plain language and get a fully structured, deployment-ready app in under 5 seconds. No waiting, no bottlenecks.",
-    accent: "#f59e0b",
-    tag: "Core",
-  },
-  {
-    icon: Code2,
-    label: "02",
-    title: "Clean Code Output",
-    sub: "Every line has a reason",
-    body: "Readable, modular, conventionally sound. Generated code follows the same standards a senior engineer would enforce in code review.",
-    accent: "#38bdf8",
-    tag: "Dev-first",
-  },
-  {
-    icon: Layers,
-    label: "03",
-    title: "Modular Architecture",
-    sub: "Built to scale from day one",
-    body: "Reusable, composable components from the ground up — extend, update, or rearchitect any part without touching the rest.",
-    accent: "#a78bfa",
-    tag: "Scalable",
-  },
-  {
-    icon: Sparkles,
-    label: "04",
-    title: "AI-Powered Brain",
-    sub: "Senior engineer + product thinking",
-    body: "Trained to understand product intent, not just syntax. It reasons about architecture, edge cases, and UX before writing line one.",
-    accent: "#f472b6",
-    tag: "Intelligence",
-  },
-];
-
-const SECONDARY = [
-  { icon: Globe2,      title: "Deploy Anywhere",    body: "Vercel, Netlify, bare server — configs auto-generated.",    accent: "#2dd4bf" },
-  { icon: ShieldCheck, title: "Built-in Security",  body: "Auth, sanitization, headers — baked in from day one.",      accent: "#4ade80" },
-  { icon: Palette,     title: "Theme System",       body: "Tokens, typography, scale, palette — complete out of box.", accent: "#e879f9" },
-  { icon: Database,    title: "Database Schema",    body: "Prisma schema + migrations wired to your data model.",      accent: "#818cf8" },
-  { icon: Gauge,       title: "Performance First",  body: "Lazy load, code-split, image-optimize — automatic.",        accent: "#fb923c" },
-  { icon: GitBranch,   title: "Version Control",    body: "Every generation versioned, diffable, rollbackable.",       accent: "#67e8f9" },
-];
-
-const STATS = [
-  { n: "< 5s",   label: "generation time" },
-  { n: "4,200+", label: "builders this month" },
-  { n: "98%",    label: "deploy success rate" },
-  { n: "∞",      label: "iterations, no extra cost" },
-];
-
-/* ─────────────────────────────────────
-   PRIMARY CARD
-───────────────────────────────────── */
-
-
-const CARD_STYLES: Array<"big-stat" | "body-first" | "title-bottom" | "dot-strip"> = [
-  "big-stat", "body-first", "title-bottom", "dot-strip"
-];
-
-function PrimaryCard({ f, i }: { f: typeof PRIMARY[0]; i: number }) {
-  const { ref, visible } = useScrollReveal();
-  const type = CARD_STYLES[i];
-
-  const borderStyles: React.CSSProperties = {
-    "big-stat":     {},
-    "body-first":   { borderLeft: `3px solid ${f.accent}` },
-    "title-bottom": {},
-    "dot-strip":    {},
-  }[type];
 
   return (
-    <div
-      ref={ref}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(40px)",
-        transition: `opacity 0.65s cubic-bezier(.22,1,.36,1) ${i * 0.1}s,
-                     transform 0.65s cubic-bezier(.22,1,.36,1) ${i * 0.1}s`,
-      }}
-    >
-      <div
-        style={{
-          background: "#fff",
-          border: "1px solid #e8e8e3",
-          borderRadius: 18,
-          padding: "1.75rem 2rem",
-          minHeight: 280,
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-          transition: "background 0.2s ease, box-shadow 0.2s ease",
-          cursor: "default",
-          ...borderStyles,
-        }}
-        onMouseEnter={e => {
-          (e.currentTarget as HTMLElement).style.background = "#fafaf9";
-          (e.currentTarget as HTMLElement).style.boxShadow = "0 4px 24px rgba(0,0,0,0.06)";
-        }}
-        onMouseLeave={e => {
-          (e.currentTarget as HTMLElement).style.background = "#fff";
-          (e.currentTarget as HTMLElement).style.boxShadow = "none";
-        }}
-      >
-        {/* Header row */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontSize: 11, color: "rgba(0,0,0,0.22)", letterSpacing: "0.14em" }}>{f.label}</span>
-          <span style={{
-            fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase",
-            color: f.accent,
-            background: `${f.accent}18`,
-            border: `1px solid ${f.accent}35`,
-            borderRadius: 100, padding: "3px 10px",
-          }}>{f.tag}</span>
-        </div>
-
-        {/* Card body varies by type */}
-        {type === "big-stat" && (
-          <>
-            <div style={{
-              fontSize: 72, fontWeight: 800, lineHeight: 1,
-              color: "#e5e4e0", letterSpacing: "-0.04em",
-            }}>
-              5s
-            </div>
-            <h3 style={{ fontWeight: 700, fontSize: "1.4rem", color: "#0a0a0a", lineHeight: 1.2, margin: 0 }}>
-              {f.title}
-            </h3>
-            <p style={{ fontSize: 13.5, color: "#888", lineHeight: 1.78, margin: 0 }}>{f.body}</p>
-          </>
-        )}
-
-        {type === "body-first" && (
-          <>
-            <p style={{ fontSize: 15, color: "#555", lineHeight: 1.72, flex: 1, margin: 0 }}>{f.body}</p>
-            <h3 style={{ fontWeight: 700, fontSize: "1.5rem", color: "#0a0a0a", lineHeight: 1.15, margin: 0, marginTop: "auto" }}>
-              {f.title}
-            </h3>
-          </>
-        )}
-
-        {type === "title-bottom" && (
-          <>
-            <h3 style={{ fontWeight: 800, fontSize: "1.75rem", color: "#0a0a0a", lineHeight: 1.1, margin: 0 }}>
-              {f.title}
-            </h3>
-            <div style={{ borderTop: "1px solid #eeeee9", paddingTop: "1rem", marginTop: "auto" }}>
-              <p style={{ fontSize: 13.5, color: "#888", lineHeight: 1.78, margin: 0 }}>{f.body}</p>
-            </div>
-          </>
-        )}
-
-        {type === "dot-strip" && (
-          <>
-            {/* coloured dot row — abstract visual texture */}
-            <div style={{ display: "flex", gap: 7, marginBottom: 4 }}>
-              {["#6366f1","#a855f7","#ec4899","#f59e0b","#38bdf8","#4ade80"].map((c, j) => (
-                <div key={j} style={{ width: 9, height: 9, borderRadius: "50%", background: c }} />
-              ))}
-            </div>
-            <h3 style={{ fontWeight: 700, fontSize: "1.4rem", color: "#0a0a0a", lineHeight: 1.2, margin: 0 }}>
-              {f.title}
-            </h3>
-            <p style={{ fontSize: 13.5, color: "#888", lineHeight: 1.78, margin: 0 }}>{f.body}</p>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-/* ─────────────────────────────────────
-   SECONDARY TICKER
-───────────────────────────────────── */
-function SecondaryTicker() {
-  const { ref, visible } = useScrollReveal();
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [hovIdx, setHovIdx] = useState<number | null>(null);
-  const posRef = useRef(0);
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    let raf: number;
-    const run = () => {
-      if (hovIdx === null) {
-        posRef.current += 0.45;
-        const half = track.scrollWidth / 2;
-        if (posRef.current >= half) posRef.current = 0;
-        track.style.transform = `translateX(-${posRef.current}px)`;
-      }
-      raf = requestAnimationFrame(run);
-    };
-    raf = requestAnimationFrame(run);
-    return () => cancelAnimationFrame(raf);
-  }, [hovIdx]);
-
-  const items = [...SECONDARY, ...SECONDARY];
-
-  return (
-    <div
-      ref={ref}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(30px)",
-        transition: "opacity 0.65s ease 0.15s, transform 0.65s ease 0.15s",
-        overflow: "hidden", position: "relative",
-      }}
-    >
-      {/* Fade edges */}
-      {(["left","right"] as const).map(side => (
-        <div key={side} style={{
-          position: "absolute", top: 0, bottom: 0,
-          [side]: 0, width: 90, zIndex: 2, pointerEvents: "none",
-          background: `linear-gradient(to ${side === "left" ? "right" : "left"}, #f8f8f6, transparent)`,
-        }} />
-      ))}
-
-      <div
-        ref={trackRef}
-        style={{ display: "flex", gap: 14, width: "max-content", willChange: "transform", padding: "4px 0 8px" }}
-      >
-        {items.map((f, i) => {
-          const Icon = f.icon;
-          const on = hovIdx === i;
-          return (
-            <div
-              key={i}
-              onMouseEnter={() => setHovIdx(i)}
-              onMouseLeave={() => setHovIdx(null)}
-              style={{
-                flexShrink: 0, width: 230,
-                background: on ? "#0d0d0f" : "#fff",
-                border: `1px solid ${on ? f.accent + "44" : "#e8e8e3"}`,
-                borderRadius: 16, padding: "1.25rem 1.2rem",
-                cursor: "default",
-                transition: "background 0.28s ease, border-color 0.28s ease, transform 0.22s ease, box-shadow 0.28s ease",
-                transform: on ? "translateY(-5px) scale(1.01)" : "translateY(0) scale(1)",
-                boxShadow: on ? `0 16px 40px ${f.accent}22` : "none",
-              }}
-            >
-              <div style={{
-                width: 40, height: 40, borderRadius: 10,
-                background: on ? `${f.accent}22` : "#f2f2ef",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: "0.85rem", transition: "background 0.28s",
-              }}>
-                <Icon size={18} color={on ? f.accent : "#999"} strokeWidth={1.6} style={{ transition: "color 0.28s" }} />
-              </div>
-              <p style={{ margin: "0 0 0.35rem", fontWeight: 600, fontSize: 13.5, color: on ? "#fff" : "#111", transition: "color 0.28s" }}>
-                {f.title}
-              </p>
-              <p style={{ margin: 0, fontSize: 12, lineHeight: 1.65, color: on ? "rgba(255,255,255,0.42)" : "#8a8a8a", transition: "color 0.28s" }}>
-                {f.body}
-              </p>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────
-   STAT ROW
-───────────────────────────────────── */
-function StatRow() {
-  const { ref, visible } = useScrollReveal();
-  return (
-    <div
-      ref={ref}
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-        gap: 1, background: "#e2e2dc", border: "1px solid #e2e2dc",
-        borderRadius: 16, overflow: "hidden",
-      }}
-    >
-      {STATS.map((s, i) => (
-        <div key={i} style={{
-          background: "#fff", padding: "1.5rem",
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(18px)",
-          transition: `opacity 0.5s ease ${0.12 + i * 0.08}s, transform 0.5s ease ${0.12 + i * 0.08}s`,
-        }}>
-          <p style={{ margin: "0 0 0.25rem", lineHeight: 1,
-            fontSize: "clamp(1.7rem, 3vw, 2.3rem)", fontWeight: 800,
-            color: "#0a0a0a",
-          }}>{s.n}</p>
-          <p style={{ fontSize: 13, color: "#888", margin: 0, fontWeight: 500 }}>{s.label}</p>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────
-   ANIMATED HEADLINE
-───────────────────────────────────── */
-function SplitWords({ text, delay = 0, style = {} }: { text: string; delay?: number; style?: React.CSSProperties }) {
-  const { ref, visible } = useScrollReveal();
-  return (
-    <span ref={ref} style={{ display: "inline" }}>
-      {text.split(" ").map((w, i) => (
-        <span key={i} style={{
-          display: "inline-block", marginRight: "0.28em",
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(22px)",
-          transition: `opacity 0.6s cubic-bezier(.22,1,.36,1) ${delay + i * 0.07}s, transform 0.6s cubic-bezier(.22,1,.36,1) ${delay + i * 0.07}s`,
-          ...style,
-        }}>{w}</span>
-      ))}
-    </span>
-  );
-}
-
-/* ─────────────────────────────────────
-   CTA BLOCK
-───────────────────────────────────── */
-function CTABlock() {
-  const { ref, visible } = useScrollReveal();
-  const tilt = useTilt();
-
-  return (
-    <div ref={ref} style={{
-      opacity: visible ? 1 : 0,
-      transform: visible ? "translateY(0)" : "translateY(50px)",
-      transition: "opacity 0.8s ease, transform 0.8s ease",
-    }}>
-      <div
-        ref={tilt.ref}
-        onMouseMove={tilt.onMove}
-        onMouseLeave={tilt.onLeave}
-        style={{ position: "relative", background: "rgba(255,255,255,0.55)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.6)", borderRadius: 24, overflow: "hidden", transition: "transform 0.2s ease", boxShadow: "0 4px 40px rgba(0,0,0,0.05), 0 1px 0 rgba(255,255,255,0.9) inset" }}
-      >
-        {/* Animated orbs */}
-        <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
-          <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", top: "-25%", left: "-10%", background: "radial-gradient(circle, #6366f168 0%, transparent 65%)", animation: "orb1 8s ease-in-out infinite alternate" }} />
-          <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", bottom: "-25%", right: "-8%", background: "radial-gradient(circle, #f472b655 0%, transparent 65%)", animation: "orb2 10s ease-in-out infinite alternate" }} />
-          <div style={{ position: "absolute", width: 320, height: 320, borderRadius: "50%", top: "25%", right: "25%", background: "radial-gradient(circle, #38bdf848 0%, transparent 65%)", animation: "orb3 7s ease-in-out infinite alternate" }} />
-        </div>
-
-        <div style={{ position: "relative", zIndex: 1, padding: "clamp(2.5rem,6vw,5rem)", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "1.5rem" }}>
-          <span style={{ fontSize: 11, color: "rgba(0,0,0,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
-            — Ready to build with OneAtlas?
-          </span>
-          <h2 style={{
-            fontWeight: 800,
-            fontSize: "clamp(2rem, 5.5vw, 3.75rem)", color: "#0A2540",
-            margin: 0, lineHeight: 1.08, maxWidth: 700, letterSpacing: "-0.02em",
-          }}>
-            Ship your next app<br />before lunch.
-          </h2>
-          <p style={{ color: "#777", fontSize: 16, maxWidth: 460, lineHeight: 1.75, margin: 0 }}>
-            Thousands of developers and founders are using Spawn to turn ideas into production apps — faster than ever.
-          </p>
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginTop: "0.5rem" }}>
-            <a href="/sign-up" className="cta-primary" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "14px 28px", borderRadius: 12,
-              background: "#09090b", color: "#fff", fontSize: 15, fontWeight: 700,
-              textDecoration: "none", letterSpacing: "-0.01em",
-              transition: "transform 0.15s ease, box-shadow 0.2s ease",
-            }}>
-              <Sparkles size={15} /> Get started free
-            </a>
-            <a href="#demo" style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "14px 28px", borderRadius: 12,
-              background: "transparent", border: "1px solid #d8d8d4",
-              color: "#555", fontSize: 15, fontWeight: 500,
-              textDecoration: "none", transition: "border-color 0.2s, color 0.2s",
-            }}>
-              See it in action →
-            </a>
-          </div>
-          {/* Social proof avatars */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: "0.25rem" }}>
-            {["#6366f1","#f472b6","#38bdf8","#4ade80"].map((bg, i) => (
-              <div key={i} style={{
-                width: 28, height: 28, borderRadius: "50%",
-                background: bg, border: "2px solid #fff",
-                marginLeft: i > 0 ? -10 : 0, zIndex: 4 - i,
-              }} />
-            ))}
-            <span style={{ fontSize: 12.5, color: "rgba(0,0,0,0.38)", marginLeft: 8 }}>
-              +4,200 builders joined this month
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────
-   MAIN EXPORT
-───────────────────────────────────── */
-export default function Features() {
-  return (
-    <>
+    <section id="features" style={{ background: "#F6F9FC", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
       <style>{`
-        #spawn-features { color: #111; background: #fff; }
-        #spawn-features * { box-sizing: border-box; }
-
-        .pcard:hover .card-glow { opacity: 0.35 !important; }
-        .pcard:hover .card-line { opacity: 1 !important; }
-        .pcard:hover { box-shadow: 0 28px 70px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1) !important; }
-        .cta-primary:hover { transform: scale(1.03); box-shadow: 0 0 35px rgba(255,255,255,0.18); }
-
-        @keyframes orb1 { from { transform: translate(0,0) scale(1); } to { transform: translate(55px,40px) scale(1.2); } }
-        @keyframes orb2 { from { transform: translate(0,0) scale(1); } to { transform: translate(-45px,-28px) scale(1.15); } }
-        @keyframes orb3 { from { transform: translate(0,0) scale(1); } to { transform: translate(28px,-38px) scale(0.88); } }
+        @keyframes blink   { 0%,100%{opacity:1} 50%{opacity:0} }
+        @keyframes fadeIn  { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+        @keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:.35} }
+        @keyframes slideUp { from{transform:translateY(0)} to{transform:translateY(-50%)} }
+        @keyframes slideDown { from{transform:translateY(-50%)} to{transform:translateY(0)} }
+        @keyframes slideLeft  { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+        @keyframes slideRight { from{transform:translateX(-50%)} to{transform:translateX(0)} }
+        
+        .feat-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
+        .feat-card { display: flex; flex-direction: column; width: 100%; height: 400px; }
+        .feat-card-lg { grid-column: span 6; }
+        .feat-card-sm { grid-column: span 3; }
+        
+        @media (max-width: 1024px) {
+          .feat-card-lg, .feat-card-sm { grid-column: span 6; }
+        }
+        @media (max-width: 640px) {
+          .feat-card-lg, .feat-card-sm { grid-column: span 12; }
+          .feat-card { height: 350px; }
+        }
       `}</style>
 
-      <section id="spawn-features" style={{ width: "100%", overflow: "hidden" }}>
-
-        {/* ── INTRO ── */}
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(2rem, 8vw, 5rem) 2rem 0" }}>
-
-          {/* Pill badge */}
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "#F0EFFF", border: "1px solid #C7D2FE",
-            borderRadius: 100, padding: "5px 14px 5px 6px", marginBottom: "2.25rem",
-          }}>
-            <span style={{ background: "#635BFF", color: "#fff", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", padding: "3px 8px", borderRadius: 100, textTransform: "uppercase" }}>
-              New
-            </span>
-            <span style={{ fontSize: 13, color: "#635BFF" }}>OneAtlas 2.0 — now with multi-agent generation</span>
-          </div>
-
-          {/* Heading */}
-          <h1 style={{
-            fontWeight: 900,
-            fontSize: "clamp(2.8rem, 6.5vw, 6rem)", lineHeight: 1.03,
-            letterSpacing: "-0.04em", color: "#0a0a0a", margin: "0 0 1.5rem", maxWidth: 860,
-          }}>
-            <SplitWords text="The fastest way to" />
-            <br />
-            <span style={{ display: "inline-block", background: "linear-gradient(135deg,#6366f1,#a855f7,#ec4899)", WebkitBackgroundClip: "text",}}>
-              <SplitWords text="ship production apps."  />
-            </span>
-          </h1>
-
-          <p style={{ fontSize: "clamp(1rem, 1.8vw, 1.2rem)", color: "#425466", lineHeight: 1.78, maxWidth: 560, margin: "0 0 3.5rem" }}>
-            A complete toolkit engineered for speed, quality, and scalability —
-            without requiring a single line of code from you.
-          </p>
-        </div>
-
-        {/* ── PRIMARY CARDS ── */}
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 2rem 7rem" }}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {PRIMARY.map((f, i) => <PrimaryCard key={i} f={f} i={i} />)}
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 2rem" }}>
+        {/* Header */}
+        <div ref={secRef} style={{
+          opacity: secVis ? 1 : 0, transform: secVis ? "none" : "translateY(28px)",
+          transition: "all .7s ease", marginBottom: "2.5rem",
+        }}>
+          <p style={{ fontSize: 11, color: "#697386", letterSpacing: ".16em", textTransform: "uppercase", marginBottom: ".6rem" }}>— Everything you need</p>
+          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+            <h2 style={{ fontWeight: 800, fontSize: "clamp(1.75rem,4vw,2.75rem)", color: N, letterSpacing: "-.03em", margin: 0, lineHeight: 1.15 }}>
+              One platform. Every tool.
+            </h2>
+            <p style={{ fontSize: 15, color: M, maxWidth: 380, margin: 0, lineHeight: 1.75 }}>
+              From idea to shipped product — all the building blocks you need, integrated seamlessly.
+            </p>
           </div>
         </div>
 
-        {/* ── SECONDARY: "Everything else" ── */}
-        <div style={{ borderTop: "1px solid #ebebea", borderBottom: "1px solid #ebebea", padding: "5rem 0 4.5rem" }}>
+        {/* 12-col grid */}
+        <div className="feat-grid">
 
-          {/* Editorial header */}
-          <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 2rem 2.75rem" }}>
-            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 24 }}>
-              <div>
-                <p style={{ fontSize: 11, color: "#999", letterSpacing: "0.16em", textTransform: "uppercase", margin: "0 0 0.65rem" }}>
-                  — 06 capabilities
-                </p>
-                <h2 style={{
-                  fontWeight: 800,
-                  fontSize: "clamp(1.75rem, 4vw, 3rem)", color: "#0a0a0a",
-                  margin: 0, lineHeight: 1.12, letterSpacing: "-0.03em",
-                }}>
-                  Everything else<br />you need to ship.
-                </h2>
-              </div>
-              <p style={{ fontSize: 14.5, color: "#777", maxWidth: 360, lineHeight: 1.78, margin: 0 }}>
-                Security, theming, deployment, databases — the scaffolding your app needs, built and wired automatically.
-              </p>
-            </div>
+          {/* Card 1 — App Generator (span 6) */}
+          <Shell className="feat-card feat-card-lg">
+            <Title icon={Sparkles} label="App Generator" />
+            <Desc>Describe your app in plain English — get a complete, production-ready codebase in seconds.</Desc>
+            <ul style={{ listStyle: "none", padding: 0, margin: "14px 0 0", display: "flex", flexDirection: "column", gap: 6 }}>
+              {["Full-stack Next.js output", "TypeScript by default", "Prisma schema included", "Deploy-ready configs"].map(f => (
+                <li key={f} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 13, color: M }}>
+                  <Check size={14} strokeWidth={3} color={P} /> {f}
+                </li>
+              ))}
+            </ul>
+            <PromptVisual />
+          </Shell>
+
+          {/* Card 2 — All AI Models (span 3) */}
+          <Shell className="feat-card feat-card-sm">
+            <Title icon={Zap} label="All AI Models" />
+            <Desc>GPT-4o, Claude, Gemini, Llama and more.</Desc>
+            <ModelsVisual />
+          </Shell>
+
+          {/* Card 3 — 1-Click Deploy (span 3) */}
+          <Shell className="feat-card feat-card-sm">
+            <Title icon={Rocket} label="1-Click Deploy" />
+            <Desc>Push to Vercel instantly. Configs auto-generated.</Desc>
+            <DeployVisual />
+          </Shell>
+
+          {/* Card 4 — Templates (span 3) */}
+          <Shell className="feat-card feat-card-sm">
+            <Title icon={LayoutTemplate} label="60+ Templates" />
+            <Desc>Start from production-ready templates.</Desc>
+            <TemplatesVisual />
+          </Shell>
+
+          {/* Card 5 — Live Preview cursor (span 3) */}
+          <div ref={card5Ref} style={{ display: "contents" }}>
+            <Shell className="feat-card feat-card-sm">
+              <Title icon={Globe2} label="Live Preview" />
+              <Desc>Experience real-time collaborative editing.</Desc>
+              <CursorVisual wrapRef={card5Ref} />
+            </Shell>
           </div>
 
-          {/* Auto-scrolling ticker */}
-          <SecondaryTicker />
+          {/* Card 6 — Code Export (span 3) */}
+          <Shell className="feat-card feat-card-sm">
+            <Title icon={Code2} label="Code Export" />
+            <Desc>Clean, typed code that is 100% yours.</Desc>
+            <CodeVisual />
+          </Shell>
 
-          {/* Stats */}
-          <div style={{ maxWidth: 1200, margin: "2.75rem auto 0", padding: "0 2rem" }}>
-            <StatRow />
-          </div>
+          {/* Card 7 — Team (span 3) */}
+          <Shell className="feat-card feat-card-sm">
+            <Title icon={Users} label="Team Workspace" />
+            <Desc>Collaborate with real-time presence.</Desc>
+            <TeamVisual />
+          </Shell>
+
         </div>
 
-        {/* ── CTA ── */}
-        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "5rem 2rem 6rem" }}>
-          <CTABlock />
-        </div>
-
-      </section>
-    </>
+        {/* Bottom tagline */}
+        <p style={{ marginTop: "1.25rem", fontSize: 16, color: "#97A3B4", letterSpacing: "-.01em" }}>
+          <span style={{ color: N, fontWeight: 700 }}>Use one or all.</span> Best-in-class tools, integrated as a single platform.
+        </p>
+      </div>
+    </section>
   );
-}
+} 
