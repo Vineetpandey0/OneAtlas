@@ -88,7 +88,7 @@ function CardMarketer() {
         <div style={{ position: "absolute", inset: "132px 0 0 45px", borderBottom: "1px solid #e2e8f0", opacity: 0.5 }} />
 
         {/* SVG Area Chart */}
-        <svg viewBox="0 0 200 100" style={{ position: "absolute", bottom: -2, left: 45, width: "calc(100% - 45px)", height: 120, preserveAspectRatio: "none" }}>
+        <svg viewBox="0 0 200 100" preserveAspectRatio="none" style={{ position: "absolute", bottom: -2, left: 45, width: "calc(100% - 45px)", height: 120 }}>
           <defs>
             <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
