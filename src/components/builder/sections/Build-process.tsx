@@ -33,6 +33,17 @@ export default function BuildProcess() {
   return (
     <section className="py-16 md:py-32 px-8 font-sans">
       <div className="max-w-[1100px] mx-auto">
+        
+        {/* Section Heading */}
+        <div className="mb-16 md:mb-24">
+          <h2 className="text-[#0a0a0a] text-[clamp(3.5rem,8vw,6rem)] font-black tracking-[-0.05em] leading-[1.05]">
+            The fastest way<br />
+            to<br />
+            ship production<br />
+            apps.
+          </h2>
+        </div>
+
         {/* Stack container with native CSS sticky */}
         <div className="flex flex-col">
           {STEPS.map((s, i) => {
