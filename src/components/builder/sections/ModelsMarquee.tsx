@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import {
   OpenAI,
-  Anthropic,
+  Claude,
   Google,
   Meta,
   Mistral,
@@ -28,8 +28,8 @@ const MODELS = [
   },
   {
     name: "Claude 3.5",
-    company: "Anthropic",
-    Icon: Anthropic,
+    company: "Claude",
+    Icon: Claude,
     bg: "#FDF6F2",
     border: "#F5DDD5",
   },
@@ -235,7 +235,6 @@ export default function ModelsMarquee() {
 
   return (
     <section style={{
-      background: "#F6F9FC",
       borderTop: "1px solid #E4E7EB",
       borderBottom: "1px solid #E4E7EB",
       overflow: "hidden",

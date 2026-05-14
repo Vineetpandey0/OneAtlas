@@ -4,6 +4,7 @@ import GlobalNavbar from '@/components/builder/GlobalNavbar'
 import HeroSection from '@/components/builder/sections/HeroSection'
 import ModelsMarquee from '@/components/builder/sections/ModelsMarquee'
 import BuildProcess from '@/components/builder/sections/Build-process'
+import ComparisonSection from '@/components/builder/sections/ComparisonSection'
 import TemplatesSection from '@/components/builder/sections/TemplatesSection'
 import PricingSection from '@/components/builder/sections/PricingSection'
 import TestimonialsSection from '@/components/builder/sections/TestimonialsSection'
@@ -35,6 +36,9 @@ export default function HomePage() {
 
       {/* 4. AI Models Marquee */}
       <ModelsMarquee />
+
+      {/* 5. Why OneAtlas Comparison */}
+      <ComparisonSection />
 
       {/* 6. Templates */}
       <TemplatesSection />
