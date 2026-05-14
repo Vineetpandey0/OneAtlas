@@ -35,7 +35,26 @@ export default function HomePage() {
           className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full opacity-[0.02] blur-[120px]"
           style={{ background: "#635BFF" }}
         />
+        {/* Load Flash Beam */}
+        <div 
+          className="absolute inset-y-0 w-[60vw] opacity-[0.35] pointer-events-none"
+          style={{ 
+            background: "linear-gradient(90deg, transparent, #635BFF, #3ecf8e, #9461fd, transparent)",
+            transform: "skewX(-25deg)",
+            left: "-120%",
+            filter: "blur(40px)",
+            animation: "sweep 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards"
+          }}
+        />
       </div>
+
+      <style jsx global>{`
+        @keyframes sweep {
+          0% { left: -120%; opacity: 0; }
+          20% { opacity: 0.4; }
+          100% { left: 220%; opacity: 0; }
+        }
+      `}</style>
 
       <div className="relative z-10">
         {/* 1. Mega Menu Navbar */}
@@ -62,6 +81,11 @@ export default function HomePage() {
         <div className="bg-[#F6F9FC]">
           {/* 7. Pricing */}
           <PricingSection />
+        </div>
+
+        <div className="bg-white">
+          {/* 8. Testimonials */}
+          <TestimonialsSection />
         </div>
 
         <div className="bg-[#F6F9FC]">
