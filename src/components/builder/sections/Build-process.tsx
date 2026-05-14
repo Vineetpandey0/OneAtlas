@@ -48,26 +48,26 @@ const STEPS = [
     step: "01",
     title: "Describe Your Idea",
     sub: "Plain language, zero friction",
-    body: "Write what you want to build — a landing page, a SaaS dashboard, a blog. Be as vague or detailed as you like. Spawn reads your intent, not just your words.",
-    accent: "#6366f1",
+    body: "Write what you want to build — a landing page, a SaaS dashboard, a blog. Be as vague or detailed as you like. OneAtlas reads your intent, not just your words.",
+    accent: "#635BFF",
     tag: "Input",
   },
   {
     icon: CpuIcon,
     step: "02",
-    title: "Spawn Reasons & Plans",
+    title: "Atlas Reasons & Plans",
     sub: "Architecture before code",
-    body: "Before writing a single line, Spawn maps out the component tree, data model, and page structure. It thinks like an engineer, then acts like one.",
-    accent: "#f472b6",
-    tag: "Processing",
+    body: "Before writing a single line, Atlas maps out the component tree, data model, and page structure. It thinks like a senior engineer, then acts like one.",
+    accent: "#0EA5E9",
+    tag: "Planning",
   },
   {
     icon: FileCodeIcon,
     step: "03",
     title: "Code Is Generated",
     sub: "Clean, modular, yours",
-    body: "Components, routes, schemas, styles — everything is generated in one pass. Readable code that follows conventions you'd actually use in production.",
-    accent: "#38bdf8",
+    body: "Components, routes, schemas, styles — everything is generated in one pass. Readable, typed TypeScript that follows conventions you'd actually use in production.",
+    accent: "#10B981",
     tag: "Output",
   },
   {
@@ -76,7 +76,7 @@ const STEPS = [
     title: "Export & Deploy",
     sub: "Ship in minutes, not days",
     body: "Download the full codebase or push straight to Vercel. Deployment configs, environment files, and README — all included, nothing to configure.",
-    accent: "#4ade80",
+    accent: "#F59E0B",
     tag: "Deploy",
   },
 ];
@@ -104,11 +104,11 @@ function StepCard({ s, i }: { s: typeof STEPS[0]; i: number }) {
         className="wf-card"
         style={{
           position: "relative",
-          background: "#0d0d0f",
+          background: "#fff",
           borderRadius: 20,
           padding: "2.25rem",
           overflow: "hidden",
-          border: "1px solid rgba(255,255,255,0.06)",
+          border: "1px solid #e8e8e3",
           transition: "transform 0.2s ease, box-shadow 0.3s ease",
           cursor: "default",
           height: "100%",
@@ -120,7 +120,7 @@ function StepCard({ s, i }: { s: typeof STEPS[0]; i: number }) {
           style={{
             position: "absolute", top: -50, right: -50,
             width: 200, height: 200, borderRadius: "50%",
-            background: s.accent, opacity: 0.07, filter: "blur(40px)",
+            background: s.accent, opacity: 0.08, filter: "blur(40px)",
             pointerEvents: "none", transition: "opacity 0.3s",
           }}
         />
@@ -128,11 +128,11 @@ function StepCard({ s, i }: { s: typeof STEPS[0]; i: number }) {
         {/* Subtle grid */}
         <svg
           aria-hidden
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.03, pointerEvents: "none" }}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.06, pointerEvents: "none" }}
         >
           <defs>
             <pattern id={`wgrid${i}`} width="32" height="32" patternUnits="userSpaceOnUse">
-              <path d="M32 0L0 0 0 32" fill="none" stroke="white" strokeWidth="0.5" />
+              <path d="M32 0L0 0 0 32" fill="none" stroke="#000" strokeWidth="0.5" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill={`url(#wgrid${i})`} />
@@ -140,7 +140,7 @@ function StepCard({ s, i }: { s: typeof STEPS[0]; i: number }) {
 
         {/* Step index + tag row */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.75rem", position: "relative", zIndex: 1 }}>
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.22)", letterSpacing: "0.15em" }}>
+          <span style={{ fontSize: 11, color: "rgba(0,0,0,0.22)", letterSpacing: "0.15em" }}>
             {s.step} /
           </span>
           <span style={{
@@ -169,7 +169,7 @@ function StepCard({ s, i }: { s: typeof STEPS[0]; i: number }) {
         {/* Title */}
         <h3 style={{
           fontWeight: 700,
-          fontSize: "clamp(1.3rem, 2.2vw, 1.6rem)", color: "#fff",
+          fontSize: "clamp(1.3rem, 2.2vw, 1.6rem)", color: "#0a0a0a",
           lineHeight: 1.2, margin: "0 0 0.4rem", position: "relative", zIndex: 1,
         }}>
           {s.title}
@@ -186,7 +186,7 @@ function StepCard({ s, i }: { s: typeof STEPS[0]; i: number }) {
 
         {/* Body */}
         <p style={{
-          fontSize: 14.5, color: "rgba(255,255,255,0.46)", lineHeight: 1.78,
+          fontSize: 14.5, color: "#888", lineHeight: 1.78,
           margin: 0, position: "relative", zIndex: 1,
         }}>
           {s.body}
@@ -214,8 +214,8 @@ function Connectors({ progress }: { progress: number[] }) {
         <div key={i} style={{ display: "flex", alignItems: "center", flex: i < STEPS.length - 1 ? 1 : 0 }}>
           <div style={{
             width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
-            background: progress[i] > 0.9 ? s.accent : "#1e1e22",
-            border: `2px solid ${progress[i] > 0.1 ? s.accent : "rgba(255,255,255,0.08)"}`,
+            background: progress[i] > 0.9 ? s.accent : "#f0f0ed",
+            border: `2px solid ${progress[i] > 0.1 ? s.accent : "#d8d8d4"}`,
             display: "flex", alignItems: "center", justifyContent: "center",
             transition: "background 0.5s ease, border-color 0.5s ease",
             zIndex: 1,
@@ -223,14 +223,14 @@ function Connectors({ progress }: { progress: number[] }) {
           }}>
             <span style={{
               fontSize: 9,
-              color: progress[i] > 0.9 ? "#000" : "rgba(255,255,255,0.25)",
+              color: progress[i] > 0.9 ? "#000" : "rgba(0,0,0,0.3)",
               fontWeight: 700, transition: "color 0.4s",
             }}>
               {String(i + 1).padStart(2, "0")}
             </span>
           </div>
           {i < STEPS.length - 1 && (
-            <div style={{ flex: 1, height: 2, position: "relative", overflow: "hidden", background: "rgba(255,255,255,0.06)" }}>
+            <div style={{ flex: 1, height: 2, position: "relative", overflow: "hidden", background: "#e8e8e3" }}>
               <div style={{
                 position: "absolute", top: 0, left: 0, height: "100%",
                 width: `${Math.max(0, Math.min(1, (progress[i] - 0.5) * 2)) * 100}%`,
@@ -270,10 +270,10 @@ export default function BuildProcess() {
     <>
       <style>{`
         #spawn-process * { box-sizing: border-box; }
-        .wf-card:hover .wf-glow  { opacity: 0.14 !important; }
+        .wf-card:hover .wf-glow  { opacity: 0.18 !important; }
         .wf-card:hover .wf-line  { opacity: 1 !important; }
-        .wf-card:hover            { box-shadow: 0 28px 70px rgba(0,0,0,0.32) !important; }
-        .wf-card:hover .wf-icon-wrap { background: rgba(255,255,255,0.06) !important; transform: scale(1.1) rotate(-6deg); }
+        .wf-card:hover            { box-shadow: 0 8px 40px rgba(0,0,0,0.08) !important; border-color: #d8d8d4 !important; }
+        .wf-card:hover .wf-icon-wrap { transform: scale(1.1) rotate(-6deg); }
       `}</style>
 
       <section
@@ -295,16 +295,16 @@ export default function BuildProcess() {
             {/* Pill */}
             <div style={{
               display: "inline-flex", alignItems: "center", gap: 8,
-              background: "#edede9", border: "1px solid #deded8",
+              background: "#F0EFFF", border: "1px solid #C7D2FE",
               borderRadius: 100, padding: "5px 14px 5px 6px", marginBottom: "1.75rem",
             }}>
               <span style={{
-                background: "#111", color: "#fff", fontSize: 10, fontWeight: 700,
+                background: "#635BFF", color: "#fff", fontSize: 10, fontWeight: 700,
                 letterSpacing: "0.14em", padding: "3px 8px", borderRadius: 100, textTransform: "uppercase",
               }}>
                 How it works
               </span>
-              <span style={{ fontSize: 13, color: "#666" }}>Four steps. One prompt.</span>
+              <span style={{ fontSize: 13, color: "#635BFF" }}>Four steps. One prompt.</span>
             </div>
 
             {/* Heading */}
@@ -312,20 +312,20 @@ export default function BuildProcess() {
               <h2 style={{
                 fontWeight: 900,
                 fontSize: "clamp(2.2rem, 5vw, 4.25rem)", lineHeight: 1.06,
-                letterSpacing: "-0.035em", color: "#0a0a0a",
+                letterSpacing: "-0.035em", color: "#0A2540",
                 margin: 0, maxWidth: 640,
               }}>
                 From idea to working app —<br />
                 <span style={{
-                  background: "linear-gradient(135deg, #6366f1, #a855f7, #ec4899)",
+                  background: "linear-gradient(135deg, #635BFF, #818CF8, #0EA5E9)",
                   WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
                 }}>
                   in under a minute.
                 </span>
               </h2>
-              <p style={{ fontSize: 15, color: "#777", maxWidth: 340, lineHeight: 1.8, margin: 0, flexShrink: 0 }}>
+              <p style={{ fontSize: 15, color: "#425466", maxWidth: 340, lineHeight: 1.8, margin: 0, flexShrink: 0 }}>
                 No scaffolding. No config files. No second guessing.
-                Spawn handles the full stack so you can stay focused on the product.
+                OneAtlas handles the full stack so you can stay focused on building.
               </p>
             </div>
           </div>

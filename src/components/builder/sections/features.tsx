@@ -379,34 +379,34 @@ function CTABlock() {
         ref={tilt.ref}
         onMouseMove={tilt.onMove}
         onMouseLeave={tilt.onLeave}
-        style={{ position: "relative", background: "#09090b", borderRadius: 24, overflow: "hidden", transition: "transform 0.2s ease" }}
+        style={{ position: "relative", background: "rgba(255,255,255,0.55)", backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)", border: "1px solid rgba(255,255,255,0.6)", borderRadius: 24, overflow: "hidden", transition: "transform 0.2s ease", boxShadow: "0 4px 40px rgba(0,0,0,0.05), 0 1px 0 rgba(255,255,255,0.9) inset" }}
       >
         {/* Animated orbs */}
         <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
-          <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", top: "-20%", left: "-8%", background: "radial-gradient(circle, #6366f190 0%, transparent 70%)", animation: "orb1 8s ease-in-out infinite alternate" }} />
-          <div style={{ position: "absolute", width: 360, height: 360, borderRadius: "50%", bottom: "-20%", right: "-5%", background: "radial-gradient(circle, #f472b655 0%, transparent 70%)", animation: "orb2 10s ease-in-out infinite alternate" }} />
-          <div style={{ position: "absolute", width: 260, height: 260, borderRadius: "50%", top: "30%", right: "28%", background: "radial-gradient(circle, #38bdf844 0%, transparent 70%)", animation: "orb3 7s ease-in-out infinite alternate" }} />
+          <div style={{ position: "absolute", width: 500, height: 500, borderRadius: "50%", top: "-25%", left: "-10%", background: "radial-gradient(circle, #6366f168 0%, transparent 65%)", animation: "orb1 8s ease-in-out infinite alternate" }} />
+          <div style={{ position: "absolute", width: 420, height: 420, borderRadius: "50%", bottom: "-25%", right: "-8%", background: "radial-gradient(circle, #f472b655 0%, transparent 65%)", animation: "orb2 10s ease-in-out infinite alternate" }} />
+          <div style={{ position: "absolute", width: 320, height: 320, borderRadius: "50%", top: "25%", right: "25%", background: "radial-gradient(circle, #38bdf848 0%, transparent 65%)", animation: "orb3 7s ease-in-out infinite alternate" }} />
         </div>
 
         <div style={{ position: "relative", zIndex: 1, padding: "clamp(2.5rem,6vw,5rem)", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "1.5rem" }}>
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
-            — Ready when you are
+          <span style={{ fontSize: 11, color: "rgba(0,0,0,0.35)", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+            — Ready to build with OneAtlas?
           </span>
           <h2 style={{
             fontWeight: 800,
-            fontSize: "clamp(2rem, 5.5vw, 3.75rem)", color: "#fff",
+            fontSize: "clamp(2rem, 5.5vw, 3.75rem)", color: "#0A2540",
             margin: 0, lineHeight: 1.08, maxWidth: 700, letterSpacing: "-0.02em",
           }}>
             Ship your next app<br />before lunch.
           </h2>
-          <p style={{ color: "rgba(255,255,255,0.42)", fontSize: 16, maxWidth: 460, lineHeight: 1.75, margin: 0 }}>
+          <p style={{ color: "#777", fontSize: 16, maxWidth: 460, lineHeight: 1.75, margin: 0 }}>
             Thousands of developers and founders are using Spawn to turn ideas into production apps — faster than ever.
           </p>
           <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginTop: "0.5rem" }}>
             <a href="/sign-up" className="cta-primary" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               padding: "14px 28px", borderRadius: 12,
-              background: "#fff", color: "#09090b", fontSize: 15, fontWeight: 700,
+              background: "#09090b", color: "#fff", fontSize: 15, fontWeight: 700,
               textDecoration: "none", letterSpacing: "-0.01em",
               transition: "transform 0.15s ease, box-shadow 0.2s ease",
             }}>
@@ -415,8 +415,8 @@ function CTABlock() {
             <a href="#demo" style={{
               display: "inline-flex", alignItems: "center", gap: 8,
               padding: "14px 28px", borderRadius: 12,
-              background: "transparent", border: "1px solid rgba(255,255,255,0.14)",
-              color: "rgba(255,255,255,0.65)", fontSize: 15, fontWeight: 500,
+              background: "transparent", border: "1px solid #d8d8d4",
+              color: "#555", fontSize: 15, fontWeight: 500,
               textDecoration: "none", transition: "border-color 0.2s, color 0.2s",
             }}>
               See it in action →
@@ -427,11 +427,11 @@ function CTABlock() {
             {["#6366f1","#f472b6","#38bdf8","#4ade80"].map((bg, i) => (
               <div key={i} style={{
                 width: 28, height: 28, borderRadius: "50%",
-                background: bg, border: "2px solid #09090b",
+                background: bg, border: "2px solid #fff",
                 marginLeft: i > 0 ? -10 : 0, zIndex: 4 - i,
               }} />
             ))}
-            <span style={{ fontSize: 12.5, color: "rgba(255,255,255,0.38)", marginLeft: 8 }}>
+            <span style={{ fontSize: 12.5, color: "rgba(0,0,0,0.38)", marginLeft: 8 }}>
               +4,200 builders joined this month
             </span>
           </div>
@@ -469,13 +469,13 @@ export default function Features() {
           {/* Pill badge */}
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            background: "#f3f2ef", border: "1px solid #e5e4e0",
+            background: "#F0EFFF", border: "1px solid #C7D2FE",
             borderRadius: 100, padding: "5px 14px 5px 6px", marginBottom: "2.25rem",
           }}>
-            <span style={{ background: "#111", color: "#fff", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", padding: "3px 8px", borderRadius: 100, textTransform: "uppercase" }}>
+            <span style={{ background: "#635BFF", color: "#fff", fontSize: 10, fontWeight: 700, letterSpacing: "0.14em", padding: "3px 8px", borderRadius: 100, textTransform: "uppercase" }}>
               New
             </span>
-            <span style={{ fontSize: 13, color: "#555" }}>Spawn 2.0 — now with multi-agent generation</span>
+            <span style={{ fontSize: 13, color: "#635BFF" }}>OneAtlas 2.0 — now with multi-agent generation</span>
           </div>
 
           {/* Heading */}
@@ -491,9 +491,9 @@ export default function Features() {
             </span>
           </h1>
 
-          <p style={{ fontSize: "clamp(1rem, 1.8vw, 1.2rem)", color: "#666", lineHeight: 1.78, maxWidth: 560, margin: "0 0 3.5rem" }}>
+          <p style={{ fontSize: "clamp(1rem, 1.8vw, 1.2rem)", color: "#425466", lineHeight: 1.78, maxWidth: 560, margin: "0 0 3.5rem" }}>
             A complete toolkit engineered for speed, quality, and scalability —
-            without requiring a single line of code.
+            without requiring a single line of code from you.
           </p>
         </div>
 
