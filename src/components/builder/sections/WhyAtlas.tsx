@@ -73,16 +73,14 @@ function DiffCard({ d, i }: { d: typeof DIFFERENTIATORS[0]; i: number }) {
       onMouseLeave={() => setHovered(false)}
       style={{
         opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0)" : "translateY(32px)",
-        transition: `opacity 0.65s cubic-bezier(.22,1,.36,1) ${i * 0.08}s, transform 0.65s cubic-bezier(.22,1,.36,1) ${i * 0.08}s`,
+        transform: visible ? (hovered ? "translateY(-3px)" : "translateY(0)") : "translateY(32px)",
+        transition: `opacity 0.65s cubic-bezier(.22,1,.36,1) ${i * 0.08}s, transform 0.3s ease, box-shadow 0.2s ease, border-color 0.2s ease`,
         border: `1px solid ${hovered ? "#C7D2FE" : "#E4E7EB"}`,
         borderRadius: 16,
         background: "#fff",
         padding: "1.75rem",
         cursor: "default",
         boxShadow: hovered ? "0 8px 32px rgba(99,91,255,0.08)" : "0 1px 4px rgba(10,37,64,0.05)",
-        transition2: "border-color 0.2s, box-shadow 0.2s, transform 0.2s",
-        transform2: hovered ? "translateY(-3px)" : "translateY(0)",
       }}
     >
       <div style={{

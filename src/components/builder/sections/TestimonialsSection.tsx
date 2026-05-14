@@ -81,7 +81,7 @@ function TestimonialCard({ t, i }: { t: typeof TESTIMONIALS[0]; i: number }) {
       style={{
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(32px)",
-        transition: `opacity 0.65s cubic-bezier(.22,1,.36,1) ${i * 0.08}s, transform 0.65s cubic-bezier(.22,1,.36,1) ${i * 0.08}s`,
+        transition: `opacity 0.65s cubic-bezier(.22,1,.36,1) ${i * 0.08}s, transform 0.65s cubic-bezier(.22,1,.36,1) ${i * 0.08}s, box-shadow 0.2s ease, border-color 0.2s ease`,
         border: "1px solid #E4E7EB",
         borderRadius: 16,
         background: "#fff",
@@ -90,7 +90,6 @@ function TestimonialCard({ t, i }: { t: typeof TESTIMONIALS[0]; i: number }) {
         flexDirection: "column",
         gap: "1rem",
         boxShadow: "0 1px 4px rgba(10,37,64,0.05)",
-        transition2: "box-shadow 0.2s, border-color 0.2s",
       }}
       onMouseEnter={e => {
         (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(99,91,255,0.08)";
