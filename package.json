@@ -12,6 +12,7 @@
   "dependencies": {
     "@clerk/nextjs": "^7.2.7",
     "@google/genai": "^1.51.0",
+    "@lobehub/icons": "^5.8.0",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "axios": "^1.15.2",
