@@ -236,7 +236,7 @@ export default function HeroSection() {
           {/* Headline */}
           <h1 style={{ textAlign: "center", fontWeight: 900, fontSize: "clamp(2.8rem,8vw,5.5rem)", letterSpacing: "-0.04em", lineHeight: 1.06, color: C.navy, margin: "0 0 1.25rem", maxWidth: 820 }}>
             <span style={{ display: "block" }}>
-              {["Build", "anything", "with", "AI."].map((w, i) => (
+              {["Ideas to", "Apps"].map((w, i) => (
                 <span key={i} style={wordStyle(0.1 + i * 0.07)}>{w} </span>
               ))}
             </span>

@@ -8,7 +8,6 @@ import TemplatesSection from '@/components/builder/sections/TemplatesSection'
 import PricingSection from '@/components/builder/sections/PricingSection'
 import TestimonialsSection from '@/components/builder/sections/TestimonialsSection'
 import AtlasForRoles from '@/components/builder/sections/AtlasForRoles'
-import WhyAtlas from '@/components/builder/sections/WhyAtlas'
 import FAQSection from '@/components/builder/sections/FAQSection'
 import Footer from '@/components/builder/Footer'
 import { useUser } from '@clerk/nextjs'
@@ -48,9 +47,6 @@ export default function HomePage() {
 
       {/* 9. Atlas For Roles */}
       <AtlasForRoles />
-
-      {/* 10. Why Atlas */}
-      <WhyAtlas />
 
       {/* 11. FAQ */}
       <FAQSection />

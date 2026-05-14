@@ -29,7 +29,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Spawn Apps",
+  title: "One Atlas",
   description: "Generated Apps with just a prompt",
 };
 

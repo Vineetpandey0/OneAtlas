@@ -1,232 +1,307 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Code2, Paintbrush, Rocket, BarChart3, Check } from "lucide-react";
+import { Search, Globe, CheckCircle2, Clock, Share2, Monitor, Check } from "lucide-react";
+import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
 
-const ROLES = [
-  {
-    key: "Developer",
-    icon: Code2,
-    color: "#635BFF",
-    bg: "#EEEFFD",
-    headline: "Ship full-stack apps without the boilerplate.",
-    sub: "Generate clean, modular code you'd actually write yourself — routes, schemas, components, and deploy configs included.",
-    benefits: [
-      "Readable, typed TypeScript output",
-      "Prisma schema + auto-migrations",
-      "API routes and auth scaffolded",
-      "Next.js, Vite, or React — your choice",
-      "Git-ready export every time",
-    ],
-    visual: { gradient: "linear-gradient(135deg,#635BFF,#818CF8)", label: "TypeScript · Next.js · Prisma" },
-  },
-  {
-    key: "Designer",
-    icon: Paintbrush,
-    color: "#EC4899",
-    bg: "#FDE8F3",
-    headline: "Go from Figma concept to live UI instantly.",
-    sub: "Describe your design intent and get production-quality components with consistent spacing, tokens, and responsive layouts.",
-    benefits: [
-      "Tailwind + token-based design system",
-      "Responsive at every breakpoint",
-      "Dark/light mode out of the box",
-      "Customisable component output",
-      "No more developer back-and-forth",
-    ],
-    visual: { gradient: "linear-gradient(135deg,#EC4899,#F472B6)", label: "Tailwind · Components · Responsive" },
-  },
-  {
-    key: "Founder",
-    icon: Rocket,
-    color: "#F59E0B",
-    bg: "#FEF3C7",
-    headline: "Validate ideas before hiring a dev team.",
-    sub: "Turn your product vision into a working prototype in hours — not weeks. Test, iterate, and ship while competitors are still writing specs.",
-    benefits: [
-      "MVP in under a day",
-      "One-click Vercel deploy",
-      "Built-in landing page templates",
-      "Stripe payment integration",
-      "Full codebase you own forever",
-    ],
-    visual: { gradient: "linear-gradient(135deg,#F59E0B,#FCD34D)", label: "MVP · Deploy · Own" },
-  },
-  {
-    key: "Manager",
-    icon: BarChart3,
-    color: "#10B981",
-    bg: "#D1FAE5",
-    headline: "Reduce dev costs without sacrificing quality.",
-    sub: "Give your team a 10× productivity boost. Automate the repetitive scaffolding work so engineers focus on what only humans can do.",
-    benefits: [
-      "Reduce sprint kickoff time by 60%",
-      "Consistent code standards across projects",
-      "Audit-ready, documented output",
-      "Team workspace & collaboration",
-      "Enterprise SSO & permissions",
-    ],
-    visual: { gradient: "linear-gradient(135deg,#10B981,#34D399)", label: "Teams · Workflows · Scale" },
-  },
-];
+/* ─── Bento Card Components ─── */
 
-function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } }, { threshold: 0.1 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
-  return { ref, visible };
-}
-
-export default function AtlasForRoles() {
-  const [active, setActive] = useState("Developer");
-  const header = useScrollReveal();
-  const body = useScrollReveal();
-  const role = ROLES.find(r => r.key === active)!;
-  const Icon = role.icon;
-
+function CardPM() {
   return (
-    <section id="for-roles" style={{ background: "#F6F9FC", padding: "6rem 0", borderTop: "1px solid #E4E7EB" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 2rem" }}>
-
-        {/* Header */}
-        <div ref={header.ref} style={{
-          textAlign: "center",
-          opacity: header.visible ? 1 : 0,
-          transform: header.visible ? "translateY(0)" : "translateY(28px)",
-          transition: "opacity 0.7s ease, transform 0.7s ease",
-          marginBottom: "2.5rem",
-        }}>
-          <p style={{ fontSize: 11, color: "#697386", letterSpacing: "0.16em", textTransform: "uppercase", marginBottom: "0.75rem" }}>
-            — Built for every role
-          </p>
-          <h2 style={{ fontWeight: 800, fontSize: "clamp(1.75rem, 4vw, 2.75rem)", color: "#0A2540", letterSpacing: "-0.03em", margin: "0 0 0.75rem", lineHeight: 1.15 }}>
-            OneAtlas for every team
-          </h2>
-          <p style={{ color: "#425466", fontSize: 16, lineHeight: 1.75, maxWidth: 480, margin: "0 auto" }}>
-            Whether you write code, design UIs, or run the business — Atlas adapts to how you work.
-          </p>
+    <div className="bento-visual">
+      <div style={{ width: "100%", background: "#fff", border: "1px solid #e2e8f0", borderBottom: "none", borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 20, boxShadow: "0 -10px 30px rgba(0,0,0,0.02)" }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", margin: "0 0 4px" }}>Version history</h4>
+        <p style={{ fontSize: 12, color: "#64748b", margin: "0 0 16px" }}>Review changes, revert to a version.</p>
+        
+        <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#f8fafc", border: "1px solid #e2e8f0", padding: "8px 12px", borderRadius: 8, marginBottom: 20 }}>
+          <Search size={14} color="#94a3b8" />
+          <span style={{ fontSize: 13, color: "#94a3b8" }}>Search for a version</span>
         </div>
 
-        {/* Tab switcher */}
-        <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: "3rem" }}>
-          {ROLES.map(r => {
-            const RIcon = r.icon;
-            const isActive = r.key === active;
-            return (
-              <button
-                key={r.key}
-                onClick={() => setActive(r.key)}
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 8,
-                  padding: "9px 20px", borderRadius: 100, fontSize: 13.5, fontWeight: 600,
-                  cursor: "pointer", transition: "all 0.2s",
-                  border: isActive ? `1.5px solid ${r.color}` : "1.5px solid #E4E7EB",
-                  background: isActive ? r.bg : "#fff",
-                  color: isActive ? r.color : "#425466",
-                }}
-              >
-                <RIcon size={15} strokeWidth={2} />
-                {r.key}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Body */}
-        <div
-          ref={body.ref}
-          key={active}
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 40,
-            alignItems: "center",
-            opacity: body.visible ? 1 : 0,
-            transform: body.visible ? "translateY(0)" : "translateY(24px)",
-            transition: "opacity 0.6s ease, transform 0.6s ease",
-          }}
-        >
-          {/* Left: copy */}
-          <div>
-            <div style={{
-              display: "inline-flex", alignItems: "center", justifyContent: "center",
-              width: 52, height: 52, borderRadius: 14,
-              background: role.bg, marginBottom: "1.25rem",
-            }}>
-              <Icon size={24} color={role.color} strokeWidth={1.8} />
-            </div>
-            <h3 style={{ fontWeight: 800, fontSize: "clamp(1.4rem, 3vw, 2rem)", color: "#0A2540", letterSpacing: "-0.025em", lineHeight: 1.2, margin: "0 0 0.75rem" }}>
-              {role.headline}
-            </h3>
-            <p style={{ fontSize: 15, color: "#425466", lineHeight: 1.75, margin: "0 0 1.5rem" }}>{role.sub}</p>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-              {role.benefits.map(b => (
-                <li key={b} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "#425466" }}>
-                  <span style={{
-                    width: 20, height: 20, borderRadius: "50%",
-                    background: role.bg, display: "inline-flex",
-                    alignItems: "center", justifyContent: "center", flexShrink: 0,
-                  }}>
-                    <Check size={11} strokeWidth={2.5} color={role.color} />
-                  </span>
-                  {b}
-                </li>
-              ))}
-            </ul>
-            <a
-              href="/sign-up"
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 8,
-                marginTop: "2rem", padding: "11px 24px", borderRadius: 10,
-                background: role.color, color: "#fff",
-                fontSize: 14, fontWeight: 700, textDecoration: "none",
-                transition: "opacity 0.2s",
-                letterSpacing: "-0.01em",
-              }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = "0.85"}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = "1"}
-            >
-              Get started as a {role.key}
-            </a>
-          </div>
-
-          {/* Right: visual */}
-          <div style={{
-            borderRadius: 20,
-            background: role.visual.gradient,
-            minHeight: 320,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 16,
-            padding: "2.5rem",
-            boxShadow: `0 16px 48px ${role.color}22`,
-          }}>
-            <Icon size={56} color="rgba(255,255,255,0.7)" strokeWidth={1.2} />
-            <span style={{
-              background: "rgba(255,255,255,0.2)", color: "#fff",
-              fontSize: 12, fontWeight: 600, letterSpacing: "0.06em",
-              borderRadius: 100, padding: "6px 16px",
-              border: "1px solid rgba(255,255,255,0.3)",
-            }}>
-              {role.visual.label}
-            </span>
+        <p style={{ fontSize: 10, fontWeight: 700, color: "#94a3b8", letterSpacing: "0.05em", margin: "0 0 12px" }}>BOOKMARKED VERSIONS (1)</p>
+        <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", padding: 12, borderRadius: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#0f172a", marginBottom: 4 }}>Landing page working</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "#64748b" }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981" }} /> Published • Jun 7 6:00PM (Created)
           </div>
         </div>
       </div>
+    </div>
+  );
+}
 
+function CardEntrepreneur() {
+  return (
+    <div className="bento-visual">
+      <div style={{ width: "100%", background: "#fff", border: "1px solid #e2e8f0", borderBottom: "none", borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: 20, boxShadow: "0 -10px 30px rgba(0,0,0,0.02)" }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", margin: "0 0 16px" }}>Publish your project</h4>
+        
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+          <Globe size={14} color="#64748b" />
+          <span style={{ fontSize: 13, fontWeight: 500, color: "#0f172a" }}>https://dunder-mifflin.com</span>
+        </div>
+        
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+          <Clock size={14} color="#64748b" />
+          <span style={{ fontSize: 13, color: "#64748b" }}>1min ago</span>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 20 }}>
+          <div style={{ width: 14, height: 14, borderRadius: "50%", background: "#10b981", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#fff" }} />
+          </div>
+          <span style={{ fontSize: 13, fontWeight: 500, color: "#0f172a" }}>Up to date</span>
+        </div>
+
+        <p style={{ fontSize: 12, color: "#64748b", margin: "0 0 12px" }}>Share it with friends and coworkers</p>
+        <div style={{ display: "flex", gap: 12, marginBottom: 20 }}>
+          <FaTwitter size={16} color="#64748b" />
+          <FaLinkedin size={16} color="#64748b" />
+          <FaGithub size={16} color="#64748b" />
+        </div>
+
+        <button style={{ width: "100%", background: "#2563eb", color: "#fff", border: "none", padding: "10px", borderRadius: 8, fontSize: 13, fontWeight: 600 }}>
+          Update
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CardMarketer() {
+  return (
+    <div className="bento-visual" style={{ alignItems: "flex-end", overflow: "hidden" }}>
+      <div style={{ width: "100%", background: "#fff", border: "1px solid #e2e8f0", borderBottom: "none", borderTopLeftRadius: 16, borderTopRightRadius: 16, padding: "20px 20px 0 20px", position: "relative", minHeight: 200 }}>
+        <h4 style={{ fontSize: 14, fontWeight: 600, color: "#0f172a", margin: "0 0 24px" }}>Unique visitors</h4>
+        
+        {/* Y-axis labels */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 24, position: "absolute", left: 20, zIndex: 10 }}>
+          <span style={{ fontSize: 10, color: "#94a3b8" }}>100</span>
+          <span style={{ fontSize: 10, color: "#94a3b8" }}>80</span>
+          <span style={{ fontSize: 10, color: "#94a3b8" }}>60</span>
+          <span style={{ fontSize: 10, color: "#94a3b8" }}>40</span>
+        </div>
+
+        {/* Chart Lines */}
+        <div style={{ position: "absolute", inset: "60px 0 0 45px", borderBottom: "1px solid #e2e8f0", opacity: 0.5 }} />
+        <div style={{ position: "absolute", inset: "96px 0 0 45px", borderBottom: "1px solid #e2e8f0", opacity: 0.5 }} />
+        <div style={{ position: "absolute", inset: "132px 0 0 45px", borderBottom: "1px solid #e2e8f0", opacity: 0.5 }} />
+
+        {/* SVG Area Chart */}
+        <svg viewBox="0 0 200 100" style={{ position: "absolute", bottom: -2, left: 45, width: "calc(100% - 45px)", height: 120, preserveAspectRatio: "none" }}>
+          <defs>
+            <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
+            </linearGradient>
+          </defs>
+          <path d="M0,80 C20,80 30,50 60,40 C90,30 110,40 140,20 C170,0 190,10 200,20 L200,100 L0,100 Z" fill="url(#chartGrad)" />
+          <path d="M0,80 C20,80 30,50 60,40 C90,30 110,40 140,20 C170,0 190,10 200,20" fill="none" stroke="#2563eb" strokeWidth="3" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function CardAgency() {
+  return (
+    <div className="bento-visual" style={{ padding: 0 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.2fr 0.8fr", gap: 12, padding: "20px", width: "100%" }}>
+        <div style={{ background: "#0f172a", borderRadius: 12, height: 160, position: "relative", overflow: "hidden" }}>
+          <div style={{ padding: 16 }}>
+            <div style={{ fontSize: 10, color: "#fff", fontWeight: 600, opacity: 0.8, marginBottom: 4 }}>We craft extraordinary</div>
+            <div style={{ fontSize: 12, color: "#fff", fontWeight: 700 }}>digital experiences</div>
+          </div>
+          <div style={{ position: "absolute", right: -30, bottom: -30, width: 120, height: 120, background: "#ea580c", borderRadius: "50%" }} />
+        </div>
+        
+        <div style={{ background: "#2563eb", borderRadius: 12, height: 160, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 16 }}>
+          <div>
+            <div style={{ fontSize: 12, color: "#fff", fontWeight: 600, marginBottom: 2 }}>Learn Like You Are Chatting</div>
+            <div style={{ fontSize: 12, color: "#60a5fa", fontWeight: 600 }}>With A Smart Friend</div>
+          </div>
+          <div style={{ alignSelf: "flex-end", background: "#fcd34d", width: 60, height: 60, borderRadius: 8, transform: "rotate(-10deg) translate(10px, 20px)" }} />
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div style={{ background: "#f8fafc", borderRadius: 12, flex: 1, border: "1px solid #e2e8f0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ fontSize: 12, fontWeight: 600, color: "#334155" }}>AI Prompts</span>
+          </div>
+          <div style={{ background: "#059669", borderRadius: 12, height: 60, display: "flex", alignItems: "center", justifyContent: "center" }}>
+             <span style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>500,000+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CardStudent() {
+  return (
+    <div className="bento-visual">
+      <div style={{ width: "100%", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 16, padding: 24, boxShadow: "0 10px 30px rgba(0,0,0,0.03)", margin: "0 20px" }}>
+        <h4 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a", margin: "0 0 20px" }}>Plan</h4>
+        
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {[
+            "Analyze current project structure and dependencies",
+            "Design todo app component structure",
+            "Create todo data types and interfaces",
+            "Implement todo state management",
+          ].map((task, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, opacity: 1 - i * 0.15 }}>
+              <CheckCircle2 size={18} color="#10b981" />
+              <span style={{ fontSize: 14, fontWeight: 500, color: "#334155" }}>{task}</span>
+            </div>
+          ))}
+          <div style={{ display: "flex", alignItems: "center", gap: 12, opacity: 0.2 }}>
+            <CheckCircle2 size={18} color="#10b981" />
+            <span style={{ fontSize: 14, fontWeight: 500, color: "#334155" }}>Create todo input component</span>
+          </div>
+        </div>
+        
+        {/* Fog overlay at the bottom */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 60, background: "linear-gradient(to top, #fff, transparent)", borderRadius: 16 }} />
+      </div>
+    </div>
+  );
+}
+
+
+/* ─── Main Component ─── */
+
+export default function AtlasForRoles() {
+  return (
+    <section id="for-roles" style={{ background: "#FAFAFA", padding: "8rem 0" }}>
       <style>{`
+        .bento-grid {
+          display: grid;
+          grid-template-columns: repeat(6, 1fr);
+          gap: 1.5rem;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
+        }
+        .bento-card {
+          background: #ffffff;
+          border: 1px solid #e2e8f0;
+          border-radius: 24px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s;
+          cursor: default;
+        }
+        .bento-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 24px 48px -12px rgba(10,37,64,0.08);
+          border-color: #cbd5e1;
+        }
+        .bento-card:hover .bento-visual {
+          transform: scale(1.02);
+        }
+        .bento-card-top {
+          padding: 2rem;
+          z-index: 2;
+          background: #fff;
+        }
+        .bento-visual {
+          flex: 1;
+          background: #f8fafc;
+          border-top: 1px solid #f1f5f9;
+          display: flex;
+          align-items: flex-end;
+          justify-content: center;
+          padding: 0 2rem;
+          padding-top: 2rem;
+          transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+          transform-origin: bottom center;
+          position: relative;
+        }
+        
+        /* Grid spans */
+        .col-3 { grid-column: span 2; } /* 3 cards in row 1 -> 6/3 = 2 cols each */
+        .col-2 { grid-column: span 3; } /* 2 cards in row 2 -> 6/2 = 3 cols each */
+
+        @media (max-width: 1024px) {
+          .col-3 { grid-column: span 3; } /* 2x2 wrapping */
+          .col-2 { grid-column: span 6; }
+        }
         @media (max-width: 768px) {
-          #for-roles .role-grid { grid-template-columns: 1fr !important; }
+          .col-3 { grid-column: span 6; }
+          .col-2 { grid-column: span 6; }
         }
       `}</style>
+
+      {/* Header */}
+      <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 4rem", padding: "0 2rem" }}>
+        <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, color: "#0f172a", letterSpacing: "-0.04em", margin: "0 0 1rem", lineHeight: 1.1 }}>
+          <span style={{ display: "block", color: "#64748b", fontSize: "clamp(1.5rem, 3vw, 2.25rem)", fontWeight: 700, marginBottom: 8 }}>
+            Whatever your role
+          </span>
+          OneAtlas gives you superpowers
+        </h2>
+        <p style={{ fontSize: "1.1rem", color: "#475569", lineHeight: 1.6, margin: 0 }}>
+          From idea to live product, Atlas adapts to the way you work turning every vision into something real & fast.
+        </p>
+      </div>
+
+      {/* Bento Grid */}
+      <div className="bento-grid">
+        
+        {/* Row 1 */}
+        <div className="bento-card col-3">
+          <div className="bento-card-top">
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>Product managers</h3>
+            <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: 0 }}>
+              Go from insight to prototype in hours and test ideas with your team before the day is over.
+            </p>
+          </div>
+          <CardPM />
+        </div>
+
+        <div className="bento-card col-3">
+          <div className="bento-card-top">
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>Entrepreneurs</h3>
+            <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: 0 }}>
+              Launch a full business in days, not months. From landing page to product, all in one flow.
+            </p>
+          </div>
+          <CardEntrepreneur />
+        </div>
+
+        <div className="bento-card col-3">
+          <div className="bento-card-top">
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>Marketers</h3>
+            <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: 0 }}>
+              Spin up high-performing campaign pages in hours, with SEO and hosting built in.
+            </p>
+          </div>
+          <CardMarketer />
+        </div>
+
+        {/* Row 2 */}
+        <div className="bento-card col-2">
+          <div className="bento-card-top" style={{ paddingBottom: 0 }}>
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px", textAlign: "center" }}>Agencies</h3>
+            <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: "0 auto", textAlign: "center", maxWidth: 400 }}>
+              Multiply your impact: deliver more projects, faster, without scaling headcount.
+            </p>
+          </div>
+          <CardAgency />
+        </div>
+
+        <div className="bento-card col-2">
+          <div className="bento-card-top" style={{ paddingBottom: 0 }}>
+            <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px", textAlign: "center" }}>Students & builders</h3>
+            <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: "0 auto", textAlign: "center", maxWidth: 400 }}>
+              Learn by doing. Take ideas from class or side projects and turn them into fully working apps.
+            </p>
+          </div>
+          <CardStudent />
+        </div>
+
+      </div>
     </section>
   );
 }
