@@ -33,7 +33,7 @@ export default function BuildProcess() {
   return (
     <section className="py-16 md:py-32 px-8 font-sans">
       <div className="max-w-[1100px] mx-auto">
-        
+
         {/* Section Heading */}
         <div className="mb-16 md:mb-24">
           <h2 className="text-[#0a0a0a] text-[clamp(3.5rem,8vw,6rem)] font-black tracking-[-0.05em] leading-[1.05]">
@@ -50,10 +50,11 @@ export default function BuildProcess() {
             return (
               <div
                 key={i}
-                className="build-card sticky h-[560px] rounded-[24px] overflow-hidden flex bg-white shadow-[0_-15px_40px_-15px_rgba(0,0,0,0.15),_0_20px_40px_-10px_rgba(0,0,0,0.1)]"
+                className="build-card sticky h-[560px] rounded-[32px] overflow-hidden flex bg-white shadow-[0_-15px_40px_-15px_rgba(0,0,0,0.1),_0_40px_80px_-20px_rgba(0,0,0,0.15)] transition-all duration-500 hover:-translate-y-4 hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.2)]"
                 style={{
-                  top: `calc(10vh + ${i * 32}px)`,
-                  marginBottom: i === STEPS.length - 1 ? "10vh" : "60vh",
+                  top: `calc(16vh + ${i * 32}px)`,
+                  marginBottom: i === STEPS.length - 1 ? "50vh" : "60vh",
+                  zIndex: i,
                 }}
               >
                 {/* Left: white text panel */}

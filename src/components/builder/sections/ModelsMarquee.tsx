@@ -108,13 +108,13 @@ const MODELS = [
 /* ─── Logo renderer ─── */
 function ModelLogo({ model, size = 18 }: { model: typeof MODELS[0]; size?: number }) {
   const BaseIcon = model.Icon as any;
-  
+
   // Prefer the pre-colored SVG if the icon package exports it
   const IconComponent = BaseIcon.Color || BaseIcon.BrandColor || BaseIcon;
-  
+
   // If no colored component exists, fallback to coloring the Mono icon with the brand's primary color
-  const colorProp = (!BaseIcon.Color && !BaseIcon.BrandColor && BaseIcon.colorPrimary) 
-    ? { color: BaseIcon.colorPrimary } 
+  const colorProp = (!BaseIcon.Color && !BaseIcon.BrandColor && BaseIcon.colorPrimary)
+    ? { color: BaseIcon.colorPrimary }
     : {};
 
   return (
