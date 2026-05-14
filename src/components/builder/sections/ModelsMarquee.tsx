@@ -14,7 +14,7 @@ import {
   Perplexity,
   Microsoft,
   Qwen,
-  TII
+  TII,
 } from "@lobehub/icons";
 
 /* ─── Model definitions ───────────────────────────────────────────────────── */
@@ -105,28 +105,40 @@ const MODELS = [
   },
 ];
 
-/* ─── Logo renderer ─── */
-function ModelLogo({ model, size = 18 }: { model: typeof MODELS[0]; size?: number }) {
+/* ─── Logo renderer ───────────────────────────────────────────────────────── */
+function ModelLogo({
+  model,
+  size = 18,
+}: {
+  model: (typeof MODELS)[0];
+  size?: number;
+}) {
   const BaseIcon = model.Icon as any;
 
-  // Prefer the pre-colored SVG if the icon package exports it
   const IconComponent = BaseIcon.Color || BaseIcon.BrandColor || BaseIcon;
 
-  // If no colored component exists, fallback to coloring the Mono icon with the brand's primary color
-  const colorProp = (!BaseIcon.Color && !BaseIcon.BrandColor && BaseIcon.colorPrimary)
-    ? { color: BaseIcon.colorPrimary }
-    : {};
+  const colorProp =
+    !BaseIcon.Color && !BaseIcon.BrandColor && BaseIcon.colorPrimary
+      ? { color: BaseIcon.colorPrimary }
+      : {};
 
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+    <span
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
       <IconComponent size={size} {...colorProp} />
     </span>
   );
 }
 
-/* ─── Minimal vertical logo + label (no outer box) ─── */
-function ModelPill({ model }: { model: typeof MODELS[0] }) {
+/* ─── Minimal vertical logo + label ───────────────────────────────────────── */
+function ModelPill({ model }: { model: (typeof MODELS)[0] }) {
   const [hovered, setHovered] = useState(false);
+
   return (
     <div
       onMouseEnter={() => setHovered(true)}
@@ -143,28 +155,51 @@ function ModelPill({ model }: { model: typeof MODELS[0] }) {
         padding: "4px 0",
       }}
     >
-      {/* Logo icon square — the only visual element */}
-      <span style={{
-        width: 56, height: 56,
-        borderRadius: 16,
-        background: model.bg,
-        border: `1.5px solid ${hovered ? model.border : "transparent"}`,
-        display: "inline-flex", alignItems: "center", justifyContent: "center",
-        flexShrink: 0,
-        overflow: "hidden",
-        transition: "transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease",
-        transform: hovered ? "translateY(-4px) scale(1.06)" : "translateY(0) scale(1)",
-        boxShadow: hovered ? `0 8px 20px ${model.border}88` : "none",
-      }}>
+      <span
+        style={{
+          width: 56,
+          height: 56,
+          borderRadius: 16,
+          background: model.bg,
+          border: `1.5px solid ${hovered ? model.border : "transparent"}`,
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+          overflow: "hidden",
+          transition:
+            "transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease",
+          transform: hovered ? "translateY(-4px) scale(1.06)" : "translateY(0) scale(1)",
+          boxShadow: hovered ? `0 8px 20px ${model.border}88` : "none",
+        }}
+      >
         <ModelLogo model={model} size={30} />
       </span>
 
-      {/* Name + company — plain text, no box */}
       <div>
-        <p style={{ margin: 0, fontSize: 11.5, fontWeight: 700, color: "#0A2540", lineHeight: 1.3, letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>
+        <p
+          style={{
+            margin: 0,
+            fontSize: 11.5,
+            fontWeight: 700,
+            color: "#0A2540",
+            lineHeight: 1.3,
+            letterSpacing: "-0.01em",
+            whiteSpace: "nowrap",
+          }}
+        >
           {model.name}
         </p>
-        <p style={{ margin: "1px 0 0", fontSize: 10, color: "#97A3B4", lineHeight: 1.2, fontWeight: 500, whiteSpace: "nowrap" }}>
+        <p
+          style={{
+            margin: "1px 0 0",
+            fontSize: 10,
+            color: "#97A3B4",
+            lineHeight: 1.2,
+            fontWeight: 500,
+            whiteSpace: "nowrap",
+          }}
+        >
           {model.company}
         </p>
       </div>
@@ -172,52 +207,93 @@ function ModelPill({ model }: { model: typeof MODELS[0] }) {
   );
 }
 
-/* ─── Marquee row ─── */
+/* ─── Curved marquee row ──────────────────────────────────────────────────── */
 function MarqueeRow({ reversed = false }: { reversed?: boolean }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const posRef = useRef(0);
+  const [t, setT] = useState(0);
   const [hovered, setHovered] = useState(false);
-  const items = [...MODELS, ...MODELS];
+
+  const items = MODELS;
 
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track) return;
-    let raf: number;
-    const speed = reversed ? -0.4 : 0.4;
-    const run = () => {
+    let raf = 0;
+    let last = performance.now();
+
+    const speed = reversed ? -0.00022 : 0.00022;
+
+    const animate = (time: number) => {
+      const delta = time - last;
+      last = time;
+
       if (!hovered) {
-        posRef.current += speed;
-        const half = track.scrollWidth / 2;
-        if (posRef.current >= half) posRef.current = 0;
-        if (posRef.current < 0) posRef.current = half;
-        track.style.transform = `translateX(-${posRef.current}px)`;
+        setT((prev) => prev + delta * speed);
       }
-      raf = requestAnimationFrame(run);
+
+      raf = requestAnimationFrame(animate);
     };
-    raf = requestAnimationFrame(run);
+
+    raf = requestAnimationFrame(animate);
+
     return () => cancelAnimationFrame(raf);
   }, [hovered, reversed]);
 
   return (
     <div
-      style={{ overflow: "hidden", position: "relative", width: "100%" }}
+      style={{
+        overflow: "hidden",
+        position: "relative",
+        width: "100%",
+        height: 260,
+      }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <div
-        ref={trackRef}
-        style={{
-          display: "flex", gap: 14, width: "max-content",
-          padding: "6px 0", willChange: "transform",
-        }}
-      >
-        {items.map((m, i) => <ModelPill key={`${m.name}-${i}`} model={m} />)}
-      </div>
+      {items.map((m, i) => {
+        // moving parameter
+        const p = (t + i / items.length) % 1;
+
+        // horizontal traversal
+        const x = p * window.innerWidth * 1.3 - 180;
+
+        // normalize for parabola
+        const nx = (p - 0.5) * 2;
+
+        // actual parabola
+        const y = 140 + (nx * nx) * 120;
+
+        // perspective scaling
+        const scale = 1.12 - Math.abs(nx) * 0.28;
+
+        // tangent-based rotation
+        const rotate = nx * 12;
+
+        // depth opacity
+        const opacity = 1 - Math.abs(nx) * 0.55;
+
+        return (
+          <div
+            key={`${m.name}-${i}`}
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              transform: `
+                translate3d(${x}px, ${y}px, 0)
+                scale(${scale})
+                rotate(${rotate}deg)
+              `,
+              opacity,
+              willChange: "transform",
+            }}
+          >
+            <ModelPill model={m} />
+          </div>
+        );
+      })}
     </div>
   );
 }
 
-/* ─── Section ─── */
+/* ─── Section ────────────────────────────────────────────────────────────── */
 export default function ModelsMarquee() {
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -225,60 +301,96 @@ export default function ModelsMarquee() {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
     const obs = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      ([e]) => {
+        if (e.isIntersecting) {
+          setVisible(true);
+          obs.disconnect();
+        }
+      },
       { threshold: 0.1 }
     );
+
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
 
   return (
-    <section style={{
-      borderTop: "1px solid #E4E7EB",
-      borderBottom: "1px solid #E4E7EB",
-      overflow: "hidden",
-      padding: "5rem 0",
-    }}>
-      {/* Header */}
+    <section
+      style={{
+        borderTop: "1px solid #E4E7EB",
+        borderBottom: "1px solid #E4E7EB",
+        overflow: "hidden",
+        padding: "5rem 0",
+      }}
+    >
       <div
         ref={ref}
         style={{
-          maxWidth: 1200, margin: "0 auto", padding: "0 2rem 3rem",
+          maxWidth: 1200,
+          margin: "0 auto",
+          padding: "0 2rem 3rem",
           textAlign: "center",
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(28px)",
           transition: "opacity 0.7s ease, transform 0.7s ease",
         }}
       >
-        <p style={{
-          fontSize: 11, color: "#697386", letterSpacing: "0.16em",
-          textTransform: "uppercase", marginBottom: "0.75rem",
-        }}>
+        <p
+          style={{
+            fontSize: 11,
+            color: "#697386",
+            letterSpacing: "0.16em",
+            textTransform: "uppercase",
+            marginBottom: "0.75rem",
+          }}
+        >
           — Powered by every frontier model
         </p>
-        <h2 style={{
-          fontWeight: 800,
-          fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
-          color: "#0A2540", letterSpacing: "-0.03em",
-          margin: 0, lineHeight: 1.15,
-        }}>
+        <h2
+          style={{
+            fontWeight: 800,
+            fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+            color: "#0A2540",
+            letterSpacing: "-0.03em",
+            margin: 0,
+            lineHeight: 1.15,
+          }}
+        >
           Build with all the latest AI models
         </h2>
-        <p style={{ color: "#425466", fontSize: 16, marginTop: "0.85rem", lineHeight: 1.75 }}>
+        <p
+          style={{
+            color: "#425466",
+            fontSize: 16,
+            marginTop: "0.85rem",
+            lineHeight: 1.75,
+          }}
+        >
           OneAtlas connects to every top model so you always use the best one for the job.
         </p>
       </div>
 
-      {/* Marquee rows with fade edges */}
       <div style={{ position: "relative" }}>
-        {(["left", "right"] as const).map(side => (
-          <div key={side} style={{
-            position: "absolute", top: 0, bottom: 0, [side]: 0,
-            width: 140, zIndex: 2, pointerEvents: "none",
-            background: `linear-gradient(to ${side === "left" ? "right" : "left"}, #F6F9FC, transparent)`,
-          }} />
+        {(["left", "right"] as const).map((side) => (
+          <div
+            key={side}
+            style={{
+              position: "absolute",
+              top: 0,
+              bottom: 0,
+              [side]: 0,
+              width: 140,
+              zIndex: 2,
+              pointerEvents: "none",
+              background: `linear-gradient(to ${
+                side === "left" ? "right" : "left"
+              }, #F6F9FC, transparent)`,
+            }}
+          />
         ))}
+
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <MarqueeRow />
         </div>
