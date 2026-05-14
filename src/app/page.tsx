@@ -43,7 +43,7 @@ export default function HomePage() {
             transform: "skewX(-25deg)",
             left: "-120%",
             filter: "blur(40px)",
-            animation: "sweep 2.5s cubic-bezier(0.22, 1, 0.36, 1) forwards"
+            animation: "sweep 3.5s cubic-bezier(0.22, 1, 0.36, 1) forwards"
           }}
         />
       </div>
