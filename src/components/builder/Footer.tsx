@@ -16,12 +16,13 @@ export default function Footer() {
   return (
     <footer className="w-full relative overflow-hidden font-sans">
       
-      {/* Sky Background Recreated with CSS */}
-      <div className="absolute inset-0 z-0 footer-mesh-bg" />
+      {/* Animated Mesh Background */}
+      <div className="absolute inset-0 z-0 footer-mesh-bg">
+        <div className="footer-mesh-bg-overlay" />
+      </div>
       
       {/* Subtle overlays to ensure text readability */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
-      <div className="absolute inset-0 z-0 bg-white/5 opacity-50" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/20 via-transparent to-black/20" />
 
       {/* Hero CTA Section */}
       <div className="relative z-10 max-w-[1200px] mx-auto px-8 pt-48 pb-40 flex flex-col items-center text-center">

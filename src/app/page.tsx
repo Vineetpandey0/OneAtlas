@@ -6,6 +6,7 @@ import ModelsMarquee from '@/components/builder/sections/ModelsMarquee'
 import BuildProcess from '@/components/builder/sections/Build-process'
 import ComparisonSection from '@/components/builder/sections/ComparisonSection'
 import TemplatesSection from '@/components/builder/sections/TemplatesSection'
+import EverythingSection from '@/components/builder/sections/EverythingSection'
 import PricingSection from '@/components/builder/sections/PricingSection'
 import TestimonialsSection from '@/components/builder/sections/TestimonialsSection'
 import AtlasForRoles from '@/components/builder/sections/AtlasForRoles'
@@ -66,6 +67,11 @@ export default function HomePage() {
         <div className="bg-[#F6F9FC]">
           {/* 3. How OneAtlas Works */}
           <BuildProcess />
+        </div>
+
+        <div className="bg-white">
+          {/* 3.5 Everything Built-in */}
+          <EverythingSection />
         </div>
 
         <div className="bg-white">

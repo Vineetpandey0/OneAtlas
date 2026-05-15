@@ -1,0 +1,41 @@
+.footer-mesh-bg {
+  background-color: #030303;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-mesh-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(at 0% 0%, #635BFF 0%, transparent 70%),   /* Stripe Indigo */
+    radial-gradient(at 100% 0%, #3ECF8E 0%, transparent 70%), /* Supabase Emerald */
+    radial-gradient(at 50% 50%, #FF3366 0%, transparent 80%),  /* Neon Pink */
+    radial-gradient(at 0% 100%, #00f2ff 0%, transparent 70%),  /* Neon Cyan */
+    radial-gradient(at 100% 100%, #9461fd 0%, transparent 70%); /* Stripe Purple */
+  filter: blur(50px);
+  opacity: 1;
+}
+
+.footer-mesh-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(circle at 30% 20%, rgba(62, 207, 142, 0.1) 0%, transparent 40%),
+    radial-gradient(circle at 70% 80%, rgba(255, 59, 141, 0.1) 0%, transparent 40%);
+  z-index: 1;
+}
+
+/* Add a subtle top border glow */
+.footer-mesh-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+}
+
+

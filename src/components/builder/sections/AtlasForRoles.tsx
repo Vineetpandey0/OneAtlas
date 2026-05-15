@@ -167,53 +167,7 @@ function CardStudent() {
   );
 }
 
-/* ─── Minimal Floating Dots ─── */
-function SectionBackgroundDots() {
-  const colors = ["#635BFF", "#ff3b8d", "#10b981", "#ea580c", "#0ea5e9"];
-  return (
-    <div className="section-dots-container">
-      {[...Array(25)].map((_, i) => (
-        <div 
-          key={i} 
-          className="floating-dot"
-          style={{
-            background: colors[i % colors.length],
-            left: `${(i * 7) % 100}%`,
-            top: `${(i * 13) % 100}%`,
-            width: 8 + (i % 5) * 4,
-            height: 8 + (i % 5) * 4,
-            animationDelay: `${i * 0.3}s`,
-            animationDuration: `${5 + (i % 4) * 2}s`,
-            opacity: 0.15 + (i % 3) * 0.1,
-            boxShadow: `0 0 20px ${colors[i % colors.length]}33`
-          }}
-        />
-      ))}
-    </div>
-  );
-}
 
-function FloatingDots({ color }: { color: string }) {
-  return (
-    <div className="dots-container">
-      {[...Array(4)].map((_, i) => (
-        <div 
-          key={i} 
-          className="floating-dot"
-          style={{
-            background: color,
-            left: `${15 + i * 20}%`,
-            top: `${20 + (i % 2) * 40}%`,
-            width: 3 + (i % 2) * 2,
-            height: 3 + (i % 2) * 2,
-            animationDelay: `${i * 0.3}s`,
-            opacity: 0.12
-          }}
-        />
-      ))}
-    </div>
-  );
-}
 
 
 /* ─── Main Component ─── */
@@ -221,8 +175,7 @@ function FloatingDots({ color }: { color: string }) {
 export default function AtlasForRoles() {
   return (
     <section id="for-roles" className="relative" style={{ background: "transparent", padding: "8rem 0", overflow: "hidden" }}>
-      {/* Global Background Dots */}
-      <SectionBackgroundDots />
+      {/* Colorful Background Glows */}
 
       <style>{`
         .bento-grid {
@@ -245,25 +198,7 @@ export default function AtlasForRoles() {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-10px); }
         }
-        .section-dots-container {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          z-index: 0;
-          overflow: hidden;
-        }
-        .dots-container {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          z-index: 1;
-        }
-        .floating-dot {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(1.5px);
-          animation: float 5s ease-in-out infinite, wiggle 4s ease-in-out infinite;
-        }
+
 
         .bento-card {
           background: #ffffff;
@@ -387,7 +322,6 @@ export default function AtlasForRoles() {
         
         {/* Row 1 */}
         <div className="bento-card col-3" data-role="pm">
-          <FloatingDots color="#635BFF" />
           <div className="role-glow" />
           <div className="bento-card-top">
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>Product managers</h3>
@@ -399,7 +333,6 @@ export default function AtlasForRoles() {
         </div>
 
         <div className="bento-card col-3" data-role="ent">
-          <FloatingDots color="#ff3b8d" />
           <div className="role-glow" />
           <div className="bento-card-top">
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>Entrepreneurs</h3>
@@ -411,7 +344,6 @@ export default function AtlasForRoles() {
         </div>
 
         <div className="bento-card col-3" data-role="mark">
-          <FloatingDots color="#10b981" />
           <div className="role-glow" />
           <div className="bento-card-top">
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>Marketers</h3>
@@ -424,7 +356,6 @@ export default function AtlasForRoles() {
 
         {/* Row 2 */}
         <div className="bento-card col-2" data-role="agency">
-          <FloatingDots color="#ea580c" />
           <div className="role-glow" />
           <div className="bento-card-top" style={{ paddingBottom: 0 }}>
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px", textAlign: "center" }}>Agencies</h3>
@@ -436,7 +367,6 @@ export default function AtlasForRoles() {
         </div>
 
         <div className="bento-card col-2" data-role="student">
-          <FloatingDots color="#0ea5e9" />
           <div className="role-glow" />
           <div className="bento-card-top" style={{ paddingBottom: 0 }}>
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px", textAlign: "center" }}>Students & builders</h3>

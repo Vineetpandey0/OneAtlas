@@ -8,12 +8,18 @@ import {
   Palette, 
   Presentation, 
   Film, 
-  ChevronLeft, 
+  ChevronLeft,
   ChevronRight,
   RefreshCw,
   Layout,
   Rocket,
-  Gamepad2
+  Gamepad2,
+  Paperclip,
+  Sparkles,
+  Globe,
+  Sliders,
+  Mic,
+  ChevronDown
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -84,29 +90,50 @@ export default function HeroSection() {
       alignItems: "center",
       justifyContent: "center",
       background: "#fff",
-      padding: "80px 2rem 2rem",
+      padding: "120px 2rem 2rem",
       overflow: "hidden",
       fontFamily: "'Inter', sans-serif"
     }}>
-      {/* Stripe-style Blurred Background */}
       <div style={{
         position: "absolute", inset: 0,
         zIndex: 0, overflow: "hidden"
       }}>
+        {/* Colorful Mesh Glows */}
         <div style={{
-          position: "absolute", top: "-10%", left: "-5%",
-          width: "50vw", height: "50vw",
-          background: "radial-gradient(circle, rgba(99,91,255,0.08) 0%, transparent 70%)",
-          filter: "blur(80px)",
+          position: "absolute", top: "10%", left: "10%",
+          width: "40vw", height: "40vw",
+          background: "radial-gradient(circle, rgba(99,91,255,0.05) 0%, transparent 70%)",
+          filter: "blur(60px)",
           animation: "float 12s ease-in-out infinite"
         }} />
         <div style={{
-          position: "absolute", bottom: "0%", right: "-10%",
-          width: "60vw", height: "60vw",
-          background: "radial-gradient(circle, rgba(148,97,253,0.06) 0%, transparent 70%)",
-          filter: "blur(100px)",
-          animation: "float2 15s ease-in-out infinite"
+          position: "absolute", top: "20%", right: "15%",
+          width: "35vw", height: "35vw",
+          background: "radial-gradient(circle, rgba(16,185,129,0.04) 0%, transparent 70%)",
+          filter: "blur(80px)",
+          animation: "float2 18s ease-in-out infinite"
         }} />
+        <div style={{
+          position: "absolute", bottom: "10%", left: "20%",
+          width: "45vw", height: "45vw",
+          background: "radial-gradient(circle, rgba(239,68,68,0.03) 0%, transparent 70%)",
+          filter: "blur(100px)",
+          animation: "float 15s ease-in-out infinite"
+        }} />
+        
+        {/* Subtle Decorative Dots */}
+        {[...Array(20)].map((_, i) => (
+          <div key={i} style={{
+            position: "absolute",
+            width: 4, height: 4,
+            borderRadius: "50%",
+            background: i % 2 === 0 ? "#635BFF" : "#3ECF8E",
+            opacity: 0.1,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            filter: "blur(1px)"
+          }} />
+        ))}
       </div>
 
       <div style={{
@@ -118,27 +145,43 @@ export default function HeroSection() {
         transition: "all 0.8s cubic-bezier(0.22, 1, 0.36, 1)"
       }}>
         
+        {/* Beta Badge */}
+        <div style={{
+          display: "flex", alignItems: "center", gap: 8,
+          padding: "6px 16px",
+          borderRadius: 20,
+          background: "#EEF2FF",
+          color: "#635BFF",
+          fontSize: 13,
+          fontWeight: 600,
+          marginBottom: "2rem",
+          border: "1px solid rgba(99, 91, 255, 0.1)"
+        }}>
+          <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#635BFF" }} />
+          Now in public beta
+        </div>
+
         {/* Headline */}
         <h1 style={{
-          fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+          fontSize: "clamp(2.5rem, 6.5vw, 5rem)",
           fontWeight: 900,
           color: "#0a0a0a",
           textAlign: "center",
           lineHeight: 1.1,
-          letterSpacing: "-0.05em",
-          marginBottom: "1.5rem"
+          letterSpacing: "-0.04em",
+          marginBottom: "1.5rem",
+          whiteSpace: "nowrap",
+          width: "100%"
         }}>
-          <span style={{ display: "block", whiteSpace: "nowrap" }}>From vision to app,</span>
+          Where ideas become{" "}
           <span style={{ 
-            background: `linear-gradient(135deg, ${C.primary} 0%, ${C.accent} 100%)`,
+            background: "linear-gradient(135deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
-            display: "block",
-            whiteSpace: "nowrap",
             paddingRight: "0.05em"
           }}>
-            Ship Faster.
+            tools
           </span>
         </h1>
 
@@ -146,13 +189,14 @@ export default function HeroSection() {
         <p style={{
           fontSize: "1.15rem",
           color: C.muted,
-          marginBottom: "2.5rem",
+          marginBottom: "3rem",
           textAlign: "center",
-          maxWidth: 580,
-          lineHeight: 1.6
+          maxWidth: 620,
+          lineHeight: 1.6,
+          fontWeight: 500
         }}>
-          OneAtlas turns your natural language into fully-functional, 
-          shippable applications instantly.
+          Describe what your team needs. OneAtlas generates a production-ready 
+          internal tool and deploys it instantly.
         </p>
 
         {/* Main Integrated Prompt Box */}
@@ -167,7 +211,7 @@ export default function HeroSection() {
           flexDirection: "column",
           gap: 24,
           boxShadow: "0 10px 40px rgba(0,0,0,0.06)",
-          marginBottom: "2.5rem",
+          marginBottom: "3.5rem",
           transition: "all 0.3s ease"
         }}>
           {/* Row 1: Input */}
@@ -220,10 +264,67 @@ export default function HeroSection() {
             </button>
           </div>
 
+          {/* Row: Toolbar */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: -8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <button style={{ 
+                width: 32, height: 32, borderRadius: "50%", 
+                border: "1px solid #E5E7EB", background: "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "#64748B", cursor: "pointer"
+              }}>
+                <Paperclip size={16} />
+              </button>
+              
+              <button style={{ 
+                height: 36, padding: "0 14px", borderRadius: 100, 
+                border: "1px solid #E5E7EB", background: "#fff",
+                display: "flex", alignItems: "center", gap: 8,
+                color: "#0f172a", cursor: "pointer",
+                fontSize: 13, fontWeight: 600
+              }}>
+                <Sparkles size={14} style={{ color: "#9461fd" }} />
+                Claude Opus 4.7
+                <ChevronDown size={14} style={{ color: "#64748B" }} />
+              </button>
+            </div>
+
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              <button style={{ 
+                height: 36, padding: "0 14px", borderRadius: 100, 
+                border: "1px solid #E5E7EB", background: "#fff",
+                display: "flex", alignItems: "center", gap: 8,
+                color: "#64748B", cursor: "pointer",
+                fontSize: 13, fontWeight: 600
+              }}>
+                <Globe size={16} />
+                Public
+              </button>
+              
+              <button style={{ 
+                width: 32, height: 32, borderRadius: "50%", 
+                border: "1px solid #E5E7EB", background: "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "#64748B", cursor: "pointer"
+              }}>
+                <Sliders size={16} />
+              </button>
+              
+              <button style={{ 
+                width: 32, height: 32, borderRadius: "50%", 
+                border: "1px solid #E5E7EB", background: "#fff",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                color: "#64748B", cursor: "pointer"
+              }}>
+                <Mic size={16} />
+              </button>
+            </div>
+          </div>
+
           {/* Separator Line */}
           <div style={{ height: 1, background: "#F1F5F9", width: "100%" }} />
 
-          {/* Row 2: Categories (Restored original design) */}
+          {/* Row 2: Categories */}
           <div style={{ 
             display: "flex", 
             alignItems: "center",
@@ -268,7 +369,7 @@ export default function HeroSection() {
                     onMouseLeave={e => {
                       const iconBox = e.currentTarget.querySelector('.icon-box') as HTMLElement;
                       if (iconBox && activeCategory !== cat.id) iconBox.style.borderColor = "#E5E7EB";
-                      e.currentTarget.style.opacity = activeCategory === cat.id ? "1" : "0.6";
+                      e.currentTarget.style.opacity = activeCategory === cat.id ? 1 : 0.6;
                     }}
                   >
                     <div 
