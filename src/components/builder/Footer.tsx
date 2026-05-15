@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 import { Globe2 } from "lucide-react";
+import "@/styles/FooterBackground.css";
 
 const footerLinks = {
   Product:   ["App Generator", "Templates", "Pricing", "Changelog"],
@@ -15,17 +16,12 @@ export default function Footer() {
   return (
     <footer className="w-full relative overflow-hidden font-sans">
       
-      {/* Sky Background */}
-      <div 
-        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ 
-          backgroundImage: "url('https://images.unsplash.com/photo-1500462918059-b1a0cb512f1d?q=80&w=2500&auto=format&fit=crop')",
-          backgroundPosition: "center 30%"
-        }}
-      />
-      {/* Subtle overlays to ensure text readability while keeping the sky bright */}
-      <div className="absolute inset-0 z-0 bg-gradient-to-b from-blue-900/10 via-transparent to-blue-900/50 mix-blend-multiply" />
-      <div className="absolute inset-0 z-0 bg-white/10" />
+      {/* Sky Background Recreated with CSS */}
+      <div className="absolute inset-0 z-0 footer-mesh-bg" />
+      
+      {/* Subtle overlays to ensure text readability */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-b from-black/20 via-transparent to-black/40" />
+      <div className="absolute inset-0 z-0 bg-white/5 opacity-50" />
 
       {/* Hero CTA Section */}
       <div className="relative z-10 max-w-[1200px] mx-auto px-8 pt-48 pb-40 flex flex-col items-center text-center">

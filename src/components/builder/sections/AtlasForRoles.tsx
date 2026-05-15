@@ -167,14 +167,67 @@ function CardStudent() {
   );
 }
 
+/* ─── Minimal Floating Dots ─── */
+function SectionBackgroundDots() {
+  const colors = ["#635BFF", "#ff3b8d", "#10b981", "#ea580c", "#0ea5e9"];
+  return (
+    <div className="section-dots-container">
+      {[...Array(25)].map((_, i) => (
+        <div 
+          key={i} 
+          className="floating-dot"
+          style={{
+            background: colors[i % colors.length],
+            left: `${(i * 7) % 100}%`,
+            top: `${(i * 13) % 100}%`,
+            width: 8 + (i % 5) * 4,
+            height: 8 + (i % 5) * 4,
+            animationDelay: `${i * 0.3}s`,
+            animationDuration: `${5 + (i % 4) * 2}s`,
+            opacity: 0.15 + (i % 3) * 0.1,
+            boxShadow: `0 0 20px ${colors[i % colors.length]}33`
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function FloatingDots({ color }: { color: string }) {
+  return (
+    <div className="dots-container">
+      {[...Array(4)].map((_, i) => (
+        <div 
+          key={i} 
+          className="floating-dot"
+          style={{
+            background: color,
+            left: `${15 + i * 20}%`,
+            top: `${20 + (i % 2) * 40}%`,
+            width: 3 + (i % 2) * 2,
+            height: 3 + (i % 2) * 2,
+            animationDelay: `${i * 0.3}s`,
+            opacity: 0.12
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 
 /* ─── Main Component ─── */
 
 export default function AtlasForRoles() {
   return (
-    <section id="for-roles" style={{ background: "transparent", padding: "8rem 0" }}>
+    <section id="for-roles" className="relative" style={{ background: "transparent", padding: "8rem 0", overflow: "hidden" }}>
+      {/* Global Background Dots */}
+      <SectionBackgroundDots />
+
       <style>{`
         .bento-grid {
+          position: relative;
+          z-index: 1;
           display: grid;
           grid-template-columns: repeat(6, 1fr);
           gap: 1.5rem;
@@ -182,6 +235,36 @@ export default function AtlasForRoles() {
           margin: 0 auto;
           padding: 0 2rem;
         }
+        @keyframes wiggle {
+          0%, 100% { transform: translate(0, 0); }
+          25% { transform: translate(2px, -2px); }
+          50% { transform: translate(-2px, 1px); }
+          75% { transform: translate(1px, -1px); }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+        .section-dots-container {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 0;
+          overflow: hidden;
+        }
+        .dots-container {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          z-index: 1;
+        }
+        .floating-dot {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(1.5px);
+          animation: float 5s ease-in-out infinite, wiggle 4s ease-in-out infinite;
+        }
+
         .bento-card {
           background: #ffffff;
           border: 1px solid #e2e8f0;
@@ -189,13 +272,21 @@ export default function AtlasForRoles() {
           overflow: hidden;
           display: flex;
           flex-direction: column;
-          transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s;
+          transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
           cursor: default;
+          position: relative;
         }
+        
+        .bento-card[data-role="pm"] { background: linear-gradient(to bottom, #ffffff, #EEF2FF); }
+        .bento-card[data-role="ent"] { background: linear-gradient(to bottom, #ffffff, #FFF1F2); }
+        .bento-card[data-role="mark"] { background: linear-gradient(to bottom, #ffffff, #ECFDF5); }
+        .bento-card[data-role="agency"] { background: linear-gradient(to bottom, #ffffff, #FFF7ED); }
+        .bento-card[data-role="student"] { background: linear-gradient(to bottom, #ffffff, #F0F9FF); }
+
         .bento-card:hover {
-          transform: translateY(-12px);
-          box-shadow: 0 32px 64px -12px rgba(10,37,64,0.12);
-          border-color: #cbd5e1;
+          transform: translateY(-16px);
+          box-shadow: 0 40px 80px -15px rgba(0,0,0,0.1);
+          z-index: 10;
         }
         .bento-card:hover .bento-visual {
           transform: scale(1.08);
@@ -203,21 +294,52 @@ export default function AtlasForRoles() {
         .bento-card-top {
           padding: 2rem;
           z-index: 2;
-          background: #fff;
+          background: transparent;
         }
         .bento-visual {
           flex: 1;
-          background: #f8fafc;
-          border-top: 1px solid #f1f5f9;
+          background: transparent;
+          border-top: 1px solid rgba(0,0,0,0.03);
           display: flex;
           align-items: flex-end;
           justify-content: center;
           padding: 0 2rem;
           padding-top: 2rem;
-          transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+          transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
           transform-origin: bottom center;
           position: relative;
         }
+        
+        .bento-card[data-role="pm"]:hover .bento-visual { background: rgba(99,91,255,0.04); }
+        .bento-card[data-role="ent"]:hover .bento-visual { background: rgba(255,59,141,0.04); }
+        .bento-card[data-role="mark"]:hover .bento-visual { background: rgba(16,185,129,0.04); }
+        .bento-card[data-role="agency"]:hover .bento-visual { background: rgba(234,88,12,0.04); }
+        .bento-card[data-role="student"]:hover .bento-visual { background: rgba(14,165,233,0.04); }
+
+        .role-glow {
+          position: absolute;
+          inset: 0;
+          opacity: 0;
+          transition: opacity 0.5s ease;
+          pointer-events: none;
+          z-index: 1;
+        }
+        .bento-card:hover .role-glow {
+          opacity: 1;
+        }
+
+        .bento-card[data-role="pm"] .role-glow { background: radial-gradient(circle at center, rgba(99,91,255,0.1) 0%, transparent 70%); }
+        .bento-card[data-role="ent"] .role-glow { background: radial-gradient(circle at center, rgba(255,59,141,0.1) 0%, transparent 70%); }
+        .bento-card[data-role="mark"] .role-glow { background: radial-gradient(circle at center, rgba(16,185,129,0.1) 0%, transparent 70%); }
+        .bento-card[data-role="agency"] .role-glow { background: radial-gradient(circle at center, rgba(234,88,12,0.1) 0%, transparent 70%); }
+        .bento-card[data-role="student"] .role-glow { background: radial-gradient(circle at center, rgba(14,165,233,0.1) 0%, transparent 70%); }
+        
+        .bento-card:hover { border-color: rgba(0,0,0,0.1) !important; }
+        .bento-card[data-role="pm"]:hover { border-color: #635BFF66 !important; }
+        .bento-card[data-role="ent"]:hover { border-color: #ff3b8d66 !important; }
+        .bento-card[data-role="mark"]:hover { border-color: #10b98166 !important; }
+        .bento-card[data-role="agency"]:hover { border-color: #ea580c66 !important; }
+        .bento-card[data-role="student"]:hover { border-color: #0ea5e966 !important; }
         
         /* Grid spans */
         .col-3 { grid-column: span 2; } /* 3 cards in row 1 -> 6/3 = 2 cols each */
@@ -233,16 +355,30 @@ export default function AtlasForRoles() {
         }
       `}</style>
 
+      {/* Colorful Background Glows */}
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+        <div style={{ position: "absolute", top: "20%", left: "5%", width: "30%", height: "40%", background: "radial-gradient(circle, rgba(99,91,255,0.04) 0%, transparent 70%)", filter: "blur(60px)" }} />
+        <div style={{ position: "absolute", bottom: "10%", right: "5%", width: "40%", height: "50%", background: "radial-gradient(circle, rgba(255,59,141,0.03) 0%, transparent 70%)", filter: "blur(80px)" }} />
+      </div>
+
       {/* Header */}
-      <div style={{ textAlign: "center", maxWidth: 640, margin: "0 auto 4rem", padding: "0 2rem" }}>
-        <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, color: "#0f172a", letterSpacing: "-0.04em", margin: "0 0 1rem", lineHeight: 1.1 }}>
-          <span style={{ display: "block", color: "#64748b", fontSize: "clamp(1.5rem, 3vw, 2.25rem)", fontWeight: 700, marginBottom: 8 }}>
+      <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: 640, margin: "0 auto 4rem", padding: "0 2rem" }}>
+        <h2 style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 800, color: "#0f172a", letterSpacing: "-0.04em", margin: "0 0 1rem", lineHeight: 1.1 }}>
+          <span style={{ 
+            display: "block", 
+            background: "linear-gradient(135deg, #635BFF, #ff3b8d)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            fontSize: "clamp(1.5rem, 3vw, 2.25rem)", 
+            fontWeight: 700, 
+            marginBottom: 8 
+          }}>
             Whatever your role
           </span>
           OneAtlas gives you superpowers
         </h2>
-        <p style={{ fontSize: "1.1rem", color: "#475569", lineHeight: 1.6, margin: 0 }}>
-          From idea to live product, Atlas adapts to the way you work turning every vision into something real & fast.
+        <p style={{ fontSize: "1.15rem", color: "#475569", lineHeight: 1.6, margin: 0 }}>
+          From idea to live product, OneAtlas adapts to your workflow, turning vision into reality instantly.
         </p>
       </div>
 
@@ -250,7 +386,9 @@ export default function AtlasForRoles() {
       <div className="bento-grid">
         
         {/* Row 1 */}
-        <div className="bento-card col-3">
+        <div className="bento-card col-3" data-role="pm">
+          <FloatingDots color="#635BFF" />
+          <div className="role-glow" />
           <div className="bento-card-top">
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>Product managers</h3>
             <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: 0 }}>
@@ -260,7 +398,9 @@ export default function AtlasForRoles() {
           <CardPM />
         </div>
 
-        <div className="bento-card col-3">
+        <div className="bento-card col-3" data-role="ent">
+          <FloatingDots color="#ff3b8d" />
+          <div className="role-glow" />
           <div className="bento-card-top">
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>Entrepreneurs</h3>
             <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: 0 }}>
@@ -270,7 +410,9 @@ export default function AtlasForRoles() {
           <CardEntrepreneur />
         </div>
 
-        <div className="bento-card col-3">
+        <div className="bento-card col-3" data-role="mark">
+          <FloatingDots color="#10b981" />
+          <div className="role-glow" />
           <div className="bento-card-top">
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px" }}>Marketers</h3>
             <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: 0 }}>
@@ -281,7 +423,9 @@ export default function AtlasForRoles() {
         </div>
 
         {/* Row 2 */}
-        <div className="bento-card col-2">
+        <div className="bento-card col-2" data-role="agency">
+          <FloatingDots color="#ea580c" />
+          <div className="role-glow" />
           <div className="bento-card-top" style={{ paddingBottom: 0 }}>
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px", textAlign: "center" }}>Agencies</h3>
             <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: "0 auto", textAlign: "center", maxWidth: 400 }}>
@@ -291,7 +435,9 @@ export default function AtlasForRoles() {
           <CardAgency />
         </div>
 
-        <div className="bento-card col-2">
+        <div className="bento-card col-2" data-role="student">
+          <FloatingDots color="#0ea5e9" />
+          <div className="role-glow" />
           <div className="bento-card-top" style={{ paddingBottom: 0 }}>
             <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0f172a", margin: "0 0 12px", textAlign: "center" }}>Students & builders</h3>
             <p style={{ fontSize: 15, color: "#475569", lineHeight: 1.6, margin: "0 auto", textAlign: "center", maxWidth: 400 }}>
