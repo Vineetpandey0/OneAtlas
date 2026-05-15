@@ -268,7 +268,7 @@ export default function HeroSection() {
                     onMouseLeave={e => {
                       const iconBox = e.currentTarget.querySelector('.icon-box') as HTMLElement;
                       if (iconBox && activeCategory !== cat.id) iconBox.style.borderColor = "#E5E7EB";
-                      e.currentTarget.style.opacity = activeCategory === cat.id ? 1 : 0.6;
+                      e.currentTarget.style.opacity = activeCategory === cat.id ? "1" : "0.6";
                     }}
                   >
                     <div 
