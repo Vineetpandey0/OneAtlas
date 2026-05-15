@@ -8,6 +8,8 @@ import {
   Cpu, Plug, ShieldCheck, Terminal, Activity,
   BookOpen, Video, School, LayoutGrid, Newspaper, MessageSquare,
   ChevronDown, ChevronRight, Menu, X,
+  Lock, Zap, LineChart,
+  Globe
 } from "lucide-react";
 
 type NavItem = {
@@ -17,38 +19,72 @@ type NavItem = {
 };
 
 const teamSizeItems = [
-  { icon: User,      label: "For Individuals", desc: "Personal building made simple", color: "#635BFF" },
-  { icon: Users,     label: "For Teams",       desc: "Collaborative building for groups", color: "#3ECF8E" },
+  { icon: User, label: "For Individuals", desc: "Personal building made simple", color: "#635BFF" },
+  { icon: Users, label: "For Teams", desc: "Collaborative building for groups", color: "#3ECF8E" },
   { icon: Building2, label: "For Organizations", desc: "Larger teams building for more control", color: "#F59E0B" },
-  { icon: Building,  label: "For Enterprises",  desc: "Enterprise-level building solutions", color: "#EF4444" },
+  { icon: Building, label: "For Enterprises", desc: "Enterprise-level building solutions", color: "#EF4444" },
 ];
 
-const useCaseItems = [
-  { icon: Send,          label: "Recruiting",  size: 44, iSize: 22 },
-  { icon: BarChart2,     label: "Sales",       size: 38, iSize: 19 },
-  { icon: Headphones,    label: "Support",     size: 42, iSize: 21 },
-  { icon: Stethoscope,   label: "Healthcare",  size: 40, iSize: 20 },
-  { icon: Users,         label: "HR",          size: 36, iSize: 18 },
-  { icon: MessageSquare, label: "Telehealth",  size: 42, iSize: 21 },
-  { icon: GraduationCap, label: "Education",   size: 44, iSize: 22 },
-  { icon: Megaphone,     label: "Marketing",   size: 38, iSize: 19 },
+const platformCapabilities = [
+  { icon: MessageSquare, label: "Describe What You Want", desc: "No coding. Just intent.", color: "#3ECF8E" },
+  { icon: Send, label: "Iterate and Improve", desc: "Natural language editing", color: "#635BFF" },
+  { icon: BarChart2, label: "Grow Your Business", desc: "Scaling & infra handled", color: "#F59E0B" },
+  { icon: ShieldCheck, label: "Security & Compliance", desc: "Enterprise-grade safety", color: "#EF4444" },
+  { icon: Users, label: "User Management", desc: "Auth & roles built-in", color: "#A855F7" },
+  { icon: Zap, label: "Instant Deployment", desc: "Go live in seconds", color: "#EC4899" },
 ];
 
 const learnItems: NavItem[] = [
-  { icon: BookOpen, label: "Documentation",   desc: "Guides & API reference" },
-  { icon: Video,    label: "Video Tutorials", desc: "Step-by-step walkthroughs" },
-  { icon: School,   label: "Academy",         desc: "Structured learning paths" },
+  { icon: BookOpen, label: "Documentation", desc: "Guides & API reference" },
+  { icon: Video, label: "Video Tutorials", desc: "Step-by-step walkthroughs" },
+  { icon: School, label: "Academy", desc: "Structured learning paths" },
 ];
 
 const buildItems: NavItem[] = [
-  { icon: LayoutGrid,    label: "Templates",  desc: "Ready-to-use starting points" },
-  { icon: Newspaper,     label: "Blog",       desc: "Product news & insights" },
-  { icon: MessageSquare, label: "Community",  desc: "Forums & developer hub" },
+  { icon: LayoutGrid, label: "Templates", desc: "Ready-to-use starting points" },
+  { icon: Newspaper, label: "Blog", desc: "Product news & insights" },
+  { icon: MessageSquare, label: "Community", desc: "Forums & developer hub" },
+];
+
+const hubItems = [
+  { icon: Globe, label: "Web Applications", desc: "Deploy globally in seconds" },
+  { icon: Lock, label: "Secure Infrastructure", desc: "SOC 2 & HIPAA compliant" },
+  { icon: Zap, label: "AI Workflows", desc: "Automate with intelligence" },
+  { icon: LineChart, label: "Analytics & Insights", desc: "Data-driven decisions" },
+];
+
+const resourceCategories = [
+  { label: "Popular Templates", icon: LayoutGrid, count: "120+" },
+  { label: "Community Forum", icon: MessageSquare, count: "50k members" },
+  { label: "Developer Docs", icon: BookOpen, count: "1k+ pages" },
+  { label: "Video Academy", icon: Video, count: "40+ courses" },
+];
+
+const useCaseItemsExtended = [
+  { icon: Send, label: "Recruiting", color: "text-violet-500", bg: "bg-violet-50" },
+  { icon: BarChart2, label: "Sales", color: "text-emerald-500", bg: "bg-emerald-50" },
+  { icon: Users, label: "HR", color: "text-orange-500", bg: "bg-orange-50" },
+  { icon: GraduationCap, label: "Education", color: "text-purple-500", bg: "bg-purple-50" },
+  { icon: Headphones, label: "Support", color: "text-amber-500", bg: "bg-amber-50" },
+  { icon: Activity, label: "Healthcare", color: "text-rose-500", bg: "bg-rose-50" },
+  { icon: MessageSquare, label: "Telehealth", color: "text-teal-500", bg: "bg-teal-50" },
+  { icon: Megaphone, label: "Marketing", color: "text-pink-500", bg: "bg-pink-50" },
+];
+
+const templates = [
+  { name: "SaaS Starter", color: "from-purple-500 to-indigo-600", image: "/templates/saas.png" },
+  { name: "CRM Dashboard", color: "from-emerald-500 to-teal-600", image: "/templates/crm.png" },
+  { name: "AI App Engine", color: "from-rose-500 to-pink-600", image: "/templates/ai.png" },
+];
+
+const featuredTemplates = [
+  { title: "SaaS Dashboard", type: "Admin", image: "/template_dashboard_preview_1778836781258.png" },
+  { title: "CRM Pipeline", type: "Sales", image: "/template_crm_preview_1778836797455.png" },
 ];
 
 function ColLabel({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-3 px-2">
+    <p className="text-[11.5px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5 px-1">
       {children}
     </p>
   );
@@ -71,118 +107,193 @@ function DropdownItem({ item }: { item: NavItem }) {
   );
 }
 
-function SolutionsDropdown() {
+function TemplateCarousel() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % templates.length);
+    }, 2000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <div className="mega-dropdown absolute top-full left-1/2 mt-3 bg-white border border-slate-200/60 rounded-[28px] shadow-[0_40px_120px_-20px_rgba(0,0,0,0.2)] p-7 grid grid-cols-12 gap-5 w-[920px] z-50 opacity-0 invisible pointer-events-none transition-all duration-300">
-      
-      {/* Left Section: Platform/Team Size (Bento Grid) */}
-      <div className="col-span-7 grid grid-cols-2 gap-4 border-r border-gray-200 pr-5">
-        <div className="col-span-2">
-          <ColLabel>Platform & Teams</ColLabel>
-        </div>
-        
-        {teamSizeItems.slice(0, 2).map((item) => (
-          <a key={item.label} href="#" className="col-span-1 group relative p-5 rounded-2xl border border-slate-200/60 bg-slate-50/30 hover:bg-white hover:border-slate-200/60 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] hover:scale-[1.03] transition-all duration-300">
-            <div className="w-12 h-12 rounded-2xl bg-white border border-slate-900/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-sm">
-              <item.icon size={22} style={{ color: item.color }} />
-            </div>
-            <p className="text-[15px] font-bold text-slate-900 mb-1.5">{item.label}</p>
-            <p className="text-[12px] text-slate-500 leading-relaxed line-clamp-2">{item.desc}</p>
-          </a>
-        ))}
-
-        {teamSizeItems.slice(2).map((item) => (
-          <a key={item.label} href="#" className="col-span-1 flex items-center gap-4 p-4 rounded-2xl border border-transparent hover:border-slate-900/10 hover:bg-slate-50/50 hover:scale-[1.02] transition-all group">
-            <div className="w-10 h-10 rounded-xl bg-white border border-slate-900/10 flex items-center justify-center flex-shrink-0 group-hover:bg-slate-900 transition-all duration-300">
-              <item.icon size={18} className="text-slate-600 group-hover:text-white transition-colors" />
-            </div>
-            <div>
-              <p className="text-[14px] font-bold text-slate-900 leading-tight mb-1">{item.label}</p>
-              <p className="text-[11px] text-slate-400 font-medium">Learn more →</p>
-            </div>
-          </a>
-        ))}
-
-        <div className="col-span-2 pt-2">
-          <ColLabel>Top Use Cases</ColLabel>
-          <div className="grid grid-cols-3 gap-2">
-            {useCaseItems.map(item => (
-              <a key={item.label} href="#" className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl border border-slate-900/10 bg-white hover:bg-slate-900 hover:text-white hover:scale-[1.05] transition-all duration-200 group">
-                <item.icon size={14} className="text-slate-400 group-hover:text-indigo-400" />
-                <span className="text-[11px] font-bold tracking-tight">{item.label}</span>
-              </a>
-            ))}
-          </div>
+    <div className={`relative w-full h-full rounded-[28px] overflow-hidden bg-gradient-to-br transition-all duration-1000 group/carousel shadow-xl border border-white/20 ${templates[index].color} shadow-indigo-500/20`}>
+      {/* Top Badge */}
+      <div className="absolute top-3 right-3 z-20">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/10">
+          <Zap size={11} className="text-white fill-white" />
+          <span className="text-[9px] font-black text-white uppercase tracking-wider">TRY ATLAS AI NOW!</span>
         </div>
       </div>
 
-      {/* Right Section: Solutions & AI (Spanning) */}
-      <div className="col-span-5 flex flex-col gap-5">
-        <div className="bg-slate-50/50 border border-slate-900/5 rounded-2xl p-5 hover:bg-white hover:border-slate-900/20 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.08)] hover:scale-[1.02] transition-all duration-300 group">
-          <ColLabel>Solutions Hub</ColLabel>
-          <div className="grid grid-cols-1 gap-3 mt-2">
-            {teamSizeItems.map(item => (
-              <a key={item.label} href="#" className="flex items-center gap-3 group/item hover:translate-x-1 transition-transform">
-                <div className="w-8 h-8 rounded-lg bg-white border border-slate-900/10 flex items-center justify-center group-hover/item:border-indigo-400 transition-colors">
-                  <item.icon size={15} className="text-slate-600 group-hover/item:text-indigo-600" />
-                </div>
-                <span className="text-[13px] font-bold text-slate-700 group-hover/item:text-slate-900">Custom {item.label} flow</span>
-              </a>
-            ))}
+      {templates.map((tpl, i) => (
+        <div
+          key={tpl.name}
+          className={`absolute inset-0 transition-all duration-1000 flex flex-col items-center justify-center p-4 text-center ${i === index ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-4 scale-95"
+            }`}
+        >
+          <div className="mb-2">
+            <h4 className="text-white text-3xl font-black tracking-tighter drop-shadow-lg">OneAtlas</h4>
           </div>
-        </div>
+          <p className="text-white text-[11px] font-bold leading-snug max-w-[160px] mb-4 drop-shadow-md">
+            Supercharged building with AI-powered tools
+          </p>
 
-        {/* AI Promo Card - Bento Style */}
-        <div className="flex-1 bg-slate-900 rounded-[24px] p-6 relative overflow-hidden group/promo cursor-pointer hover:scale-[1.03] hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.4)] transition-all duration-500 border border-white/5">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 blur-[60px] rounded-full -mr-10 -mt-10 group-hover/promo:scale-150 transition-transform duration-700" />
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-500/20 blur-[50px] rounded-full -ml-10 -mb-10 group-hover/promo:scale-150 transition-transform duration-700" />
-          
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white/10 border border-white/10 mb-4">
-              <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
-              <span className="text-[9px] font-black text-white uppercase tracking-widest">New</span>
-            </div>
-            <h4 className="text-white text-3xl font-black tracking-tighter mb-2 group-hover/promo:translate-x-1 transition-transform">OneAtlas</h4>
-            <p className="text-slate-400 text-[11px] font-medium leading-relaxed mb-6">
-              The world's most powerful<br />AI app engine is here.
-            </p>
-            <div className="text-indigo-400 text-[13px] font-bold flex items-center gap-2 group-hover/promo:gap-3 transition-all">
-              Try public beta <ChevronRight size={14} />
+          <button className="px-4 py-2 rounded-full bg-white shadow-xl shadow-black/10 hover:scale-105 transition-transform">
+            <span className={`text-[11px] font-black uppercase tracking-widest ${tpl.color.includes('teal') ? 'text-teal-600' : 'text-indigo-600'}`}>
+              {tpl.name}
+            </span>
+          </button>
+
+          {/* Decorative Graphic (Stairs approximation) */}
+          <div className="absolute bottom-0 left-0 right-0 h-32 opacity-30 pointer-events-none">
+            <div className="absolute bottom-0 right-0 w-full h-full flex items-end justify-end overflow-hidden">
+              {/* Sphere */}
+              <div className="absolute bottom-4 right-20 w-12 h-12 rounded-full bg-white/40 blur-sm mix-blend-overlay" />
+              {/* Stairs steps */}
+              <div className="w-10 h-8 bg-white/20 ml-auto" style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 0)' }} />
+              <div className="w-10 h-16 bg-white/20" style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 0)' }} />
+              <div className="w-10 h-24 bg-white/20" style={{ clipPath: 'polygon(0 100%, 100% 100%, 100% 0)' }} />
             </div>
           </div>
         </div>
+      ))}
+
+      {/* Bottom Progress Bar */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10">
+        <div
+          className="h-full bg-white transition-all duration-[1000ms] ease-linear"
+          style={{ width: `${((index + 1) / templates.length) * 100}%` }}
+        />
       </div>
     </div>
   );
 }
 
+function SolutionsDropdown() {
+  return (
+    <div className="mega-dropdown absolute top-full left-1/2 mt-2 bg-white border border-slate-100 rounded-[28px] shadow-[0_40px_120px_-20px_rgba(0,0,0,0.12)] p-1.5 grid grid-cols-12 w-[680px] z-50 opacity-0 invisible pointer-events-none transition-all duration-300">
+
+      {/* Left & Middle Container */}
+      <div className="col-span-9 flex flex-col">
+        {/* By Team Size */}
+        <div className="p-2 bg-white rounded-tl-[26px]">
+          <ColLabel>By team size</ColLabel>
+          <div className="grid grid-cols-4 gap-1.5 mt-1">
+            {/* Individual */}
+            <a href="#" className="py-1 px-0.5 bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] hover:shadow-xl hover:-translate-y-0.5 hover:bg-violet-50/30 transition-all group flex flex-col items-center text-center rounded-xl">
+              <User size={40} className="text-violet-500 mb-1.5 transition-transform group-hover:scale-110" strokeWidth={1.5} />
+              <p className="text-[13px] font-bold text-slate-900 leading-tight">For Individuals</p>
+              <p className="text-[11px] text-slate-400">Personal success.</p>
+            </a>
+
+            {/* Teams */}
+            <a href="#" className="py-1 px-0.5 bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] hover:shadow-xl hover:-translate-y-0.5 hover:bg-emerald-50/30 transition-all group flex flex-col items-center text-center rounded-xl">
+              <Users size={40} className="text-emerald-500 mb-1.5 transition-transform group-hover:scale-110" strokeWidth={1.5} />
+              <p className="text-[13px] font-bold text-slate-900 leading-tight">For Teams</p>
+              <p className="text-[11px] text-slate-400">Better together.</p>
+            </a>
+
+            {/* Organizations */}
+            <a href="#" className="py-1 px-0.5 bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] hover:shadow-xl hover:-translate-y-0.5 hover:bg-amber-50/30 transition-all group flex flex-col items-center text-center rounded-xl">
+              <Building2 size={40} className="text-amber-500 mb-1.5 transition-transform group-hover:scale-110" strokeWidth={1.5} />
+              <p className="text-[13px] font-bold text-slate-900 leading-tight">Orgs</p>
+              <p className="text-[11px] text-slate-400">Stronger alignment.</p>
+            </a>
+
+            {/* Enterprise */}
+            <a href="#" className="py-1 px-0.5 bg-white shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] hover:shadow-xl hover:-translate-y-0.5 hover:bg-rose-50/30 transition-all group flex flex-col items-center text-center rounded-xl">
+              <Building size={40} className="text-rose-500 mb-1.5 transition-transform group-hover:scale-110" strokeWidth={1.5} />
+              <p className="text-[13px] font-bold text-slate-900 leading-tight">For Enterprises</p>
+              <p className="text-[11px] text-slate-400">Scale effortlessly.</p>
+            </a>
+          </div>
+        </div>
+
+        {/* By Use Case */}
+        <div className="p-2">
+          <ColLabel>By use case</ColLabel>
+          <div className="grid grid-cols-4 gap-1">
+            {useCaseItemsExtended.slice(0, 8).map((item) => (
+              <a key={item.label} href="#" className={`flex items-center gap-1.5 py-1.5 px-1.5 rounded-lg bg-white shadow-[0_2px_10px_-4px_rgba(0,0,0,0.08)] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.1)] hover:${item.bg} transition-all group`}>
+                <item.icon size={20} className={`${item.color}`} strokeWidth={2} />
+                <span className="text-[12.5px] font-bold text-slate-900 tracking-tight">{item.label}</span>
+                <ChevronRight size={12} className="text-slate-300 ml-auto opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Right: OneAtlas Promo Card - Latest Screenshot Match */}
+      <div className="col-span-3 p-2">
+        <TemplateCarousel />
+      </div>
+    </div>
+  );
+}
+
+
 function ResourcesDropdown() {
   return (
-    <div className="mega-dropdown absolute top-full left-1/2 mt-3 bg-white border border-slate-200 rounded-[24px] shadow-2xl shadow-slate-200/60 p-6 grid grid-cols-2 gap-4 w-[500px] z-50 opacity-0 invisible pointer-events-none transition-all duration-300">
-      <div className="col-span-2">
-        <ColLabel>Resources & Learning</ColLabel>
-      </div>
-      
-      {learnItems.map((item) => (
-        <a key={item.label} href="#" className="flex flex-col gap-3 p-4 rounded-2xl border border-slate-100 bg-slate-50/30 hover:bg-white hover:shadow-lg transition-all duration-300 group">
-          <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
-            <item.icon size={18} className="text-slate-600 group-hover:text-indigo-600 transition-colors" />
-          </div>
-          <div>
-            <p className="text-[13px] font-bold text-slate-900 leading-tight mb-1">{item.label}</p>
-            <p className="text-[11px] text-slate-500 leading-snug">{item.desc}</p>
-          </div>
-        </a>
-      ))}
+    <div className="mega-dropdown absolute top-full left-1/2 mt-3 bg-white border border-slate-100 rounded-[32px] shadow-[0_50px_120px_-20px_rgba(0,0,0,0.15)] p-6 grid grid-cols-12 gap-5 w-[820px] z-50 opacity-0 invisible pointer-events-none transition-all duration-300">
 
-      <div className="col-span-2 bg-slate-50 rounded-xl p-4 flex items-center justify-between group cursor-pointer hover:bg-slate-100 transition-colors">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center">
-             <MessageSquare size={14} className="text-slate-600" />
+      {/* Left Column: Categories */}
+      <div className="col-span-4 flex flex-col gap-2 pr-4 border-r border-slate-50">
+        <ColLabel>Resources</ColLabel>
+        {resourceCategories.map((cat) => (
+          <a key={cat.label} href="#" className="flex items-center gap-4 p-3 rounded-xl hover:bg-slate-50 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_10px_25px_-5px_rgba(0,0,0,0.08)] transition-all group">
+            <div className="w-10 h-10 rounded-lg bg-white shadow-[0_4px_12px_-4px_rgba(0,0,0,0.1)] flex items-center justify-center group-hover:scale-110 transition-transform">
+              <cat.icon size={18} className="text-slate-600" />
+            </div>
+            <div>
+              <p className="text-[13px] font-bold text-slate-900">{cat.label}</p>
+              <p className="text-[11px] text-slate-400 font-medium">{cat.count}</p>
+            </div>
+          </a>
+        ))}
+
+        <div className="mt-4 p-4 rounded-2xl bg-indigo-50/50 shadow-[0_10px_30px_-10px_rgba(99,91,255,0.1)] relative overflow-hidden group/academy cursor-pointer">
+          <div className="relative z-10">
+            <p className="text-[12px] font-bold text-indigo-900 mb-1">New Academy Course</p>
+            <p className="text-[11px] text-indigo-600 leading-snug">Build a full-scale CRM in 10 minutes.</p>
           </div>
-          <span className="text-[12px] font-bold text-slate-900">Join our Discord community</span>
+          <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-400/10 blur-2xl -mr-8 -mt-8 group-hover/academy:scale-150 transition-transform" />
         </div>
-        <ChevronRight size={14} className="text-slate-400 group-hover:translate-x-1 transition-transform" />
+      </div>
+
+      {/* Right Column: Featured Showcase */}
+      <div className="col-span-8 flex flex-col gap-4">
+        <div className="flex items-center justify-between px-2">
+          <ColLabel>Featured Showcase</ColLabel>
+          <a href="#" className="text-[11px] font-black text-slate-900 uppercase tracking-widest hover:translate-x-1 transition-transform flex items-center gap-1">
+            View all templates <ChevronRight size={12} />
+          </a>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          {featuredTemplates.map((tpl) => (
+            <div key={tpl.title} className="group cursor-pointer">
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-slate-50 mb-3 shadow-[0_15px_45px_-15px_rgba(0,0,0,0.15)] hover:shadow-[0_25px_60px_-20px_rgba(0,0,0,0.2)] hover:scale-[1.02] transition-all duration-300">
+                <img
+                  src={tpl.image}
+                  alt={tpl.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute top-3 left-3 px-2 py-1 rounded-md bg-white/90 backdrop-blur shadow-sm text-[9px] font-black uppercase tracking-tight text-slate-900">
+                  {tpl.type}
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              </div>
+              <p className="text-[14px] font-bold text-slate-900 group-hover:text-indigo-600 transition-colors flex items-center justify-between">
+                {tpl.title}
+                <ChevronRight size={14} className="opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+              </p>
+              <p className="text-[11px] text-slate-400 font-medium">Click to preview template</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -230,8 +341,9 @@ export default function GlobalNavbar() {
 
           {/* Logo */}
           <Link href="/" className="no-underline">
-            <span className="text-[22px] font-extrabold text-slate-900 tracking-tight">
+            <span className="text-[22px] font-black text-slate-950 tracking-tighter flex items-center gap-1 group">
               OneAtlas
+              <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mb-4 group-hover:scale-150 transition-transform" />
             </span>
           </Link>
 
