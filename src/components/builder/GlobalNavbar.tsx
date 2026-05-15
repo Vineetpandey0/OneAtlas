@@ -76,13 +76,13 @@ function SolutionsDropdown() {
     <div className="mega-dropdown absolute top-full left-1/2 mt-3 bg-white border border-slate-200/60 rounded-[28px] shadow-[0_40px_120px_-20px_rgba(0,0,0,0.2)] p-7 grid grid-cols-12 gap-5 w-[920px] z-50 opacity-0 invisible pointer-events-none transition-all duration-300">
       
       {/* Left Section: Platform/Team Size (Bento Grid) */}
-      <div className="col-span-7 grid grid-cols-2 gap-4 border-r border-slate-100 pr-5">
+      <div className="col-span-7 grid grid-cols-2 gap-4 border-r border-gray-200 pr-5">
         <div className="col-span-2">
           <ColLabel>Platform & Teams</ColLabel>
         </div>
         
         {teamSizeItems.slice(0, 2).map((item) => (
-          <a key={item.label} href="#" className="col-span-1 group relative p-5 rounded-2xl border border-slate-900/5 bg-slate-50/30 hover:bg-white hover:border-slate-900/20 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] hover:scale-[1.03] transition-all duration-300">
+          <a key={item.label} href="#" className="col-span-1 group relative p-5 rounded-2xl border border-slate-200/60 bg-slate-50/30 hover:bg-white hover:border-slate-200/60 hover:shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1)] hover:scale-[1.03] transition-all duration-300">
             <div className="w-12 h-12 rounded-2xl bg-white border border-slate-900/10 flex items-center justify-center mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-sm">
               <item.icon size={22} style={{ color: item.color }} />
             </div>
